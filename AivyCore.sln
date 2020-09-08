@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyCore", "AivyCore\AivyCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyTest", "AivyTest\AivyTest.csproj", "{D807C9D3-4ED7-4C0D-A9E0-E3966B0EA0FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyData", "AivyData\AivyData.csproj", "{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyDomain", "AivyDomain\AivyDomain.csproj", "{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{D807C9D3-4ED7-4C0D-A9E0-E3966B0EA0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D807C9D3-4ED7-4C0D-A9E0-E3966B0EA0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D807C9D3-4ED7-4C0D-A9E0-E3966B0EA0FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
