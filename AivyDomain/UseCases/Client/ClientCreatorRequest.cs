@@ -24,6 +24,8 @@ namespace AivyDomain.UseCases.Client
         {
             return _repository.ActionResult(x => x.RemoteIp == request, x => 
             {
+                if (request is null) throw new ArgumentNullException(nameof(request));
+
                 if (x.IsRunning) throw new ArgumentException("client is already created");
 
                 x.RemoteIp = request;

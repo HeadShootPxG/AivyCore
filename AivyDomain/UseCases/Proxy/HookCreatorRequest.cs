@@ -23,6 +23,12 @@ namespace AivyDomain.UseCases.Proxy
         {
             return _repository.ActionResult(x => x.Port == request.Port, x =>
             {
+                if (exePath is null || exePath is "")
+                    throw new ArgumentNullException(nameof(exePath));
+
+                if (request is null)
+                    throw new ArgumentNullException(nameof(request));
+
                 x.Hooker = new HookEntity()
                 {
                     ExePath = exePath

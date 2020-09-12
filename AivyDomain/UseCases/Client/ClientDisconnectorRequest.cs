@@ -19,6 +19,9 @@ namespace AivyDomain.UseCases.Client
         {
             return _repository.ActionResult(x => x.RemoteIp == request.RemoteIp, x =>
             {
+                if (request is null)
+                    throw new ArgumentNullException(nameof(request));
+
                 if(x.IsRunning)
                     x.Socket.Disconnect(true);
 
