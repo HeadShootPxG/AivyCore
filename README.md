@@ -50,6 +50,15 @@ namespace AivyCore
     }
 }
 ```
+<h2> AivyDofus </h2>
+
+Proxy directement créer pour Dofus 
+
+```csharp
+// DofusProxy("DOSSIER APP DOFUS", PORT)
+DofusProxy proxy = new DofusProxy("D:/DofusApp", 666);
+proxy.Active(true);
+```
 
 <h2> Dépendances </h2>
 
