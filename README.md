@@ -1,10 +1,9 @@
 # AivyCore
 Modulable Proxy
 
-Un exemple de proxy dans https://github.com/Mrpotatosse/AivyCore/blob/master/AivyCore/Program.cs
-
 Pour le moment les APIs ne sont pas encore implémenté. 
 
+Voici un exemple de Program permettant d'installer un proxy sur Dofus en lançant le proxy sur le port 666
 ```csharp
 using NLog;
 using NLog.Config;
