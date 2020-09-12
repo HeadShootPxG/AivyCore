@@ -53,6 +53,10 @@ namespace AivyCore
 
 <h2> Dépendances </h2>
 - NLog
+
 - NewtonSoft Json
+
 - EasyHook ( SocketHook de Nameless )
+
 - Botofu parser
+
