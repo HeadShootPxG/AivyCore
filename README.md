@@ -59,5 +59,5 @@ namespace AivyCore
 
 - EasyHook ( SocketHook de Nameless https://cadernis.fr/index.php?threads/sockethook-injector-alternative-%C3%A0-no-ankama-dll.2221/page-2#post-24796 )
 
-- Botofu parser
+- Botofu parser ( https://gitlab.com/botofu/protocol_parser )
 
