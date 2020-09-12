@@ -66,7 +66,7 @@ proxy.Active(true);
 
 - NewtonSoft Json
 
-- EasyHook ( SocketHook de Nameless https://cadernis.fr/index.php?threads/sockethook-injector-alternative-%C3%A0-no-ankama-dll.2221/page-2#post-24796 )
+- EasyHook ( SocketHook de Nameless https://cadernis.fr/index.php?threads/sockethook-injector-alternative-%C3%A0-no-ankama-dll.2221/page-2#post-24796 celui que j'utilise est une ancienne version auquel j'ai appliqué quelque modification )
 
 - Botofu parser ( https://gitlab.com/botofu/protocol_parser )
 
