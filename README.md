@@ -4,26 +4,11 @@ Modulable Proxy
 Un exemple de proxy dans https://github.com/Mrpotatosse/AivyCore/blob/master/AivyCore/Program.cs
 
 ```csharp
-using AivyData.Entities;
-using AivyDomain.API.Client;
-using AivyDomain.API.Server;
-using AivyDomain.Mappers.Client;
-using AivyDomain.Mappers.Server;
-using AivyDomain.Repository.Client;
-using AivyDomain.Repository.Server;
-using AivyDomain.UseCases.Client;
-using AivyDomain.UseCases.Server;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Remoting;
+using AivyData.Entities;
 using AivyDomain.API.Proxy;
 using AivyDomain.Mappers.Proxy;
 using AivyDomain.Repository.Proxy;
