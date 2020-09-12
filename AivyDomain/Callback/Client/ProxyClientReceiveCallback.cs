@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyData.Enums;
 using AivyDomain.UseCases.Client;
 using NLog;
 using System;
@@ -16,14 +17,14 @@ namespace AivyDomain.Callback.Client
         protected readonly ClientEntity _remote;
         protected readonly ClientSenderRequest _client_sender;
         protected readonly ClientDisconnectorRequest _client_disconnector;
-        protected readonly string _tag;
+        protected readonly ProxyTagEnum _tag;
 
-        public ProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, string tag = "") 
+        public ProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
             : base(client)
         {
             _remote = remote ?? throw new ArgumentNullException(nameof(remote));
             _client_sender = sender ?? throw new ArgumentNullException(nameof(sender));
-            _tag = tag ?? throw new ArgumentNullException(nameof(tag));
+            _tag = tag;
             _client_disconnector = disconnector ?? throw new ArgumentNullException(nameof(disconnector));
         }
 
@@ -39,6 +40,8 @@ namespace AivyDomain.Callback.Client
                 {
                     _client.ReceiveBuffer = new MemoryStream();
                     _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
+
+                    _rcv_action?.Invoke(_client.ReceiveBuffer);
 
                     _client_sender.Handle(_remote, _client.ReceiveBuffer.ToArray());
 

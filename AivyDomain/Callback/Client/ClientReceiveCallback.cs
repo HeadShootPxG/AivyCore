@@ -14,6 +14,8 @@ namespace AivyDomain.Callback.Client
 
         public byte[] _buffer { get; set; }
 
+        protected Action<MemoryStream> _rcv_action { get; set; }
+
         public ClientReceiveCallback(ClientEntity client)
             : base(client)
         {
@@ -30,20 +32,24 @@ namespace AivyDomain.Callback.Client
             {
                 _client.ReceiveBuffer = new MemoryStream();
                 _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
-                
-                string str = "";
-                for (int i = 0; i < _rcv_len; i++)
-                    str += $"{_buffer[i]} ";
-                logger.Info($"test zebi : {str}");
+
+                _rcv_action?.Invoke(_client.ReceiveBuffer);
 
                 _buffer = new byte[_client.ReceiveBufferLength];
 
-                _client.Socket.BeginReceive(_buffer,
-                                            0,
-                                            _buffer.Length,
-                                            SocketFlags.None,
-                                            Callback,
-                                            _client.Socket);
+                try
+                {
+                    _client.Socket.BeginReceive(_buffer,
+                                                0,
+                                                _buffer.Length,
+                                                SocketFlags.None,
+                                                Callback,
+                                                _client.Socket);
+                }
+                catch (SocketException e)
+                {
+                    logger.Error(e);
+                }
             }
         }
     }

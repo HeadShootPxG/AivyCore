@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyData.Enums;
 using AivyDomain.API.Client;
 using AivyDomain.Callback.Client;
 using AivyDomain.Mappers.Client;
@@ -18,16 +19,16 @@ namespace AivyDomain.Callback.Proxy
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly OpenClientApi _client_api;
-        private readonly ClientEntityMapper _client_mapper;
-        private readonly ClientRepository _client_repository;
+        protected readonly OpenClientApi _client_api;
+        protected readonly ClientEntityMapper _client_mapper;
+        protected readonly ClientRepository _client_repository;
 
-        private readonly ClientCreatorRequest _client_creator;
-        private readonly ClientConnectorRequest _client_connector;
-        private readonly ClientDisconnectorRequest _client_disconnector;
-        private readonly ClientLinkerRequest _client_linker;
-        private readonly ClientReceiverRequest _client_receiver;
-        private readonly ClientSenderRequest _client_sender;
+        protected readonly ClientCreatorRequest _client_creator;
+        protected readonly ClientConnectorRequest _client_connector;
+        protected readonly ClientDisconnectorRequest _client_disconnector;
+        protected readonly ClientLinkerRequest _client_linker;
+        protected readonly ClientReceiverRequest _client_receiver;
+        protected readonly ClientSenderRequest _client_sender;
 
         public ProxyAcceptCallback(ProxyEntity proxy) 
             : base(proxy)
@@ -57,12 +58,13 @@ namespace AivyDomain.Callback.Proxy
 
                 ClientEntity remote = _client_creator.Handle(_proxy.IpRedirectedStack.Dequeue());
                 remote = _client_linker.Handle(remote, new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp));
-                ProxyClientReceiveCallback remote_rcv_callback = new ProxyClientReceiveCallback(remote, client, _client_sender, _client_disconnector ,"server");
+                ProxyClientReceiveCallback remote_rcv_callback = new ProxyClientReceiveCallback(remote, client, _client_sender, _client_disconnector , ProxyTagEnum.Server);
                 remote = _client_connector.Handle(remote, new ClientConnectCallback(remote, remote_rcv_callback));
 
+                // wait remote client to connect 
                 while (!remote.IsRunning) ; ;
 
-                client = _client_receiver.Handle(client, new ProxyClientReceiveCallback(client, remote, _client_sender, _client_disconnector, "client"));
+                client = _client_receiver.Handle(client, new ProxyClientReceiveCallback(client, remote, _client_sender, _client_disconnector, ProxyTagEnum.Client));
 
                 logger.Info("client connected");
 

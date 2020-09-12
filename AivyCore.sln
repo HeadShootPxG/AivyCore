@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AivyDomain", "AivyDomain\Ai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketHook", "SocketHook\SocketHook.csproj", "{EB3FCA74-D359-4356-AFA9-EA23709AE810}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyDofus", "AivyDofus\AivyDofus.csproj", "{36DFA665-7400-49DA-99FA-C72A2B7BFE24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36DFA665-7400-49DA-99FA-C72A2B7BFE24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36DFA665-7400-49DA-99FA-C72A2B7BFE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36DFA665-7400-49DA-99FA-C72A2B7BFE24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36DFA665-7400-49DA-99FA-C72A2B7BFE24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

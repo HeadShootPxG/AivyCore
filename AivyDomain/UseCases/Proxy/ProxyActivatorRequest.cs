@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AivyDomain.UseCases.Proxy
 {
-    public class ProxyActivatorRequest : IRequestHandler<ProxyEntity, bool, ProxyEntity>
+    public class ProxyActivatorRequest : IRequestHandler<ProxyEntity, bool, ProxyAcceptCallback, ProxyEntity>
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -20,7 +20,7 @@ namespace AivyDomain.UseCases.Proxy
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public ProxyEntity Handle(ProxyEntity request1, bool request2)
+        public ProxyEntity Handle(ProxyEntity request1, bool request2, ProxyAcceptCallback request3)
         {
             return _repository.ActionResult(x => x.Port == request1.Port && request1.ProcessId == x.ProcessId, x =>
             {
@@ -32,7 +32,7 @@ namespace AivyDomain.UseCases.Proxy
                     x.Socket.Bind(new IPEndPoint(IPAddress.Any, x.Port));
                     x.Socket.Listen(10);
 
-                    x.Socket.BeginAccept(new ProxyAcceptCallback(x).Callback, x.Socket);
+                    x.Socket.BeginAccept(request3.Callback, x.Socket);
                 }
                 else
                 {
