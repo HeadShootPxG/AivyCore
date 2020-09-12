@@ -1,9 +1,9 @@
-# AivyCore
-Modulable Proxy
+<h2> # AivyCore </h2>
+Proxy Modulable
 
 Pour le moment les APIs ne sont pas encore implémenté. 
 
-Voici un exemple de Program permettant d'installer un proxy sur Dofus en lançant le proxy sur le port 666
+Voici un exemple de Program permettant d'installer un proxy sur un fichier éxécutable en lançant le proxy sur le port 666
 ```csharp
 using NLog;
 using NLog.Config;
@@ -42,7 +42,7 @@ namespace AivyCore
             _proxy_creator = new ProxyCreatorRequest(_proxy_repository);
             _proxy_activator = new ProxyActivatorRequest(_proxy_repository);
 
-            ProxyEntity proxy = _proxy_creator.Handle(@"D:\DofusApp\Dofus.exe", 666);
+            ProxyEntity proxy = _proxy_creator.Handle(@"VOTRE FICHIER EXECUTABLE", 666);
             proxy = _proxy_activator.Handle(proxy, true);
 
             Console.ReadLine();
@@ -50,3 +50,9 @@ namespace AivyCore
     }
 }
 ```
+
+<h2> Dépendances </h2>
+- NLog
+- NewtonSoft Json
+- EasyHook ( SocketHook de Nameless )
+- Botofu parser
