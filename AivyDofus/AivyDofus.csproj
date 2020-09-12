@@ -36,6 +36,9 @@
     <Reference Include="EasyHook, Version=2.7.7097.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.7097\lib\net40\EasyHook.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.7.4\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -61,10 +64,23 @@
     <Compile Include="IO\Int64.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Protocol\Buffer\MessageBufferReader.cs" />
+    <Compile Include="Protocol\Elements\BotofuProtocol.cs" />
+    <Compile Include="Protocol\Elements\BotofuProtocolManager.cs" />
+    <Compile Include="Protocol\Elements\ProtocolKeyEnum.cs" />
+    <Compile Include="Protocol\Parser\BotofuParser.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyAcceptCallback.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyClientReceiveCallback.cs" />
     <Compile Include="Proxy\DofusProxy.cs" />
+    <Compile Include="Protocol\Elements\Fields\ClassField.cs" />
+    <Compile Include="Protocol\Elements\Fields\EnumField.cs" />
+    <Compile Include="Protocol\Elements\Fields\Limits.cs" />
+    <Compile Include="Protocol\Elements\NetworkElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -81,7 +97,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Proxy\Elements\" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="EasyHook32.dll">
@@ -102,6 +121,7 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Protocol\Parser\botofu_protocol_parser.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

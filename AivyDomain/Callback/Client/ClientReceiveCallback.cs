@@ -33,9 +33,9 @@ namespace AivyDomain.Callback.Client
                 _client.ReceiveBuffer = new MemoryStream();
                 _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
 
-                _rcv_action?.Invoke(_client.ReceiveBuffer);
-
                 _buffer = new byte[_client.ReceiveBufferLength];
+
+                _rcv_action?.Invoke(_client.ReceiveBuffer);
 
                 try
                 {

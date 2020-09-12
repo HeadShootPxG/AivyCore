@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyDofus.Protocol.Parser;
 using AivyDofus.Proxy.Callbacks;
 using AivyDomain.API.Proxy;
 using AivyDomain.Mappers.Proxy;
@@ -23,8 +24,16 @@ namespace AivyDofus.Proxy
 
         ProxyEntity _proxy;
 
-        public DofusProxy(string exePath, int port)
+        readonly BotofuParser _protocol_parser;
+
+        readonly string _app_path;
+        string _exe_path => $"{_app_path}/Dofus.exe";
+        string _invoker_path => $"{_app_path}/DofusInvoker.swf";
+
+        public DofusProxy(string appPath, int port)
         {
+            _app_path = appPath ?? throw new ArgumentNullException(nameof(appPath));
+
             _proxy_api = new OpenProxyApi("./proxy_information_api.json");
             _proxy_mapper = new ProxyEntityMapper();
             _proxy_repository = new ProxyRepository(_proxy_api, _proxy_mapper);
@@ -32,7 +41,10 @@ namespace AivyDofus.Proxy
             _proxy_creator = new ProxyCreatorRequest(_proxy_repository);
             _proxy_activator = new ProxyActivatorRequest(_proxy_repository);
 
-            _proxy = _proxy_creator.Handle(exePath, port);
+            _proxy = _proxy_creator.Handle(_exe_path, port);
+
+            _protocol_parser = new BotofuParser(_invoker_path);
+            _protocol_parser.Parse();
         }
 
         public void Active(bool active)

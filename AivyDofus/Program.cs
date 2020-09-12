@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyDofus.Protocol.Parser;
 using AivyDofus.Proxy;
 using AivyDofus.Proxy.Callbacks;
 using AivyDomain.API.Proxy;
@@ -28,7 +29,7 @@ namespace AivyDofus
             configuration.AddRule(LogLevel.Info, LogLevel.Fatal, log_console);
             LogManager.Configuration = configuration;
 
-            DofusProxy proxy = new DofusProxy(@"D:\DofusApp\Dofus.exe", 666);
+            DofusProxy proxy = new DofusProxy("D:/DofusApp", 666);
             proxy.Active(true);
 
             Console.ReadLine();
