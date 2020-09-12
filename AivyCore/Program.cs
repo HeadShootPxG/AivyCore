@@ -17,6 +17,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Remoting;
+using AivyDomain.API.Proxy;
+using AivyDomain.Mappers.Proxy;
+using AivyDomain.Repository.Proxy;
+using AivyDomain.UseCases.Proxy;
 
 namespace AivyCore
 {
@@ -26,7 +31,7 @@ namespace AivyCore
         static readonly LoggingConfiguration configuration = new LoggingConfiguration();
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        static OpenServerApi _server_api;
+        /*static OpenServerApi _server_api;
         static ServerEntityMapper _server_mapper;
         static ServerRepository _server_repository;
         // request
@@ -41,14 +46,31 @@ namespace AivyCore
         static ClientCreatorRequest _client_creator;
         static ClientConnectorRequest _client_connector;
         static ClientLinkerRequest _client_linker;
-        static ClientSenderRequest _client_sender;
+        static ClientSenderRequest _client_sender;*/
+
+        static OpenProxyApi _proxy_api;
+        static ProxyEntityMapper _proxy_mapper;
+        static ProxyRepository _proxy_repository;
+
+        static ProxyCreatorRequest _proxy_creator;
+        static ProxyActivatorRequest _proxy_activator;
 
         static void Main(string[] args)
         {
             configuration.AddRule(LogLevel.Info, LogLevel.Fatal, log_console);
             LogManager.Configuration = configuration;
 
-            _server_api = new OpenServerApi("./server_information.json");
+            _proxy_api = new OpenProxyApi("./proxy_information_api.json");
+            _proxy_mapper = new ProxyEntityMapper();
+            _proxy_repository = new ProxyRepository(_proxy_api, _proxy_mapper);
+
+            _proxy_creator = new ProxyCreatorRequest(_proxy_repository);
+            _proxy_activator = new ProxyActivatorRequest(_proxy_repository);
+
+            ProxyEntity proxy = _proxy_creator.Handle(@"D:\DofusApp\Dofus.exe", 666);
+            proxy = _proxy_activator.Handle(proxy, true);
+
+            /*_server_api = new OpenServerApi("./server_information.json");
             _server_mapper = new ServerEntityMapper();
             _server_repository = new ServerRepository(_server_api, _server_mapper);
 
@@ -72,6 +94,14 @@ namespace AivyCore
             client = _client_connector.Handle(client);
             while (!client.IsRunning) { }
             client = _client_sender.Handle(client, new byte[] { 1,2,3,4,5,6,7,8,9,10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            client = _client_sender.Handle(client, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });*/
 
             Console.ReadLine();
         }

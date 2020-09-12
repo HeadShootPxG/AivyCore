@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyCore", "AivyCore\AivyCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyTest", "AivyTest\AivyTest.csproj", "{D807C9D3-4ED7-4C0D-A9E0-E3966B0EA0FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyData", "AivyData\AivyData.csproj", "{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AivyData", "AivyData\AivyData.csproj", "{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AivyDomain", "AivyDomain\AivyDomain.csproj", "{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AivyDomain", "AivyDomain\AivyDomain.csproj", "{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketHook", "SocketHook\SocketHook.csproj", "{EB3FCA74-D359-4356-AFA9-EA23709AE810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E35C66D9-A988-4FCE-AF38-FB411BB4CEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3FCA74-D359-4356-AFA9-EA23709AE810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

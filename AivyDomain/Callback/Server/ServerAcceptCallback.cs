@@ -1,5 +1,6 @@
 ﻿using AivyData.Entities;
 using AivyDomain.API.Client;
+using AivyDomain.Callback.Client;
 using AivyDomain.Mappers.Client;
 using AivyDomain.Repository.Client;
 using AivyDomain.UseCases.Client;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace AivyDomain.Callback.Server
 {
-    public class ServerAcceptCallback : ServerCallback
+    public class ServerAcceptCallback : ServerCallback 
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -46,7 +47,7 @@ namespace AivyDomain.Callback.Server
 
                 ClientEntity client = _client_creator.Handle(_client_socket.RemoteEndPoint as IPEndPoint);
                 client = _client_linker.Handle(client, _client_socket);
-                client = _client_receiver.Handle(client);
+                client = _client_receiver.Handle(client, new ClientReceiveCallback(client));
 
                 logger.Info("client connected");
 

@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyDomain.Callback;
 using AivyDomain.Callback.Client;
 using AivyDomain.Repository;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace AivyDomain.UseCases.Client
 {
-    public class ClientReceiverRequest : IRequestHandler<ClientEntity, ClientEntity>
+    public class ClientReceiverRequest : IRequestHandler<ClientEntity, ClientReceiveCallback,ClientEntity> 
     {
         private readonly IRepository<ClientEntity> _repository;
 
@@ -17,12 +18,11 @@ namespace AivyDomain.UseCases.Client
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public ClientEntity Handle(ClientEntity request)
+        public ClientEntity Handle(ClientEntity request1, ClientReceiveCallback request2)
         {
-            return _repository.ActionResult(x => x.Socket.RemoteEndPoint == request.Socket.RemoteEndPoint, x =>
+            return _repository.ActionResult(x => x.Socket.RemoteEndPoint == request1.Socket.RemoteEndPoint, x =>
             {
-                ClientReceiveCallback callback = new ClientReceiveCallback(x);
-                x.Socket.BeginReceive(callback._buffer, 0, callback._buffer.Length, SocketFlags.None, callback.Callback, x.Socket);
+                x.Socket.BeginReceive(request2._buffer, 0, request2._buffer.Length, SocketFlags.None, request2.Callback, x.Socket);
                 return x;
             });
         }

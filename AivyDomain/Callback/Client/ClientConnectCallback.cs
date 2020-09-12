@@ -10,10 +10,16 @@ namespace AivyDomain.Callback.Client
     {
         private readonly ClientReceiveCallback _receiveCallback;
 
-        public ClientConnectCallback(ClientEntity client)
+        public ClientConnectCallback(ClientEntity client, ClientReceiveCallback receiveCallback)
             : base(client)
         {
-            _receiveCallback = new ClientReceiveCallback(client);
+            _receiveCallback = receiveCallback ?? throw new ArgumentNullException(nameof(receiveCallback));
+        }
+
+        public ClientConnectCallback(ClientEntity client)
+            : this(client, new ClientReceiveCallback(client))
+        {
+
         }
 
         public override void Callback(IAsyncResult result)

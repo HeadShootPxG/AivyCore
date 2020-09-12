@@ -24,7 +24,6 @@ namespace AivyDomain.UseCases.Client
                 if (!x.IsRunning) throw new ArgumentException($"client is running : {request1.IsRunning}");
 
                 x.Socket.BeginSend(request2, 0, request2.Length, SocketFlags.None, new ClientSendCallback(x).Callback, x.Socket);
-
                 return x;
             });
         }

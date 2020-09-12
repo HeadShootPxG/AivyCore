@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AivyDomain.UseCases.Client
 {
-    public class ClientConnectorRequest : IRequestHandler<ClientEntity, ClientEntity>
+    public class ClientConnectorRequest : IRequestHandler<ClientEntity, ClientConnectCallback, ClientEntity>
     {
         private readonly IRepository<ClientEntity> _repository;
 
@@ -18,7 +18,7 @@ namespace AivyDomain.UseCases.Client
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public ClientEntity Handle(ClientEntity request)
+        public ClientEntity Handle(ClientEntity request, ClientConnectCallback request2)
         {
             return _repository.ActionResult(x => x.RemoteIp == request.RemoteIp, x =>
             {
@@ -28,7 +28,7 @@ namespace AivyDomain.UseCases.Client
                 if (x.RemoteIp is null)
                     throw new ArgumentNullException(nameof(x.RemoteIp));
 
-                x.Socket.BeginConnect(x.RemoteIp, new ClientConnectCallback(x).Callback, x.Socket);
+                x.Socket.BeginConnect(x.RemoteIp, request2.Callback, x.Socket);
 
                 return x;
             });

@@ -6,10 +6,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AivyData\AivyData.csproj" />
+    <ProjectReference Include="..\SocketHook\SocketHook.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="EasyHook">
+      <HintPath>..\SocketHook\bin\Debug\EasyHook.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
