@@ -52,7 +52,7 @@ namespace AivyCore
 ```
 <h2> AivyDofus </h2>
 
-Proxy directement créer pour Dofus 
+Proxy directement créer pour Dofus ( pas encore fini à 100% mais ça arrive )
 
 ```csharp
 // DofusProxy("DOSSIER APP DOFUS", PORT)
