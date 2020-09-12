@@ -3,6 +3,8 @@ Modulable Proxy
 
 Un exemple de proxy dans https://github.com/Mrpotatosse/AivyCore/blob/master/AivyCore/Program.cs
 
+Pour le moment les APIs ne sont pas encore implémenté. 
+
 ```csharp
 using NLog;
 using NLog.Config;
