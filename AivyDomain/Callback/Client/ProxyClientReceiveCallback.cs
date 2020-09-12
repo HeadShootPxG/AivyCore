@@ -43,7 +43,8 @@ namespace AivyDomain.Callback.Client
 
                     _rcv_action?.Invoke(_client.ReceiveBuffer);
 
-                    _client_sender.Handle(_remote, _client.ReceiveBuffer.ToArray());
+                    if(_remote.IsRunning)
+                        _client_sender.Handle(_remote, _client.ReceiveBuffer.ToArray());
 
                     _buffer = new byte[_client.ReceiveBufferLength];
 

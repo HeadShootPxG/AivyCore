@@ -39,7 +39,7 @@ namespace AivyDofus.Proxy.Callbacks
                 remote = _client_connector.Handle(remote, new ClientConnectCallback(remote, remote_rcv_callback));
 
                 // wait remote client to connect 
-                while (!remote.IsRunning) ; ;
+                while (!remote.IsRunning) ; 
 
                 client = _client_receiver.Handle(client, new DofusProxyClientReceiveCallback(client, remote, _client_sender, _client_disconnector, ProxyTagEnum.Client));
 
