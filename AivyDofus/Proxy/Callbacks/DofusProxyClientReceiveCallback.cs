@@ -1,8 +1,10 @@
 ﻿using AivyData.Entities;
 using AivyData.Enums;
+using AivyDofus.Handler;
 using AivyDofus.IO;
 using AivyDofus.Protocol.Buffer;
 using AivyDofus.Protocol.Elements;
+using AivyDofus.Proxy.Handlers;
 using AivyDomain.Callback.Client;
 using AivyDomain.UseCases.Client;
 using NLog;
@@ -21,6 +23,7 @@ namespace AivyDofus.Proxy.Callbacks
         protected MessageBufferReader _buffer_reader;
         protected MessageDataBufferReader _data_buffer_reader;
         protected BigEndianReader _reader;
+        protected MessageHandler<ProxyHandlerAttribute> _handler;
 
         public DofusProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
             : base(client, remote, sender, disconnector, tag)
@@ -29,6 +32,7 @@ namespace AivyDofus.Proxy.Callbacks
             _rcv_action = OnReceive;
             if (tag is ProxyTagEnum.UNKNOW) throw new ArgumentNullException(nameof(tag));
             _buffer_reader = new MessageBufferReader(tag == ProxyTagEnum.Client);
+            _handler = new MessageHandler<ProxyHandlerAttribute>();
         }
 
         private void OnReceive(MemoryStream stream)
@@ -46,12 +50,17 @@ namespace AivyDofus.Proxy.Callbacks
             {
                 NetworkElement network = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId];
 
-                logger.Info($"info : {network?.BasicString ?? "no_message_found"}");
+                //logger.Info($"info : {network?.BasicString ?? "no_message_found"}");
                 
                 if (network != null)
                 {
                     _data_buffer_reader = new MessageDataBufferReader(network);
-                    logger.Info(_data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data)));
+                    NetworkContentElement _element = null;
+                    using (BigEndianReader reader = new BigEndianReader(_buffer_reader.Data))
+                    {
+                        _element = _data_buffer_reader.Parse(reader);
+                    }
+                    _handler.Handle(_client_sender, network, _element, _client, _remote);
                 }
 
                 _buffer_reader = null;

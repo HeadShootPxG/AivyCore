@@ -23,13 +23,12 @@ namespace AivyDofus
         static readonly ConsoleTarget log_console = new ConsoleTarget("log_console");
         static readonly FileTarget log_file = new FileTarget("log_file") { FileName = "./log.txt" };
         static readonly LoggingConfiguration configuration = new LoggingConfiguration();
-        static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public static void Main(string[] args)
         {
             Console.Title = "AivyCore - 1.0.0";
-            //configuration.AddRule(LogLevel.Info, LogLevel.Fatal, log_console);
-            configuration.AddRule(LogLevel.Debug, LogLevel.Fatal, log_file);
+
+            configuration.AddRule(LogLevel.Debug, LogLevel.Fatal, log_console);
             LogManager.Configuration = configuration;
 
             DofusProxy proxy = new DofusProxy("D:/DofusApp", 666);
