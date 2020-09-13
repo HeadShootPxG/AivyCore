@@ -46,6 +46,8 @@ namespace AivyDomain.Callback.Client
                     if(_remote.IsRunning)
                         _client_sender.Handle(_remote, _client.ReceiveBuffer.ToArray());
 
+                    _client.ReceiveBuffer.Dispose();
+
                     _buffer = new byte[_client.ReceiveBufferLength];
 
                     try 

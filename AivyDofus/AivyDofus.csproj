@@ -70,8 +70,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Protocol\Buffer\MessageBufferReader.cs" />
+    <Compile Include="Protocol\Buffer\MessageDataBufferReader.cs" />
     <Compile Include="Protocol\Elements\BotofuProtocol.cs" />
     <Compile Include="Protocol\Elements\BotofuProtocolManager.cs" />
+    <Compile Include="Protocol\Elements\NetworkContentElement.cs" />
     <Compile Include="Protocol\Elements\ProtocolKeyEnum.cs" />
     <Compile Include="Protocol\Parser\BotofuParser.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyAcceptCallback.cs" />

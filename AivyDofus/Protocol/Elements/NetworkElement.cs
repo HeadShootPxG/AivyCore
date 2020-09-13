@@ -20,7 +20,7 @@ namespace AivyDofus.Protocol.Elements
 
         public override string ToString()
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
         [JsonIgnore]

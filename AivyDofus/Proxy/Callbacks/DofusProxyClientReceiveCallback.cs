@@ -2,6 +2,7 @@
 using AivyData.Enums;
 using AivyDofus.IO;
 using AivyDofus.Protocol.Buffer;
+using AivyDofus.Protocol.Elements;
 using AivyDomain.Callback.Client;
 using AivyDomain.UseCases.Client;
 using NLog;
@@ -18,6 +19,7 @@ namespace AivyDofus.Proxy.Callbacks
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected MessageBufferReader _buffer_reader;
+        protected MessageDataBufferReader _data_buffer_reader;
         protected BigEndianReader _reader;
 
         public DofusProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
@@ -42,7 +44,15 @@ namespace AivyDofus.Proxy.Callbacks
 
             if (_buffer_reader.Build(_reader))
             {
-                logger.Info($"data : {_buffer_reader.MessageId} - (n°{_buffer_reader.InstanceId}) - {_buffer_reader.Length} - {_buffer_reader.Data.Length}");
+                NetworkElement network = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId];
+
+                logger.Info($"info : {network?.BasicString ?? "no_message_found"}");
+                
+                if (network != null)
+                {
+                    _data_buffer_reader = new MessageDataBufferReader(network);
+                    logger.Info(_data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data)));
+                }
 
                 _buffer_reader = null;
                 _buffer_reader = new MessageBufferReader(_tag == ProxyTagEnum.Client);
