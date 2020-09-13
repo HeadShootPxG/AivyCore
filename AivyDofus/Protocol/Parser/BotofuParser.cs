@@ -29,7 +29,7 @@ namespace AivyDofus.Protocol.Parser
             byte[] _byte_exe = Properties.Resources.botofu_protocol_parser;
             File.WriteAllBytes(_parser_executable_name, _byte_exe);
 
-            Process _parser_process = Process.Start(@"D:\Tsiry\Aivy\AivyCore\AivyDofus\bin\Debug\botofu_protocol_parser.exe", $"{DofusInvokerPath} ./protocol.json");
+            Process _parser_process = Process.Start(_parser_executable_name, $"{DofusInvokerPath} ./protocol.json");
 
             _parser_process.EnableRaisingEvents = true;
             _parser_process.Exited += _parser_process_Exited;
