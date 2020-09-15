@@ -17,7 +17,7 @@ namespace AivyDofus.Protocol.Buffer
         public int? Header { get; private set; }
         public uint? InstanceId { get; private set; }
         public int? Length { get; private set; }
-        public byte[] FullPacket { get; private set; }
+        public byte[] FullPacket { get; private set; }   
         #endregion
 
         #region From Modifiable Values 
@@ -50,11 +50,30 @@ namespace AivyDofus.Protocol.Buffer
             }
         }
 
+        public bool IsGameMessage
+        {
+            get
+            {
+                try 
+                {
+                    return IsValid && FullPacket.Length <= TruePacketCurrentLen && NonDataLength <= NonDataLength + Data.Length;
+                }
+                catch 
+                { 
+                    return false;
+                }
+            }
+        }
+
         public byte[] Data
         {
             get { return _data; }
             private set { _data = value; }
         }
+
+        public int NonDataLength => sizeof(short) + (ClientSide ? sizeof(uint) : 0) + LengthBytesCount.Value;
+        public int TruePacketCountLength => NonDataLength + Length.Value;
+        public int TruePacketCurrentLen => NonDataLength + Data.Length;
         #endregion
 
         private byte[] _data;

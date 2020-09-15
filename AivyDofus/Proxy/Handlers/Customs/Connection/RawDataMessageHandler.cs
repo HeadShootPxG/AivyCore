@@ -11,12 +11,15 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.Connection
 {
-    [ProxyHandler(ProtocolId = 4)]
-    public class IdentificationMessage : AbstractMessageHandler
+    // remove commentary if you want to handle it
+    //[ProxyHandler(ProtocolId = 6253)]
+    public class RawDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public IdentificationMessage(ClientSenderRequest sender,
+        public override bool IsForwardingData => true;
+
+        public RawDataMessageHandler(ClientSenderRequest sender,
                                       NetworkElement message,
                                       NetworkContentElement content,
                                       ClientEntity client,
@@ -28,8 +31,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            dynamic[] credentials = _content["credentials"];
-            logger.Info($"credentials : {credentials.Length}");
+            logger.Info($"rdm len : {_content["content"].Length}");
         }
     }
 }

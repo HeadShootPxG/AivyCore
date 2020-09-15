@@ -13,12 +13,14 @@ namespace AivyDofus.Handler
     public abstract class AbstractMessageHandler : IMessageHandler
     {
         protected readonly ClientSenderRequest _sender_request;
-        
+
         protected readonly ClientEntity _client;
         protected readonly ClientEntity _remote;
 
         protected readonly NetworkElement _message;
         protected readonly NetworkContentElement _content;
+
+        public abstract bool IsForwardingData { get; }
 
         public AbstractMessageHandler(ClientSenderRequest sender,
                                       NetworkElement message,

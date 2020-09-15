@@ -43,15 +43,15 @@ namespace AivyDomain.Callback.Client
 
                     _rcv_action?.Invoke(_client.ReceiveBuffer);
 
-                    if(_remote.IsRunning)
+                    if (_remote.IsRunning) 
                         _client_sender.Handle(_remote, _client.ReceiveBuffer.ToArray());
 
                     _client.ReceiveBuffer.Dispose();
 
                     _buffer = new byte[_client.ReceiveBufferLength];
 
-                    try 
-                    { 
+                    try
+                    {
                         _client.Socket.BeginReceive(_buffer,
                                                     0,
                                                     _buffer.Length,
@@ -59,15 +59,16 @@ namespace AivyDomain.Callback.Client
                                                     Callback,
                                                     _client.Socket);
                     }
-                    catch(SocketException)
+                    catch (SocketException)
                     {
                         _client_disconnector.Handle(_remote);
                     }
+
                 }
-            }            
+            }
             else
             {
-                if(_remote.IsRunning)
+                if (_remote.IsRunning)
                     _client_disconnector.Handle(_remote);
             }
         }

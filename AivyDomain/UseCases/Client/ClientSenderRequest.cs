@@ -19,7 +19,8 @@ namespace AivyDomain.UseCases.Client
 
         public ClientEntity Handle(ClientEntity request1, byte[] request2)
         {   
-            return _repository.ActionResult(x => x.RemoteIp == request1.RemoteIp, x =>
+            return _repository.ActionResult(x => x.Socket.RemoteEndPoint == request1.Socket.RemoteEndPoint
+                                              && x.RemoteIp == request1.RemoteIp, x =>
             {
                 if (!x.IsRunning) throw new ArgumentException($"client is running : {request1.IsRunning}");
 
