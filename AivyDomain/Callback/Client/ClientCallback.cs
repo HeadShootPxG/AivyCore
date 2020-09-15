@@ -7,7 +7,7 @@ namespace AivyDomain.Callback.Client
 {
     public abstract class ClientCallback : IAsyncCallback
     {
-        protected readonly ClientEntity _client;
+        public readonly ClientEntity _client;
 
         public ClientCallback(ClientEntity client)
         {

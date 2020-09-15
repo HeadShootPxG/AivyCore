@@ -1,6 +1,7 @@
 ﻿using AivyData.Entities;
 using AivyDofus.Protocol.Elements;
 using AivyDofus.Proxy.Handlers;
+using AivyDomain.Callback.Client;
 using AivyDomain.UseCases.Client;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Handler
 {
-    public class MessageHandler<Attribute> where Attribute : HandlerAttribute
+    public class MessageHandler<Attribute> where Attribute : HandlerAttribute 
     {
         protected static readonly object _lock = new object();
         protected readonly IEnumerable<Type> _handlers_type;
@@ -32,24 +33,16 @@ namespace AivyDofus.Handler
             }
         }
 
-        /// <summary>
-        /// return true if input data is automatically forwarded
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="message"></param>
-        /// <param name="content"></param>
-        /// <param name="client"></param>
-        /// <param name="remote"></param>
-        /// <returns></returns>
-        public bool Handle(ClientSenderRequest sender, NetworkElement message, NetworkContentElement content, ClientEntity client, ClientEntity remote = null)
+        public bool Handle(ProxyClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
         {
-            Type handler_type = _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().BaseMessage.protocolID == message.protocolID);
+            return _handle(_handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().BaseMessage.protocolID == element.protocolID), callback, element, content);
+        }
 
+        private bool _handle(Type handler_type, ProxyClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
+        {
             if (handler_type is null) return true;
 
-            AbstractMessageHandler handler = remote is null ? 
-                                             Activator.CreateInstance(handler_type, new object[] { sender, message, content, client }) as AbstractMessageHandler : 
-                                             Activator.CreateInstance(handler_type, new object[] { sender, message, content, client, remote }) as AbstractMessageHandler;
+            AbstractMessageHandler handler = Activator.CreateInstance(handler_type, new object[] { callback, element, content }) as AbstractMessageHandler;
 
             try
             {
@@ -58,7 +51,7 @@ namespace AivyDofus.Handler
                     handler.EndHandle();
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 handler.Error(e);
             }

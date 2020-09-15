@@ -14,10 +14,10 @@ namespace AivyDomain.Callback.Client
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly ClientEntity _remote;
-        protected readonly ClientSenderRequest _client_sender;
-        protected readonly ClientDisconnectorRequest _client_disconnector;
-        protected readonly ProxyTagEnum _tag;
+        public readonly ClientEntity _remote;
+        public readonly ClientSenderRequest _client_sender;
+        public readonly ClientDisconnectorRequest _client_disconnector;
+        public readonly ProxyTagEnum _tag;
 
         public ProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
             : base(client)

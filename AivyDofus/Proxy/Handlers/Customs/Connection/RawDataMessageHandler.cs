@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyData.Enums;
 using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
 using AivyDomain.UseCases.Client;
@@ -13,7 +14,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 {
     // remove commentary if you want to handle it
     //[ProxyHandler(ProtocolId = 6253)]
-    public class RawDataMessageHandler : AbstractMessageHandler
+    /*public class RawDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -23,8 +24,9 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
                                       NetworkElement message,
                                       NetworkContentElement content,
                                       ClientEntity client,
+                                      ProxyTagEnum tag = ProxyTagEnum.UNKNOW,
                                       ClientEntity remote = null)
-            : base(sender, message, content, client, remote)
+            : base(sender, message, content, client, tag, remote)
         {
 
         }
@@ -33,5 +35,5 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
         {
             logger.Info($"rdm len : {_content["content"].Length}");
         }
-    }
+    }*/
 }

@@ -76,6 +76,7 @@
     <Compile Include="Protocol\Buffer\MessageBufferReader.cs" />
     <Compile Include="Protocol\Buffer\MessageBufferWriter.cs" />
     <Compile Include="Protocol\Buffer\MessageDataBufferReader.cs" />
+    <Compile Include="Protocol\Buffer\MessageDataBufferWriter.cs" />
     <Compile Include="Protocol\Elements\BotofuProtocol.cs" />
     <Compile Include="Protocol\Elements\BotofuProtocolManager.cs" />
     <Compile Include="Protocol\Elements\NetworkContentElement.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Protocol\Elements\NetworkElement.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\IdentificationMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\RawDataMessageHandler.cs" />
+    <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\World\Map\MapComplementaryInformationsDataMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\ProxyHandlerAttribute.cs" />
   </ItemGroup>

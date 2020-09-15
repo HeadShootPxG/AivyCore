@@ -55,7 +55,6 @@ namespace AivyDofus.Proxy.Callbacks
                     _client.ReceiveBuffer = new MemoryStream();
                     _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
 
-                    //logger.Info($"rcv_data : {_rcv_len}");
                     MemoryStream _new_stream = _rcv_action?.Invoke(_client.ReceiveBuffer);
 
                     if (_remote.IsRunning && _new_stream != null)
@@ -111,19 +110,24 @@ namespace AivyDofus.Proxy.Callbacks
                     Array.Copy(full_data, 0, base_data, 0, base_data.Length);
                     Array.Copy(full_data, base_data.Length, remnant, 0, remnant.Length);
 
-                    _data_buffer_reader = new MessageDataBufferReader(element);
-                    if(_handler.GetHandler(element.protocolID) &&
-                        !_handler.Handle(_client_sender, element, _data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data)), _client, _remote))
+                    if (_handler.GetHandler(element.protocolID))
                     {
-                        if(remnant.Length > 0)
+                        _data_buffer_reader = new MessageDataBufferReader(element);
+                        
+                        if (!_handler.Handle(this, element, _data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data))))
                         {
-                            _reader.Dispose();
-                            _reader = new BigEndianReader();
-                            _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
+                            if (remnant.Length > 0)
+                            {
+                                _reader.Dispose();
+                                _reader = new BigEndianReader();
+                                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
 
-                            return OnReceive(new MemoryStream(remnant));
+                                return OnReceive(new MemoryStream(remnant));
+                            }
+
+                            return new MemoryStream();
                         }
-                    }                    
+                    }
 
                     if(remnant.Length > 0)
                     {
@@ -141,25 +145,6 @@ namespace AivyDofus.Proxy.Callbacks
 
             return null;
         }
-
-        /*private void CheckIfRemnant(MemoryStream stream)
-        {
-            using (BigEndianReader reader = new BigEndianReader(stream))
-            {
-                if (_buffer_reader.Build(reader))
-                {
-                    CheckIfRemnant();
-                }
-            }
-        }*/
-
-        /*private MemoryStream _recursif_build(ref BigEndianReader reader)
-        {
-            if (_buffer_reader.Build(reader))
-            {
-
-            }
-        }*/
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using AivyData.Entities;
+using AivyData.Enums;
 using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
 using AivyDomain.UseCases.Client;
@@ -11,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 {
-    [ProxyHandler(ProtocolId = 226)]
-    public class MapComplementaryInformationsDataMessageHandler : AbstractMessageHandler
+    //[ProxyHandler(ProtocolId = 226)]
+    /*public class MapComplementaryInformationsDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -22,8 +23,9 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
                                       NetworkElement message,
                                       NetworkContentElement content,
                                       ClientEntity client,
+                                      ProxyTagEnum tag = ProxyTagEnum.UNKNOW,
                                       ClientEntity remote = null)
-            : base(sender, message, content, client, remote)
+            : base(sender, message, content, client, tag, remote)
         {
 
         }
@@ -32,5 +34,5 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
         {
             logger.Info($"map id : {_content["mapId"]}");
         }
-    }
+    }*/
 }
