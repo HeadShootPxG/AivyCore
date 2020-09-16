@@ -66,7 +66,7 @@ proxy.Active(true);
 ```csharp
 /*
 * Il faut mettre l'attribut ProxyHandler pour que la class soit reconnu en tant que IHandler ( si vous ne le mettez pas , le message ne sera pas stocké 
-* La class doit être une sous-class de AbstractMessageHandler , et implémentera les fonction Handle() , EndHandle() ( optionel ) , Error(Exception) et son
+* La class doit être une sous-class de AbstractMessageHandler , et implémentera les fonction Handle() , EndHandle() ( optionel ) , Error(Exception) ( optionel ) et son
 * constructeur doit être NomDeVotreClass(Callback, NetworkElement, NetworkContentElement) : base(Callback,NetworkElement,NetworkContentElement) , le constructeur ne peut pas 
 * être modifié , sinon il y a une erreur lors de la création
 * la class AbstractMesssageHandler contient une fonction Send(bool,ClientEntity,NetworkElement,NetworkContentElement) , elle permet d'envoyer un message avec les arguments 
@@ -74,11 +74,13 @@ proxy.Active(true);
 * ClientEntity: le client auquel on veut envoyer le message 
 * NetworkElement: le message à envoyer
 * NetworkContentElement: le contenu du message à envoyer
+* elle contient aussi une valeur bool IsForwardingData , laissé à true , si sera directement transmis sans modification
 *
 * Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
 * Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
 * Pour faire la différence , il faudra , soit vous fié à _callback._tag , sinon , vous apprenez un peu le protocol , et vous regardez quel packet est envoyé par qui ^^ 
-*
+* Il n'y a pour l'instance aucune gestion de l'instanceId , donc les packets peuvent être seulement modifié
+* 
 * Pour créer un message/type il faut créer un NetworkContentElement de cette forme : 
 * new NetworkContentElement()
 * {
