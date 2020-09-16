@@ -26,41 +26,25 @@ namespace AivyDofus.Protocol.Buffer
             get
             {
                 if (MessageId.HasValue)
-                    return (MessageId << 2) | Length;
+                    return (MessageId << 2) | LengthBytesCount;
                 return null;
             }
         }
-
-        /*public byte[] CmpLength
-        {
-            get
-            {
-                using(BigEndianWriter writer = new BigEndianWriter())
-                {
-                    if (Length > 65535)
-                    {
-                        writer.WriteByte((byte)((Length >> 16) & 255));
-                        writer.WriteShort((short)(Length & 65535));
-                    }
-                    else if (Length > 255)
-                    {
-                        writer.WriteShort((short)Length);
-                    }
-                    else if (Length > 0)
-                    {
-                        writer.WriteByte((byte)Length);
-                    }
-                    return writer.Data;
-                }
-            }
-        }*/
 
         public int? LengthBytesCount
         {
             get
             {
-                if (Header.HasValue)
-                    return Header & 0x3;
+                if (Length.HasValue)
+                {
+                    if (Length > ushort.MaxValue)
+                        return 3;
+                    if (Length > byte.MaxValue)
+                        return 2;
+                    if (Length > 0)
+                        return 1;
+                    return 0;
+                }
                 return null;
             }
         }
@@ -80,8 +64,9 @@ namespace AivyDofus.Protocol.Buffer
             private set { _data = value; }
         }
 
-        public int TruePacketCountLength => sizeof(short) + (ClientSide ? sizeof(uint) : 0) + LengthBytesCount.Value + Length.Value;
-        public int TruePacketCurrentLen => sizeof(short) + (ClientSide ? sizeof(uint) : 0) + LengthBytesCount.Value + Data.Length;
+        public int NonDataLength => sizeof(short) + (ClientSide ? sizeof(uint) : 0) + LengthBytesCount.Value;
+        public int TruePacketCountLength => NonDataLength + Length.Value;
+        public int TruePacketCurrentLen => NonDataLength + Data.Length;
         #endregion
 
         private byte[] _data;
@@ -101,7 +86,7 @@ namespace AivyDofus.Protocol.Buffer
 
             writer.WriteShort(Header.Value);
 
-            if (ClientSide)
+            if (ClientSide && instanceId != null)
                 writer.WriteUnsignedInt(InstanceId.Value);
 
             switch (LengthBytesCount)
@@ -116,6 +101,8 @@ namespace AivyDofus.Protocol.Buffer
                     writer.WriteByte((byte)((Length >> 16) & 255));
                     writer.WriteShort((short)(Length & 65535));
                     break;
+                default:
+                    throw new ArgumentNullException(nameof(LengthBytesCount));
             }
 
             writer.WriteBytes(Data);

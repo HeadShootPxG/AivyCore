@@ -59,6 +59,8 @@ namespace AivyDofus.Proxy.Callbacks
 
                     if (_remote.IsRunning && _new_stream != null)
                     {
+                        logger.Info($"received data : {_new_stream.Length}");
+
                         if(_new_stream.Length > 0)
                             _client_sender.Handle(_remote, _new_stream.ToArray());
                         _reader.Dispose();
@@ -103,7 +105,7 @@ namespace AivyDofus.Proxy.Callbacks
                 if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element
                     && _buffer_reader.TruePacketCurrentLen == _buffer_reader.TruePacketCountLength)
                 {
-                    logger.Info(element.BasicString);
+                    //logger.Info(element.BasicString);
                     byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
                     byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 

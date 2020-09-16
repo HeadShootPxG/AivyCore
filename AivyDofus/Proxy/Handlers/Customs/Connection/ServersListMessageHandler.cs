@@ -20,7 +20,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public override bool IsForwardingData => true;
+        public override bool IsForwardingData => false;
 
         public ServersListMessageHandler(ProxyClientReceiveCallback callback, 
                                          NetworkElement element,
@@ -33,7 +33,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
         public override void Handle()
         {
             logger.Info($"{_content}");
-            //Send(false, _content);
+            Send(_callback._remote, _element, _content);
         }
     }
 }

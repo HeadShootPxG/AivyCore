@@ -42,7 +42,7 @@ namespace AivyDofus.Protocol.Buffer
                 _parse_super(writer);
                 _parse_bool(writer);
                 _parse_var(writer);
-
+                
                 return writer.Data;
             }
         }
@@ -66,7 +66,7 @@ namespace AivyDofus.Protocol.Buffer
             {
                 flags[_bool.position.Value] = BooleanByteWrapper.SetFlag(flags[_bool.position.Value], 
                                                                         (byte)((_bool.boolean_byte_wrapper_position.Value - 1) % 8), 
-                                                                        _network_content[_bool.name] is null ? _bool.default_value == "true" : _network_content[_bool.name]);
+                                                                        _network_content[_bool.name]);
             }
 
             writer.WriteBytes(flags);
