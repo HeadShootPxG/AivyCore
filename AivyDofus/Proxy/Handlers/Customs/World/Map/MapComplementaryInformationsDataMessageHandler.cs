@@ -2,6 +2,7 @@
 using AivyData.Enums;
 using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
+using AivyDomain.Callback.Client;
 using AivyDomain.UseCases.Client;
 using NLog;
 using System;
@@ -12,27 +13,24 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 {
-    //[ProxyHandler(ProtocolId = 226)]
-    /*public class MapComplementaryInformationsDataMessageHandler : AbstractMessageHandler
+    [ProxyHandler(ProtocolId = 226)]
+    public class MapComplementaryInformationsDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public override bool IsForwardingData => true;
 
-        public MapComplementaryInformationsDataMessageHandler(ClientSenderRequest sender,
-                                      NetworkElement message,
-                                      NetworkContentElement content,
-                                      ClientEntity client,
-                                      ProxyTagEnum tag = ProxyTagEnum.UNKNOW,
-                                      ClientEntity remote = null)
-            : base(sender, message, content, client, tag, remote)
+        public MapComplementaryInformationsDataMessageHandler(ProxyClientReceiveCallback callback, 
+                                                              NetworkElement element,
+                                                              NetworkContentElement content)
+            : base(callback, element, content)
         {
 
         }
 
         public override void Handle()
         {
-            logger.Info($"map id : {_content["mapId"]}");
+
         }
-    }*/
+    }
 }

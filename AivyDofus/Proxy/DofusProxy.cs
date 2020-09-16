@@ -24,8 +24,6 @@ namespace AivyDofus.Proxy
 
         ProxyEntity _proxy;
 
-        readonly BotofuParser _protocol_parser;
-
         readonly string _app_path;
         string _exe_path => $"{_app_path}/Dofus.exe";
         string _invoker_path => $"{_app_path}/DofusInvoker.swf";
@@ -43,8 +41,8 @@ namespace AivyDofus.Proxy
 
             _proxy = _proxy_creator.Handle(_exe_path, port);
 
-            _protocol_parser = new BotofuParser(_invoker_path);
-            _protocol_parser.Parse();
+            if (!StaticValues.DOFUS_PROTOCOL_INITIED)
+                new BotofuParser(_invoker_path).Parse();
         }
 
         public void Active(bool active)

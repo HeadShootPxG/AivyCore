@@ -2,6 +2,7 @@
 using AivyData.Enums;
 using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
+using AivyDomain.Callback.Client;
 using AivyDomain.UseCases.Client;
 using NLog;
 using System;
@@ -12,20 +13,17 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.Connection
 {
-    //[ProxyHandler(ProtocolId = 4)]
-    /*public class IdentificationMessageHandler : AbstractMessageHandler
+    [ProxyHandler(ProtocolId = 4)]
+    public class IdentificationMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public override bool IsForwardingData => true;
 
-        public IdentificationMessageHandler(ClientSenderRequest sender,
-                                      NetworkElement message,
-                                      NetworkContentElement content,
-                                      ClientEntity client,
-                                      ProxyTagEnum tag = ProxyTagEnum.UNKNOW,
-                                      ClientEntity remote = null)
-            : base(sender, message, content, client, tag, remote)
+        public IdentificationMessageHandler(ProxyClientReceiveCallback callback,
+                                            NetworkElement element,
+                                            NetworkContentElement content)
+            : base(callback, element, content)
         {
 
         }
@@ -35,5 +33,5 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
             dynamic[] credentials = _content["credentials"];
             logger.Info($"credentials : {credentials.Length}");
         }
-    }*/
+    }
 }

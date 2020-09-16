@@ -80,7 +80,7 @@ namespace AivyDofus.Protocol.Buffer
             {
                 if (field.is_vector || field.type == "ByteArray")
                 {
-                    dynamic[] array = _network_content[field.name];
+                    dynamic array = _network_content[field.name];
 
                     if (!field.constant_length.HasValue)
                     {

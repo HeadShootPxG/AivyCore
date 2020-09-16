@@ -91,9 +91,13 @@
     <Compile Include="Protocol\Elements\NetworkElement.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\IdentificationMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\RawDataMessageHandler.cs" />
+    <Compile Include="Proxy\Handlers\Customs\Connection\SelectedServerDataMessageHandler.cs" />
+    <Compile Include="Proxy\Handlers\Customs\Connection\ServerSelectionMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\World\Map\MapComplementaryInformationsDataMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\ProxyHandlerAttribute.cs" />
+    <Compile Include="Server\DofusServer.cs" />
+    <Compile Include="StaticValues.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

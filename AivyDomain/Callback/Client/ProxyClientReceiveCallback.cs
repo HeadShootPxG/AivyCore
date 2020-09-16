@@ -19,6 +19,8 @@ namespace AivyDomain.Callback.Client
         public readonly ClientDisconnectorRequest _client_disconnector;
         public readonly ProxyTagEnum _tag;
 
+        public virtual uint _instance_id => 0;
+
         public ProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
             : base(client)
         {

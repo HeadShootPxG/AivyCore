@@ -30,6 +30,8 @@ namespace AivyDofus.Proxy.Callbacks
         protected MessageHandler<ProxyHandlerAttribute> _handler;
         protected BigEndianReader _reader;
 
+        public override uint _instance_id => _buffer_reader.InstanceId.HasValue ? _buffer_reader.InstanceId.Value : base._instance_id; 
+
         public DofusProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
             : base(client, remote, sender, disconnector, tag)
         {
@@ -59,8 +61,6 @@ namespace AivyDofus.Proxy.Callbacks
 
                     if (_remote.IsRunning && _new_stream != null)
                     {
-                        logger.Info($"received data : {_new_stream.Length}");
-
                         if(_new_stream.Length > 0)
                             _client_sender.Handle(_remote, _new_stream.ToArray());
                         _reader.Dispose();
@@ -105,8 +105,9 @@ namespace AivyDofus.Proxy.Callbacks
                 if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element
                     && _buffer_reader.TruePacketCurrentLen == _buffer_reader.TruePacketCountLength)
                 {
-                    //logger.Info(element.BasicString);
+                    // remove commentary to see message
                     byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
+                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length})");
                     byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 
                     Array.Copy(full_data, 0, base_data, 0, base_data.Length);

@@ -21,9 +21,6 @@ namespace AivyDofus.Handler
         protected readonly NetworkElement _element;
         protected readonly NetworkContentElement _content;
 
-        private readonly MessageBufferWriter _writer;
-        private readonly MessageDataBufferWriter _data_writer;
-
         public abstract bool IsForwardingData { get; }
 
         public AbstractMessageHandler(ProxyClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
@@ -31,9 +28,6 @@ namespace AivyDofus.Handler
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
             _element = element ?? throw new ArgumentNullException(nameof(element));
             _content = content ?? throw new ArgumentNullException(nameof(content));
-
-            _writer = new MessageBufferWriter(_callback._tag == ProxyTagEnum.Client);
-            _data_writer = new MessageDataBufferWriter(_element);
         }
 
         public virtual void EndHandle()
@@ -48,18 +42,12 @@ namespace AivyDofus.Handler
 
         public abstract void Handle();
 
-        public virtual void Send(ClientEntity sender, NetworkElement element, NetworkContentElement content)
+        public virtual void Send(bool fromClient, ClientEntity sender, NetworkElement element, NetworkContentElement content, uint? instance_id = null)
         {
-            byte[] _data = _data_writer.Parse(content);
-            uint? _instance_id = null;
-            /*if((_callback._tag == ProxyTagEnum.Client && !client)
-             || _callback._tag == ProxyTagEnum.Server && client)
-            {
-                LogManager.GetCurrentClassLogger().Info("NOP");
-                // to do
-                _instance_id = 0;
-            }*/
-            byte[] _final_data = _writer.Build((ushort)element.protocolID, _instance_id, _data).Data;
+            if (fromClient && instance_id is null) throw new ArgumentNullException(nameof(instance_id));
+
+            byte[] _data = new MessageDataBufferWriter(element).Parse(content);
+            byte[] _final_data = new MessageBufferWriter(fromClient).Build((ushort)element.protocolID, instance_id, _data).Data;
 
             _callback._client_sender.Handle(sender, _final_data);
 

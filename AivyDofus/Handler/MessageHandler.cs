@@ -46,10 +46,12 @@ namespace AivyDofus.Handler
 
             try
             {
-                Task.Run(handler.Handle).ContinueWith(task =>
+                handler.Handle();
+                handler.EndHandle();
+                /*Task.Run(handler.Handle).ContinueWith(task =>
                 {
                     handler.EndHandle();
-                });
+                });*/
             }
             catch (Exception e)
             {

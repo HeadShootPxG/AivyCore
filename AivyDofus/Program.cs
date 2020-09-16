@@ -2,6 +2,7 @@
 using AivyDofus.Protocol.Parser;
 using AivyDofus.Proxy;
 using AivyDofus.Proxy.Callbacks;
+using AivyDofus.Server;
 using AivyDomain.API.Proxy;
 using AivyDomain.Callback.Proxy;
 using AivyDomain.Mappers.Proxy;
@@ -33,6 +34,9 @@ namespace AivyDofus
 
             DofusProxy proxy = new DofusProxy("D:/DofusApp", 666);
             proxy.Active(true);
+
+            DofusServer server = new DofusServer("D:/DofusApp", 777);
+            server.Active(true);
 
             Console.ReadLine();
         }

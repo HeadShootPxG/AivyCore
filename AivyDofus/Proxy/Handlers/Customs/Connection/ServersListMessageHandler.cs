@@ -32,8 +32,81 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            logger.Info($"{_content}");
-            Send(_callback._remote, _element, _content);
+            IEnumerable<dynamic> _servers = _content["servers"];            
+            _content["servers"] = _servers/*.Append(new NetworkContentElement()
+            {
+                fields =
+                {
+                    { "isMonoAccount", false },
+                    { "isSelectable", true },
+                    { "id", 127 },
+                    { "type", 1 },
+                    { "status", 3 },
+                    { "completion", 0 },
+                    { "charactersCount", 1 },
+                    { "charactersSlots", 5 },
+                    { "date", 1234828800000 }
+                }
+            }).Append(new NetworkContentElement()
+            {
+                fields =
+                {
+                    { "isMonoAccount", false },
+                    { "isSelectable", true },
+                    { "id", 119 },
+                    { "type", 1 },
+                    { "status", 3 },
+                    { "completion", 0 },
+                    { "charactersCount", 1 },
+                    { "charactersSlots", 5 },
+                    { "date", 1234828800000 }
+                }
+            }).Append(new NetworkContentElement()
+            {
+                fields =
+                {
+                    { "isMonoAccount", false },
+                    { "isSelectable", true },
+                    { "id", 122 },
+                    { "type", 1 },
+                    { "status", 3 },
+                    { "completion", 0 },
+                    { "charactersCount", 1 },
+                    { "charactersSlots", 5 },
+                    { "date", 1234828800000 }
+                }
+            })*/.Append(new NetworkContentElement()
+            {
+                fields =
+                {
+                    { "isMonoAccount", true },
+                    { "isSelectable", true },
+                    { "id", 671 },
+                    { "type", 1 },
+                    { "status", 3 },
+                    { "completion", 0 },
+                    { "charactersCount", 1 },
+                    { "charactersSlots", 5 },
+                    { "date", 1234828800000 }
+                }
+            })/*.Append(new NetworkContentElement()
+            {
+                fields =
+                {
+                    { "isMonoAccount", false },
+                    { "isSelectable", true },
+                    { "id", 901 },
+                    { "type", 1 },
+                    { "status", 3 },
+                    { "completion", 0 },
+                    { "charactersCount", 1 },
+                    { "charactersSlots", 5 },
+                    { "date", 1234828800000 }
+                }
+            })*/.ToArray();
+
+
+            Send(false, _callback._remote, _element, _content);
         }
     }
 }
