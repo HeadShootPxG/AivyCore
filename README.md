@@ -86,7 +86,7 @@ proxy.Active(true);
 * {
 *   fields = 
 *   { 
-*      { "nomDeLaPropriété", null /*valeur de la propriété*/ },
+*      { "nomDeLaPropriété", valeur de la propriété },
 *      { ... }   
 *   }
 * }
