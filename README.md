@@ -79,7 +79,7 @@ proxy.Active(true);
 * Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
 * Pour faire la différence , il faudra , soit vous fié à _callback._tag , sinon , vous apprenez un peu le protocol , et vous regardez quel packet est envoyé par qui ^^ 
 *
-* Pour créer un message il faut créer un NetworkContentElement de cette forme : 
+* Pour créer un message/type il faut créer un NetworkContentElement de cette forme : 
 * new NetworkContentElement()
 * {
 *   fields = 
