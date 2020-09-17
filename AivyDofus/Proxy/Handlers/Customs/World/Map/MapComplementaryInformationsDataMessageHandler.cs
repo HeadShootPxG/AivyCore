@@ -20,7 +20,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 
         public override bool IsForwardingData => true;
 
-        public MapComplementaryInformationsDataMessageHandler(ProxyClientReceiveCallback callback, 
+        public MapComplementaryInformationsDataMessageHandler(AbstractClientReceiveCallback callback, 
                                                               NetworkElement element,
                                                               NetworkContentElement content)
             : base(callback, element, content)

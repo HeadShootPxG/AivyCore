@@ -12,6 +12,7 @@ namespace AivyDofus.Protocol.Elements
         public EnumField[] enumerations { get; set; }
         public NetworkElement[] messages { get; set; }
         public NetworkElement[] types { get; set; }
+        public Version version { get; set; }
 
         public NetworkElement this[ProtocolKeyEnum key, Func<NetworkElement, bool> predicat]
         {

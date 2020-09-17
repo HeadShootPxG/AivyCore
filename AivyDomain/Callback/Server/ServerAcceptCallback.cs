@@ -17,13 +17,15 @@ namespace AivyDomain.Callback.Server
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly OpenClientApi _client_api;
-        private readonly ClientEntityMapper _client_mapper;
-        private readonly ClientRepository _client_repository;
+        protected readonly OpenClientApi _client_api;
+        protected readonly ClientEntityMapper _client_mapper;
+        protected readonly ClientRepository _client_repository;
 
-        private readonly ClientCreatorRequest _client_creator;
-        private readonly ClientLinkerRequest _client_linker;
-        private readonly ClientReceiverRequest _client_receiver;
+        protected readonly ClientCreatorRequest _client_creator;
+        protected readonly ClientDisconnectorRequest _client_disconnector;
+        protected readonly ClientLinkerRequest _client_linker;
+        protected readonly ClientReceiverRequest _client_receiver;
+        protected readonly ClientSenderRequest _client_sender;
 
         public ServerAcceptCallback(ServerEntity server)
             : base(server)
@@ -33,8 +35,10 @@ namespace AivyDomain.Callback.Server
             _client_repository = new ClientRepository(_client_api, _client_mapper);
 
             _client_creator = new ClientCreatorRequest(_client_repository);
+            _client_disconnector = new ClientDisconnectorRequest(_client_repository);
             _client_linker = new ClientLinkerRequest(_client_repository);
             _client_receiver = new ClientReceiverRequest(_client_repository);
+            _client_sender = new ClientSenderRequest(_client_repository);
         }
 
         public override void Callback(IAsyncResult result)

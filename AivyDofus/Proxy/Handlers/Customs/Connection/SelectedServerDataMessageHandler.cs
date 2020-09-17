@@ -17,7 +17,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override bool IsForwardingData => true;
 
-        public SelectedServerDataMessageHandler(ProxyClientReceiveCallback callback,
+        public SelectedServerDataMessageHandler(AbstractClientReceiveCallback callback,
                                                 NetworkElement element,
                                                 NetworkContentElement content)
             : base(callback, element, content)

@@ -1,5 +1,6 @@
 ﻿using AivyData.Entities;
 using AivyDofus.Protocol.Parser;
+using AivyDofus.Server.Callbacks;
 using AivyDomain.API.Server;
 using AivyDomain.Mappers.Server;
 using AivyDomain.Repository.Server;
@@ -40,13 +41,13 @@ namespace AivyDofus.Server
 
             _server = _server_creator.Handle(port);
 
-            if(!StaticValues.DOFUS_PROTOCOL_INITIED)
+            if (!StaticValues.DOFUS_PROTOCOL_INITIED)
                 new BotofuParser(_invoker_path).Parse();
         }
 
         public void Active(bool active)
         {
-            _server = _server_activator.Handle(_server, active);
+            _server = _server_activator.Handle(_server, active, new DofusServerAcceptCallback(_server));
         }
     }
 }

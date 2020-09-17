@@ -17,13 +17,13 @@ namespace AivyDofus.Handler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly ProxyClientReceiveCallback _callback;
+        protected readonly AbstractClientReceiveCallback _callback;
         protected readonly NetworkElement _element;
         protected readonly NetworkContentElement _content;
 
         public abstract bool IsForwardingData { get; }
 
-        public AbstractMessageHandler(ProxyClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
+        public AbstractMessageHandler(AbstractClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
         {
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
             _element = element ?? throw new ArgumentNullException(nameof(element));

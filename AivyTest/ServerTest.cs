@@ -1,5 +1,6 @@
 ﻿using AivyData.Entities;
 using AivyDomain.API.Server;
+using AivyDomain.Callback.Server;
 using AivyDomain.Mappers.Server;
 using AivyDomain.Repository.Server;
 using AivyDomain.UseCases.Server;
@@ -47,7 +48,7 @@ namespace AivyTest
 
             Assert.AreNotSame(server, server2);
 
-            server = _server_activator.Handle(server, true);
+            server = _server_activator.Handle(server, true, new ServerAcceptCallback(server));
 
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 666));
@@ -56,7 +57,7 @@ namespace AivyTest
             Assert.AreEqual(true, server.IsRunning);
             Assert.AreEqual(false, server2.IsRunning);
 
-            server = _server_activator.Handle(server, false);
+            server = _server_activator.Handle(server, false, null);
 
             Assert.AreEqual(false, server.IsRunning);
         }

@@ -33,12 +33,12 @@ namespace AivyDofus.Handler
             }
         }
 
-        public bool Handle(ProxyClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
+        public bool Handle(AbstractClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
         {
             return _handle(_handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().BaseMessage.protocolID == element.protocolID), callback, element, content);
         }
 
-        private bool _handle(Type handler_type, ProxyClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
+        private bool _handle(Type handler_type, AbstractClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
         {
             if (handler_type is null) return true;
 

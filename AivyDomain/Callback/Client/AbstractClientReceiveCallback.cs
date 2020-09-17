@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AivyDomain.Callback.Client
 {
-    public class ProxyClientReceiveCallback : ClientReceiveCallback
+    public class AbstractClientReceiveCallback : ClientReceiveCallback
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -21,11 +21,11 @@ namespace AivyDomain.Callback.Client
 
         public virtual uint _instance_id => 0;
 
-        public ProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
+        public AbstractClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
             : base(client)
         {
-            _remote = remote ?? throw new ArgumentNullException(nameof(remote));
             _client_sender = sender ?? throw new ArgumentNullException(nameof(sender));
+            _remote = remote;
             _tag = tag;
             _client_disconnector = disconnector ?? throw new ArgumentNullException(nameof(disconnector));
         }

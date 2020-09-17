@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Callbacks
 {
-    public class DofusProxyClientReceiveCallback : ProxyClientReceiveCallback
+    public class DofusProxyClientReceiveCallback : AbstractClientReceiveCallback
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -105,8 +105,8 @@ namespace AivyDofus.Proxy.Callbacks
                 if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element
                     && _buffer_reader.TruePacketCurrentLen == _buffer_reader.TruePacketCountLength)
                 {
-                    // remove commentary to see message
                     byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
+                    // remove/set commentary to unsee/see message
                     logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length})");
                     byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 

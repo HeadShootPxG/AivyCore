@@ -101,8 +101,6 @@ namespace AivyDofus.Protocol.Buffer
                     writer.WriteByte((byte)((Length >> 16) & 255));
                     writer.WriteShort((short)(Length & 65535));
                     break;
-                default:
-                    throw new ArgumentNullException(nameof(LengthBytesCount));
             }
 
             writer.WriteBytes(Data);

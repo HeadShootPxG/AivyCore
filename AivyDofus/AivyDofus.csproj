@@ -81,6 +81,7 @@
     <Compile Include="Protocol\Elements\BotofuProtocolManager.cs" />
     <Compile Include="Protocol\Elements\NetworkContentElement.cs" />
     <Compile Include="Protocol\Elements\ProtocolKeyEnum.cs" />
+    <Compile Include="Protocol\Elements\Version.cs" />
     <Compile Include="Protocol\Parser\BotofuParser.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyAcceptCallback.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyClientReceiveCallback.cs" />
@@ -96,7 +97,10 @@
     <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\World\Map\MapComplementaryInformationsDataMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\ProxyHandlerAttribute.cs" />
+    <Compile Include="Server\Callbacks\DofusServerAcceptCallback.cs" />
+    <Compile Include="Server\Callbacks\DofusServerClientReceiveCallback.cs" />
     <Compile Include="Server\DofusServer.cs" />
+    <Compile Include="Server\Handlers\ServerHandlerAttribute.cs" />
     <Compile Include="StaticValues.cs" />
   </ItemGroup>
   <ItemGroup>
