@@ -15,7 +15,7 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public override bool IsForwardingData => throw new NotImplementedException();
+        public override bool IsForwardingData => true;
 
         public AuthenticationTicketMessageHandler(AbstractClientReceiveCallback callback,
                                                   NetworkElement element,

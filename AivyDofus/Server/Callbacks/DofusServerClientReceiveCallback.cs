@@ -97,9 +97,9 @@ namespace AivyDofus.Server.Callbacks
                                                 Callback,
                                                 _client.Socket);
                 }
-                catch (SocketException)
+                catch (SocketException e)
                 {
-                    _client_disconnector.Handle(_remote);
+                    logger.Error(e);
                 }
             }
             else
@@ -146,8 +146,7 @@ namespace AivyDofus.Server.Callbacks
                     }
 
                     if (remnant.Length > 0)
-                    {
-                        _client_sender.Handle(_remote, base_data);
+                    {                        );
                         _reader.Dispose();
                         _reader = new BigEndianReader();
                         _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
