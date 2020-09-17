@@ -41,10 +41,7 @@ namespace AivyDofus.Server.Callbacks
         };
         private readonly NetworkElement _protocol_required = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 1];
 
-        private readonly NetworkContentElement _hello_game_message = new NetworkContentElement()
-        {
-            fields = { }
-        };
+        private readonly NetworkContentElement _hello_game_message = new NetworkContentElement();
         private readonly NetworkElement _hello_game = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 101];
 
         public DofusServerClientReceiveCallback(ClientEntity client, ClientSenderRequest sender, ClientDisconnectorRequest disconnector)
@@ -56,11 +53,12 @@ namespace AivyDofus.Server.Callbacks
 
             _rcv_action += OnReceive;
             _reader = new BigEndianReader();
-
+            // send protocolRequired
             using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_protocol_required.protocolID, null, new MessageDataBufferWriter(_protocol_required).Parse(_protocol_required_message)))
             {
                 _client_sender.Handle(_client, _writer.Data);
             }
+            // send helloGameMessage
             using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_hello_game.protocolID, null, new MessageDataBufferWriter(_hello_game).Parse(_hello_game_message)))
             {
                 _client_sender.Handle(_client, _writer.Data);
