@@ -5,10 +5,6 @@ Pour le moment les APIs ne sont pas encore implémenté.
 
 Voici un exemple de Program permettant d'installer un proxy sur un fichier éxécutable en lançant le proxy sur le port 666
 
-(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
-
-(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
-
 ```csharp
 using NLog;
 using NLog.Config;
@@ -55,6 +51,10 @@ namespace AivyCore
     }
 }
 ```
+
+(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
+(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
+
 <h2> AivyDofus </h2>
 
 La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
