@@ -83,7 +83,7 @@ server.Active(true);
 * ClientEntity: le client auquel on veut envoyer le message 
 * NetworkElement: le message à envoyer
 * NetworkContentElement: le contenu du message à envoyer
-* elle contient aussi une valeur bool IsForwardingData , laissé à true , si sera directement transmis sans modification
+* elle contient aussi une valeur bool IsForwardingData , laissé à true , si les données seront directement transmis sans modification
 *
 * Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
 * Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
