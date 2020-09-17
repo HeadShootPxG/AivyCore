@@ -95,43 +95,43 @@ proxy.Active(true);
 * Toutes les propriétées sont répertorié dans le fichier ./protocol.json dans le fichier éxécutable
 */
 [ProxyHandler(ProtocolId = 30)]
-    public class ServersListMessageHandler : AbstractMessageHandler
+public class ServersListMessageHandler : AbstractMessageHandler
+{
+    static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+    public override bool IsForwardingData => false;
+
+    public ServersListMessageHandler(ProxyClientReceiveCallback callback, 
+                                     NetworkElement element,
+                                     NetworkContentElement content)
+        : base(callback, element, content)
     {
-        static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public override bool IsForwardingData => false;
-
-        public ServersListMessageHandler(ProxyClientReceiveCallback callback, 
-                                         NetworkElement element,
-                                         NetworkContentElement content)
-            : base(callback, element, content)
-        {
-
-        }
-
-        public override void Handle()
-        {
-            IEnumerable<dynamic> _servers = _content["servers"];            
-            _content["servers"] = _servers.Append(new NetworkContentElement()
-            {
-                fields =
-                {
-                    { "isMonoAccount", true },
-                    { "isSelectable", true },
-                    { "id", 671 },
-                    { "type", 1 },
-                    { "status", 3 },
-                    { "completion", 0 },
-                    { "charactersCount", 1 },
-                    { "charactersSlots", 5 },
-                    { "date", 1234828800000 }
-                }
-            }).ToArray();
-
-
-            Send(false, _callback._remote, _element, _content);
-        }
     }
+
+    public override void Handle()
+    {
+        IEnumerable<dynamic> _servers = _content["servers"];            
+        _content["servers"] = _servers.Append(new NetworkContentElement()
+        {
+            fields =
+            {
+                { "isMonoAccount", true },
+                { "isSelectable", true },
+                { "id", 671 },
+                { "type", 1 },
+                { "status", 3 },
+                { "completion", 0 },
+                { "charactersCount", 1 },
+                { "charactersSlots", 5 },
+                { "date", 1234828800000 }
+            }
+        }).ToArray();
+
+
+        Send(false, _callback._remote, _element, _content);
+    }
+}
 ```
 
 <h2> Dépendances </h2>
