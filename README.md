@@ -4,6 +4,7 @@ Proxy Modulable
 Pour le moment les APIs ne sont pas encore implémenté. 
 
 Voici un exemple de Program permettant d'installer un proxy sur un fichier éxécutable en lançant le proxy sur le port 666
+
 ```csharp
 using NLog;
 using NLog.Config;
@@ -50,18 +51,26 @@ namespace AivyCore
     }
 }
 ```
+
+(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
+(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
+
 <h2> AivyDofus </h2>
 
-La création du proxy et du serveur (pas encore fini) se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
+La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
 Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
 
 ```csharp
 // DofusProxy("DOSSIER APP DOFUS", PORT)
 DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS", 666);
 proxy.Active(true);
+
+// DofusServer("DOSSIER APP DOFUS", PORT)
+DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS", 777);
+server.Active(true);
 ```
 
-<h2> Handlers </h2>
+<h2> Handlers Proxy </h2>
 
 ```csharp
 /*
@@ -95,43 +104,42 @@ proxy.Active(true);
 * Toutes les propriétées sont répertorié dans le fichier ./protocol.json dans le fichier éxécutable
 */
 [ProxyHandler(ProtocolId = 30)]
-    public class ServersListMessageHandler : AbstractMessageHandler
+public class ServersListMessageHandler : AbstractMessageHandler
+{
+    static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+    public override bool IsForwardingData => false;
+
+    public ServersListMessageHandler(ProxyClientReceiveCallback callback, 
+                                     NetworkElement element,
+                                     NetworkContentElement content)
+        : base(callback, element, content)
     {
-        static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public override bool IsForwardingData => false;
-
-        public ServersListMessageHandler(ProxyClientReceiveCallback callback, 
-                                         NetworkElement element,
-                                         NetworkContentElement content)
-            : base(callback, element, content)
-        {
-
-        }
-
-        public override void Handle()
-        {
-            IEnumerable<dynamic> _servers = _content["servers"];            
-            _content["servers"] = _servers.Append(new NetworkContentElement()
-            {
-                fields =
-                {
-                    { "isMonoAccount", true },
-                    { "isSelectable", true },
-                    { "id", 671 },
-                    { "type", 1 },
-                    { "status", 3 },
-                    { "completion", 0 },
-                    { "charactersCount", 1 },
-                    { "charactersSlots", 5 },
-                    { "date", 1234828800000 }
-                }
-            }).ToArray();
-
-
-            Send(false, _callback._remote, _element, _content);
-        }
     }
+
+    public override void Handle()
+    {
+        IEnumerable<dynamic> _servers = _content["servers"];            
+        _content["servers"] = _servers.Append(new NetworkContentElement()
+        {
+            fields =
+            {
+                { "isMonoAccount", true },
+                { "isSelectable", true },
+                { "id", 671 },
+                { "type", 1 },
+                { "status", 3 },
+                { "completion", 0 },
+                { "charactersCount", 1 },
+                { "charactersSlots", 5 },
+                { "date", 1234828800000 }
+            }
+        }).ToArray();
+
+        Send(false, _callback._remote, _element, _content);
+    }
+}
 ```
 
 <h2> Dépendances </h2>
