@@ -4,6 +4,11 @@ Proxy Modulable
 Pour le moment les APIs ne sont pas encore implémenté. 
 
 Voici un exemple de Program permettant d'installer un proxy sur un fichier éxécutable en lançant le proxy sur le port 666
+
+(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
+
+(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
+
 ```csharp
 using NLog;
 using NLog.Config;
@@ -52,13 +57,17 @@ namespace AivyCore
 ```
 <h2> AivyDofus </h2>
 
-La création du proxy et du serveur (pas encore fini) se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
+La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
 Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
 
 ```csharp
 // DofusProxy("DOSSIER APP DOFUS", PORT)
 DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS", 666);
 proxy.Active(true);
+
+// DofusServer("DOSSIER APP DOFUS", PORT)
+DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS", 777);
+server.Active(true);
 ```
 
 <h2> Handlers </h2>
