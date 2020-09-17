@@ -70,7 +70,7 @@ DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS", 777);
 server.Active(true);
 ```
 
-<h2> Handlers </h2>
+<h2> Handlers Proxy </h2>
 
 ```csharp
 /*
