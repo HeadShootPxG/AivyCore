@@ -100,6 +100,7 @@
     <Compile Include="Server\Callbacks\DofusServerAcceptCallback.cs" />
     <Compile Include="Server\Callbacks\DofusServerClientReceiveCallback.cs" />
     <Compile Include="Server\DofusServer.cs" />
+    <Compile Include="Server\Handlers\Customs\Connection\AuthenticationTicketMessageHandler.cs" />
     <Compile Include="Server\Handlers\ServerHandlerAttribute.cs" />
     <Compile Include="StaticValues.cs" />
   </ItemGroup>

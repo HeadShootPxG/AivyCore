@@ -63,12 +63,12 @@ namespace AivyDofus.Handler
 
         public bool GetHandler(int protocolId)
         {
-            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<ProxyHandlerAttribute>().ProtocolId == protocolId) != null;
+            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().ProtocolId == protocolId) != null;
         }
 
         public bool GetHandler(string protocolName)
         {
-            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<ProxyHandlerAttribute>().ProtocolName == protocolName) != null;
+            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().ProtocolName == protocolName) != null;
         }
     }
 }
