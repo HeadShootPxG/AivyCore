@@ -128,7 +128,6 @@ public class ServersListMessageHandler : AbstractMessageHandler
             }
         }).ToArray();
 
-
         Send(false, _callback._remote, _element, _content);
     }
 }
