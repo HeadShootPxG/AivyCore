@@ -83,7 +83,7 @@ server.Active(true);
 * ClientEntity: le client auquel on veut envoyer le message 
 * NetworkElement: le message à envoyer
 * NetworkContentElement: le contenu du message à envoyer
-* elle contient aussi une valeur bool IsForwardingData , laissé à true , si sera directement transmis sans modification
+* elle contient aussi une valeur bool IsForwardingData , laissé à true , si les données seront directement transmis sans modification
 *
 * Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
 * Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
@@ -150,5 +150,5 @@ public class ServersListMessageHandler : AbstractMessageHandler
 
 - EasyHook ( SocketHook de Nameless https://cadernis.fr/index.php?threads/sockethook-injector-alternative-%C3%A0-no-ankama-dll.2221/page-2#post-24796 celui que j'utilise est une ancienne version auquel j'ai appliqué quelque modification )
 
-- Botofu parser ( https://gitlab.com/botofu/protocol_parser ) ( j'ai directement ajouter le .exe aux ressources ducoup le protocol devrait être parser à chaque ouverture du hook  https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Protocol/Parser/BotofuParser.cs)
+- Botofu parser ( https://gitlab.com/botofu/protocol_parser ) ( j'ai directement ajouter le .exe aux ressources ducoup le protocol devrait être parser à chaque ouverture du hook  https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Protocol/Parser/BotofuParser.cs )
 
