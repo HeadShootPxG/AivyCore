@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Callback.Client;
 using AivyDomain.Repository;
 using System;
@@ -11,9 +12,9 @@ namespace AivyDomain.UseCases.Client
 {
     public class ClientConnectorRequest : IRequestHandler<ClientEntity, ClientConnectCallback, ClientEntity>
     {
-        private readonly IRepository<ClientEntity> _repository;
+        private readonly IRepository<ClientEntity, ClientData> _repository;
 
-        public ClientConnectorRequest(IRepository<ClientEntity> repository)
+        public ClientConnectorRequest(IRepository<ClientEntity, ClientData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }

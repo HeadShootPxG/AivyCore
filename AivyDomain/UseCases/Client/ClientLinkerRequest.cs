@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Repository;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ namespace AivyDomain.UseCases.Client
 {
     public class ClientLinkerRequest : IRequestHandler<ClientEntity, Socket, ClientEntity>
     {
-        private readonly IRepository<ClientEntity> _repository;
+        private readonly IRepository<ClientEntity, ClientData> _repository;
 
-        public ClientLinkerRequest(IRepository<ClientEntity> repository)
+        public ClientLinkerRequest(IRepository<ClientEntity, ClientData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }

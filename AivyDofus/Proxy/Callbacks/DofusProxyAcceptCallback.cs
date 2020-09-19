@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Callbacks
@@ -35,15 +36,34 @@ namespace AivyDofus.Proxy.Callbacks
 
                 ClientEntity remote = _client_creator.Handle(_proxy.IpRedirectedStack.Dequeue());
                 remote = _client_linker.Handle(remote, new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp));
-                DofusProxyClientReceiveCallback remote_rcv_callback = new DofusProxyClientReceiveCallback(remote, client, _client_sender, _client_disconnector, ProxyTagEnum.Server);
+                DofusProxyClientReceiveCallback remote_rcv_callback = new DofusProxyClientReceiveCallback(remote, client, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, ProxyTagEnum.Server);
                 remote = _client_connector.Handle(remote, new ClientConnectCallback(remote, remote_rcv_callback));
 
-                // wait remote client to connect 
-                while (!remote.IsRunning) ; 
+                // wait remote client to connect
+                try
+                {
+                    int c = 0;
+                    while (!remote.IsRunning)
+                    {
+                        if(c > 2000)
+                        {
+                            _client_disconnector.Handle(client);
+                            break;
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    logger.Error(e);
+                    return;
+                }
 
-                client = _client_receiver.Handle(client, new DofusProxyClientReceiveCallback(client, remote, _client_sender, _client_disconnector, ProxyTagEnum.Client));
+                if (client.IsRunning)
+                {
+                    client = _client_receiver.Handle(client, new DofusProxyClientReceiveCallback(client, remote, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, ProxyTagEnum.Client));
 
-                logger.Info("client connected");
+                    logger.Info("client connected");
+                }
 
                 _proxy.Socket.BeginAccept(Callback, _proxy.Socket);
             }

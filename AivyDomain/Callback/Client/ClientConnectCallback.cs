@@ -24,12 +24,15 @@ namespace AivyDomain.Callback.Client
 
         public override void Callback(IAsyncResult result)
         {
-            _client.Socket.BeginReceive(_receiveCallback._buffer, 
-                                        0,
-                                        _receiveCallback._buffer.Length, 
-                                        SocketFlags.None,
-                                        _receiveCallback.Callback,
-                                        _client.Socket);
+            if (_client.IsRunning)
+            {
+                _client.Socket.BeginReceive(_receiveCallback._buffer,
+                                            0,
+                                            _receiveCallback._buffer.Length,
+                                            SocketFlags.None,
+                                            _receiveCallback.Callback,
+                                            _client.Socket);
+            }
         }
     }
 }

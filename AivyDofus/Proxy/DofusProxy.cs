@@ -1,5 +1,6 @@
 ﻿using AivyData.Entities;
 using AivyDofus.Protocol.Parser;
+using AivyDofus.Proxy.API;
 using AivyDofus.Proxy.Callbacks;
 using AivyDomain.API.Proxy;
 using AivyDomain.Mappers.Proxy;
@@ -15,7 +16,7 @@ namespace AivyDofus.Proxy
 {
     public class DofusProxy 
     {
-        readonly OpenProxyApi _proxy_api;
+        public static readonly OpenProxyConfigurationApi _proxy_api = new OpenProxyConfigurationApi("./proxy_information_api.json");
         readonly ProxyEntityMapper _proxy_mapper;
         readonly ProxyRepository _proxy_repository;
 
@@ -32,7 +33,6 @@ namespace AivyDofus.Proxy
         {
             _app_path = appPath ?? throw new ArgumentNullException(nameof(appPath));
 
-            _proxy_api = new OpenProxyApi("./proxy_information_api.json");
             _proxy_mapper = new ProxyEntityMapper();
             _proxy_repository = new ProxyRepository(_proxy_api, _proxy_mapper);
 

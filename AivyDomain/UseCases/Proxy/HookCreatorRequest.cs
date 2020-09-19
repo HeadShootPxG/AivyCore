@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Repository;
 using EasyHook;
 using SocketHook;
@@ -10,10 +11,10 @@ namespace AivyDomain.UseCases.Proxy
 {
     public class HookCreatorRequest : IRequestHandler<string, ProxyEntity, HookEntity>
     {
-        private readonly IRepository<ProxyEntity> _repository;
+        private readonly IRepository<ProxyEntity, ProxyData> _repository;
         private readonly HookInjectorRequest _hook_injector;
 
-        public HookCreatorRequest(IRepository<ProxyEntity> repository)
+        public HookCreatorRequest(IRepository<ProxyEntity, ProxyData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _hook_injector = new HookInjectorRequest(_repository);

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace AivyDofus.Proxy.Handlers.Customs.Connection
 {
     // remove commentary if you want to handle it
-    [ProxyHandler(ProtocolId = 6253)]
+    //[ProxyHandler(ProtocolId = 6253)]
     public class RawDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -34,10 +34,10 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            dynamic content = _content["content"];
+            /*dynamic content = _content["content"];
             byte[] _data = new byte[content.Length];
             Array.Copy(content, 0, _data, 0, _data.Length);
-            File.WriteAllBytes(output_path, _data);
+            File.WriteAllBytes(output_path, _data);*/
         }
 
         public override void Error(Exception e)

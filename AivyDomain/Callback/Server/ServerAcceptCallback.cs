@@ -22,6 +22,7 @@ namespace AivyDomain.Callback.Server
         protected readonly ClientRepository _client_repository;
 
         protected readonly ClientCreatorRequest _client_creator;
+        protected readonly ClientConnectorRequest _client_connector;
         protected readonly ClientDisconnectorRequest _client_disconnector;
         protected readonly ClientLinkerRequest _client_linker;
         protected readonly ClientReceiverRequest _client_receiver;
@@ -39,6 +40,7 @@ namespace AivyDomain.Callback.Server
             _client_linker = new ClientLinkerRequest(_client_repository);
             _client_receiver = new ClientReceiverRequest(_client_repository);
             _client_sender = new ClientSenderRequest(_client_repository);
+            _client_connector = new ClientConnectorRequest(_client_repository);
         }
 
         public override void Callback(IAsyncResult result)

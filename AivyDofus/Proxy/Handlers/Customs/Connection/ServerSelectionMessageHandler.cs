@@ -1,4 +1,6 @@
-﻿using AivyDofus.Handler;
+﻿using AivyData.API;
+using AivyData.API.Proxy;
+using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
 using AivyDomain.Callback.Client;
 using NLog;
@@ -24,6 +26,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
         {
 
         }
+
         public static string Random()
         {
             return Guid.NewGuid().ToString("N");
@@ -36,8 +39,9 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            if (_content["serverId"] == 671)
+            if (DofusProxy._proxy_api.GetData(null).custom_servers.FirstOrDefault(x => x.ServerId == (int)_content["serverId"]) is ProxyCustomServerData _data)
             {
+                logger.Info($"data:{_data.ServerId} - content:{_content["serverId"]}");
                 NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 42];
 
                 logger.Info("request connection in custom server");
@@ -46,9 +50,9 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
                 {
                     fields = 
                     {
-                        { "serverId", 671 },
-                        { "address", "127.0.0.1" },
-                        { "ports", new short[] { 777 } },
+                        { "serverId", _data.ServerId },
+                        { "address", _data.IpAddress },
+                        { "ports", _data.Ports },
                         { "canCreateNewCharacter", true },
                         { "ticket", Encode(Random()) }
                     }
@@ -58,7 +62,6 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
             }
             else
             {
-                logger.Info($"iid {_callback._instance_id}");
                 Send(true, _callback._remote, _element, _content, _callback._instance_id);
             }
         }

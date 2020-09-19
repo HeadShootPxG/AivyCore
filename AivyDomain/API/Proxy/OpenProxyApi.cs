@@ -1,11 +1,11 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AivyDomain.API.Proxy
 {
-    public class OpenProxyApi : IApi<ProxyEntity>
+    public class OpenProxyApi : IApi<ProxyData>
     { 
         private readonly string _location;
 
@@ -14,7 +14,12 @@ namespace AivyDomain.API.Proxy
             _location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
-        public ProxyEntity GetData(Func<ProxyEntity, bool> predicat)
+        public ProxyData GetData(Func<ProxyData, bool> predicat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProxyData UpdateData(ProxyData data)
         {
             throw new NotImplementedException();
         }

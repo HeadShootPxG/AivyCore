@@ -15,19 +15,32 @@ namespace AivyDomain.Callback.Client
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public readonly ClientEntity _remote;
-        public readonly ClientSenderRequest _client_sender;
+        public readonly ClientCreatorRequest _client_creator;
+        public readonly ClientLinkerRequest _client_linker;
+        public readonly ClientConnectorRequest _client_connector;
         public readonly ClientDisconnectorRequest _client_disconnector;
+        public readonly ClientSenderRequest _client_sender;
         public readonly ProxyTagEnum _tag;
 
         public virtual uint _instance_id => 0;
 
-        public AbstractClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
+        public AbstractClientReceiveCallback(ClientEntity client, 
+                                             ClientEntity remote, 
+                                             ClientCreatorRequest creator,
+                                             ClientLinkerRequest linker,
+                                             ClientConnectorRequest connector,
+                                             ClientDisconnectorRequest disconnector,
+                                             ClientSenderRequest sender, ProxyTagEnum tag = ProxyTagEnum.UNKNOW) 
             : base(client)
         {
-            _client_sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _remote = remote;
             _tag = tag;
+
+            _client_creator = creator ?? throw new ArgumentNullException(nameof(creator));
+            _client_linker = linker ?? throw new ArgumentNullException(nameof(linker));
+            _client_connector = connector ?? throw new ArgumentNullException(nameof(connector));
             _client_disconnector = disconnector ?? throw new ArgumentNullException(nameof(disconnector));
+            _client_sender = sender ?? throw new ArgumentNullException(nameof(sender));
         }
 
         public override void Callback(IAsyncResult result)

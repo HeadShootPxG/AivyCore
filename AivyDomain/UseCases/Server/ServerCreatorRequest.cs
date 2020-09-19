@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Repository;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ namespace AivyDomain.UseCases.Server
 {
     public class ServerCreatorRequest : IRequestHandler<int, ServerEntity>
     {
-        private readonly IRepository<ServerEntity> _repository;
+        private readonly IRepository<ServerEntity, ServerData> _repository;
 
-        public ServerCreatorRequest(IRepository<ServerEntity> repository)
+        public ServerCreatorRequest(IRepository<ServerEntity, ServerData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }

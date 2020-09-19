@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Callback.Client;
 using AivyDomain.Callback.Server;
 using AivyDomain.Repository;
@@ -12,11 +13,11 @@ namespace AivyDomain.UseCases.Server
 {
     public class ServerActivatorRequest : IRequestHandler<ServerEntity, bool, ServerAcceptCallback, ServerEntity>
     {
-        private readonly IRepository<ServerEntity> _repository;
+        private readonly IRepository<ServerEntity, ServerData> _repository;
 
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public ServerActivatorRequest(IRepository<ServerEntity> repository)
+        public ServerActivatorRequest(IRepository<ServerEntity, ServerData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }

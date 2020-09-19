@@ -32,7 +32,7 @@ namespace AivyDofus.Server.Callbacks
 
                 ClientEntity client = _client_creator.Handle(_client_socket.RemoteEndPoint as IPEndPoint);
                 client = _client_linker.Handle(client, _client_socket);
-                client = _client_receiver.Handle(client, new DofusServerClientReceiveCallback(client, _client_sender, _client_disconnector));
+                client = _client_receiver.Handle(client, new DofusServerClientReceiveCallback(client, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender));
 
                 logger.Info("client connected");
 

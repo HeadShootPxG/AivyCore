@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.API;
 using AivyDomain.Mappers;
 using System;
@@ -7,16 +8,25 @@ using System.Text;
 
 namespace AivyDomain.Repository.Client
 {
-    public class ClientRepository : IRepository<ClientEntity>
+    public class ClientRepository : IRepository<ClientEntity, ClientData>
     {
-        private readonly IApi<ClientEntity> _api;
+        private readonly IApi<ClientData> _api;
         private readonly IMapper<Func<ClientEntity, bool>, ClientEntity> _mapper;
 
-        public ClientRepository(IApi<ClientEntity> api,
+        public ClientRepository(IApi<ClientData> api,
                                 IMapper<Func<ClientEntity, bool>, ClientEntity> mapper)
         {
             _api = api ?? throw new ArgumentNullException(nameof(api));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        public ClientData ActionApi(Func<ClientData, bool> predicat, Func<ClientData, ClientData> action)
+        {
+            if (predicat is null) throw new ArgumentNullException(nameof(predicat));
+            if (action is null) throw new ArgumentNullException(nameof(action));
+            ClientData result = FromApi(predicat);
+            if (result is null) throw new ArgumentNullException(nameof(result));
+            return _api.UpdateData(action(result));
         }
 
         public ClientEntity ActionResult(Func<ClientEntity, bool> predicat, Func<ClientEntity,ClientEntity> action)
@@ -27,7 +37,7 @@ namespace AivyDomain.Repository.Client
             return action(result);
         }
 
-        public ClientEntity FromApi(Func<ClientEntity, bool> predicat)
+        public ClientData FromApi(Func<ClientData, bool> predicat)
         {
             if (predicat is null) throw new ArgumentNullException(nameof(predicat));
             return _api.GetData(predicat);

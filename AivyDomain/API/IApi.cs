@@ -7,5 +7,6 @@ namespace AivyDomain.API
     public interface IApi<TData>
     {
         TData GetData(Func<TData, bool> predicat);
+        TData UpdateData(TData data);
     }
 }

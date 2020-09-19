@@ -4,10 +4,12 @@ using System.Text;
 
 namespace AivyDomain.Repository
 {
-    public interface IRepository<Result>
+    public interface IRepository<Entity, Data>
     {
-        Result GetResult(Func<Result, bool> predicat);
-        Result FromApi(Func<Result, bool> predicat);
-        Result ActionResult(Func<Result, bool> predicat, Func<Result,Result> action);
+        Entity GetResult(Func<Entity, bool> predicat);
+        Entity ActionResult(Func<Entity, bool> predicat, Func<Entity, Entity> action);
+
+        Data FromApi(Func<Data, bool> predicat);
+        Data ActionApi(Func<Data, bool> predicat, Func<Data, Data> action);
     }
 }

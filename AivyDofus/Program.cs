@@ -35,7 +35,7 @@ namespace AivyDofus
             DofusProxy proxy = new DofusProxy("D:/DofusApp", 666);
             proxy.Active(true);
 
-            DofusServer server = new DofusServer("D:/DofusApp", 777);
+            DofusServer server = new DofusServer("D:/DofusApp", 778);
             server.Active(true);
 
             Console.ReadLine();

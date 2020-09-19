@@ -27,9 +27,24 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            NetworkElement _authentication_accepted_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 111];
+            NetworkElement authentication_accepted_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 111];
 
-            Send(false, _callback._client, _authentication_accepted_message, new NetworkContentElement());
+            NetworkElement account_capabilities_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 6216];
+            NetworkContentElement account_capabilities_content = new NetworkContentElement()
+            {
+                fields =
+                {
+                    { "tutorialAvailable", true },
+                    { "canCreateNewCharacter", true },
+                    { "accountId", 1 },
+                    { "breedsVisible", 262143 },
+                    { "breedsAvailable", 262143 },
+                    { "status", 0 }
+                }
+            };
+
+            Send(false, _callback._client, authentication_accepted_message, new NetworkContentElement());
+            Send(false, _callback._client, account_capabilities_message, account_capabilities_content);
         }
 
         public override void Error(Exception e)

@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Callback;
 using AivyDomain.Callback.Client;
 using AivyDomain.Repository;
@@ -11,16 +12,16 @@ namespace AivyDomain.UseCases.Client
 {
     public class ClientReceiverRequest : IRequestHandler<ClientEntity, ClientReceiveCallback,ClientEntity> 
     {
-        private readonly IRepository<ClientEntity> _repository;
+        private readonly IRepository<ClientEntity, ClientData> _repository;
 
-        public ClientReceiverRequest(IRepository<ClientEntity> repository)
+        public ClientReceiverRequest(IRepository<ClientEntity, ClientData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public ClientEntity Handle(ClientEntity request1, ClientReceiveCallback request2)
         {
-            return _repository.ActionResult(x => x.Socket.RemoteEndPoint == request1.Socket.RemoteEndPoint, x =>
+            return _repository.ActionResult(x => x.IsRunning ? x.Socket.RemoteEndPoint == request1.Socket.RemoteEndPoint : x.RemoteIp == request1.RemoteIp, x =>
             {
                 if (request1 is null) throw new ArgumentNullException(nameof(request1));
                 if (request2 is null) throw new ArgumentNullException(nameof(request2));

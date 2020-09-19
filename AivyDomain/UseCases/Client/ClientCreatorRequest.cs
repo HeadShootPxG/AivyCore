@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Repository;
 using NLog;
 using System;
@@ -13,9 +14,9 @@ namespace AivyDomain.UseCases.Client
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IRepository<ClientEntity> _repository;
+        private readonly IRepository<ClientEntity, ClientData> _repository;
 
-        public ClientCreatorRequest(IRepository<ClientEntity> repository)
+        public ClientCreatorRequest(IRepository<ClientEntity, ClientData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }

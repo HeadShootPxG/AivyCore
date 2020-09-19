@@ -1,11 +1,12 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AivyDomain.API.Client
 {
-    public class OpenClientApi : IApi<ClientEntity>
+    public class OpenClientApi : IApi<ClientData>
     {
         private readonly string _location;
 
@@ -14,7 +15,12 @@ namespace AivyDomain.API.Client
             _location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
-        public ClientEntity GetData(Func<ClientEntity, bool> predicat)
+        public ClientData GetData(Func<ClientData, bool> predicat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ClientData UpdateData(ClientData data)
         {
             throw new NotImplementedException();
         }

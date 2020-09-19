@@ -14,30 +14,38 @@ namespace AivyData.Entities
         public int ReceiveBufferLength { get; set; }
 
         public MemoryStream ReceiveBuffer { get; set; }
+        public DateTime LastTimeMessage { get; set; }
 
         public bool IsRunning
         {
             get
             {
-                if (Socket != null && Socket.Connected)
+                try
                 {
-                    try
+                    if (Socket != null && Socket.Connected)
                     {
-                        if (Socket.Poll(0, SelectMode.SelectRead))
+                        try
                         {
-                            if (Socket.Receive(new byte[1], SocketFlags.Peek) == 0)
+                            if (Socket.Poll(0, SelectMode.SelectRead))
                             {
-                                return false;
+                                if (Socket.Receive(new byte[1], SocketFlags.Peek) == 0)
+                                {
+                                    return false;
+                                }
                             }
+                            return true;
                         }
-                        return true;
+                        catch
+                        {
+                            return false;
+                        }
                     }
-                    catch
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 

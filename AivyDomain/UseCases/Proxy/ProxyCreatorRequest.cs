@@ -5,6 +5,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Text;
 using NLog;
+using AivyData.API;
 
 namespace AivyDomain.UseCases.Proxy
 {
@@ -12,10 +13,10 @@ namespace AivyDomain.UseCases.Proxy
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IRepository<ProxyEntity> _repository;
+        private readonly IRepository<ProxyEntity, ProxyData> _repository;
         private readonly HookCreatorRequest _hook_creator;
 
-        public ProxyCreatorRequest(IRepository<ProxyEntity> repository)
+        public ProxyCreatorRequest(IRepository<ProxyEntity, ProxyData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _hook_creator = new HookCreatorRequest(_repository);

@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDomain.Callback.Proxy;
 using AivyDomain.Repository;
 using NLog;
@@ -13,9 +14,9 @@ namespace AivyDomain.UseCases.Proxy
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IRepository<ProxyEntity> _repository;
+        private readonly IRepository<ProxyEntity, ProxyData> _repository;
 
-        public ProxyActivatorRequest(IRepository<ProxyEntity> repository)
+        public ProxyActivatorRequest(IRepository<ProxyEntity, ProxyData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }

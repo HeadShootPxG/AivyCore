@@ -30,10 +30,16 @@ namespace AivyDofus.Proxy.Callbacks
         protected MessageHandler<ProxyHandlerAttribute> _handler;
         protected BigEndianReader _reader;
 
-        public override uint _instance_id => _buffer_reader.InstanceId.HasValue ? _buffer_reader.InstanceId.Value : base._instance_id; 
+        public override uint _instance_id => _buffer_reader.InstanceId.HasValue ? _buffer_reader.InstanceId.Value : base._instance_id;
 
-        public DofusProxyClientReceiveCallback(ClientEntity client, ClientEntity remote, ClientSenderRequest sender, ClientDisconnectorRequest disconnector, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
-            : base(client, remote, sender, disconnector, tag)
+        public DofusProxyClientReceiveCallback(ClientEntity client,
+                                               ClientEntity remote,
+                                               ClientCreatorRequest creator,
+                                               ClientLinkerRequest linker,
+                                               ClientConnectorRequest connector, 
+                                               ClientDisconnectorRequest disconnector, 
+                                               ClientSenderRequest sender, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
+            : base(client, remote, creator, linker, connector, disconnector, sender, tag)
         {
             if (tag is ProxyTagEnum.UNKNOW) throw new ArgumentNullException(nameof(tag));
 
@@ -61,7 +67,7 @@ namespace AivyDofus.Proxy.Callbacks
 
                     if (_remote.IsRunning && _new_stream != null)
                     {
-                        if(_new_stream.Length > 0)
+                        if(_new_stream.Length > 0 && _remote.IsRunning)
                             _client_sender.Handle(_remote, _new_stream.ToArray());
                         _reader.Dispose();
                         _reader = new BigEndianReader();
@@ -132,7 +138,7 @@ namespace AivyDofus.Proxy.Callbacks
                         }
                     }
 
-                    if(remnant.Length > 0)
+                    if(remnant.Length > 0 && _remote.IsRunning)
                     {
                         _client_sender.Handle(_remote, base_data);
                         _reader.Dispose();

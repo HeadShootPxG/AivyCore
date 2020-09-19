@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AivyDofus.Server.Callbacks
@@ -44,8 +45,8 @@ namespace AivyDofus.Server.Callbacks
         private readonly NetworkContentElement _hello_game_message = new NetworkContentElement();
         private readonly NetworkElement _hello_game = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 101];
 
-        public DofusServerClientReceiveCallback(ClientEntity client, ClientSenderRequest sender, ClientDisconnectorRequest disconnector)
-            : base(client, null, sender, disconnector, ProxyTagEnum.Client)
+        public DofusServerClientReceiveCallback(ClientEntity client, ClientCreatorRequest creator, ClientLinkerRequest linker, ClientConnectorRequest connector, ClientDisconnectorRequest disconnector, ClientSenderRequest sender)
+            : base(client, null, creator, linker, connector, disconnector, sender, ProxyTagEnum.Client)
         {
             _buffer_reader = new MessageBufferReader(true);
             _buffer_writer = new MessageBufferWriter(false);
@@ -53,21 +54,26 @@ namespace AivyDofus.Server.Callbacks
 
             _rcv_action += OnReceive;
             _reader = new BigEndianReader();
-            // send protocolRequired
-            using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_protocol_required.protocolID, null, new MessageDataBufferWriter(_protocol_required).Parse(_protocol_required_message)))
-            {
-                _client_sender.Handle(_client, _writer.Data);
-            }
-            // send helloGameMessage
-            using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_hello_game.protocolID, null, new MessageDataBufferWriter(_hello_game).Parse(_hello_game_message)))
-            {
-                _client_sender.Handle(_client, _writer.Data);
+
+            if (_client.IsRunning) 
+            { 
+                // send protocolRequired
+                using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_protocol_required.protocolID, null, new MessageDataBufferWriter(_protocol_required).Parse(_protocol_required_message)))
+                {
+                    _client_sender.Handle(_client, _writer.Data);
+                }
+                // send helloGameMessage
+                using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_hello_game.protocolID, null, new MessageDataBufferWriter(_hello_game).Parse(_hello_game_message)))
+                {
+                    _client_sender.Handle(_client, _writer.Data);
+                }
             }
         }
 
         public override void Callback(IAsyncResult result)
         {
             _client.Socket = (Socket)result.AsyncState;
+            _client.LastTimeMessage = DateTime.Now;
             int _rcv_len = _client.Socket.EndReceive(result, out SocketError errorCode);
 
             if (_rcv_len > 0 && errorCode == SocketError.Success)
@@ -146,7 +152,7 @@ namespace AivyDofus.Server.Callbacks
                     }
 
                     if (remnant.Length > 0)
-                    {                        );
+                    {                        
                         _reader.Dispose();
                         _reader = new BigEndianReader();
                         _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);

@@ -1,6 +1,9 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API;
+using AivyData.Entities;
 using AivyDofus.Protocol.Parser;
+using AivyDofus.Server.API;
 using AivyDofus.Server.Callbacks;
+using AivyDomain.API;
 using AivyDomain.API.Server;
 using AivyDomain.Mappers.Server;
 using AivyDomain.Repository.Server;
@@ -15,7 +18,7 @@ namespace AivyDofus.Server
 {
     public class DofusServer
     {
-        readonly OpenServerApi _server_api;
+        public static readonly OpenServerDatabaseApi _server_api = new OpenServerDatabaseApi("./server_database.db");
         readonly ServerEntityMapper _server_mapper;
         readonly ServerRepository _server_repository;
 
@@ -32,7 +35,6 @@ namespace AivyDofus.Server
         {
             _app_path = appPath ?? throw new ArgumentNullException(nameof(appPath));
 
-            _server_api = new OpenServerApi("./proxy_information_api.json");
             _server_mapper = new ServerEntityMapper();
             _server_repository = new ServerRepository(_server_api, _server_mapper);
 
