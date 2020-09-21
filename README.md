@@ -90,7 +90,7 @@ server.Active(true);
 * Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
 * Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
 * Pour faire la différence , il faudra , soit vous fié à _callback._tag , sinon , vous apprenez un peu le protocol , et vous regardez quel packet est envoyé par qui ^^ 
-* Il n'y a pour l'instance aucune gestion de l'instanceId , donc les packets peuvent être seulement modifié
+* L'instanceId est gérez de façon très triviale , et peut comporter quelque faille , mais elle est fonctionnelle dans la plupart des cas
 * 
 * Pour créer un message/type il faut créer un NetworkContentElement de cette forme : 
 * new NetworkContentElement()
@@ -139,6 +139,7 @@ public class ServersListMessageHandler : AbstractMessageHandler
             }
         }).ToArray();
 
+        //Send(false, _callback._remote, _element, _content, DofusProxy.GLOABL_INSTANCE_ID + 1, true); si c'est un faux message
         Send(false, _callback._remote, _element, _content);
     }
 }
