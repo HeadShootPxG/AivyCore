@@ -139,7 +139,7 @@ public class ServersListMessageHandler : AbstractMessageHandler
             }
         }).ToArray();
 
-        //Send(false, _callback._remote, _element, _content, DofusProxy.GLOABL_INSTANCE_ID + 1, true); si c'est un faux message
+        //Send(true, _callback._remote, _element, _content, DofusProxy.GLOABL_INSTANCE_ID + 1, true); si c'est un faux message provenant du client
         Send(false, _callback._remote, _element, _content);
     }
 }
