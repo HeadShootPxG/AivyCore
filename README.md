@@ -78,11 +78,13 @@ server.Active(true);
 * La class doit être une sous-class de AbstractMessageHandler , et implémentera les fonction Handle() , EndHandle() ( optionel ) , Error(Exception) ( optionel ) et son
 * constructeur doit être NomDeVotreClass(Callback, NetworkElement, NetworkContentElement) : base(Callback,NetworkElement,NetworkContentElement) , le constructeur ne peut pas 
 * être modifié , sinon il y a une erreur lors de la création
-* la class AbstractMesssageHandler contient une fonction Send(bool,ClientEntity,NetworkElement,NetworkContentElement) , elle permet d'envoyer un message avec les arguments 
+* la class AbstractMesssageHandler contient une fonction Send(bool,ClientEntity,NetworkElement,NetworkContentElement,uint?=null,bool=false) , elle permet d'envoyer un message avec les arguments 
 * bool: si le message provient du client ( donc , message envoyé au serveur )
 * ClientEntity: le client auquel on veut envoyer le message 
 * NetworkElement: le message à envoyer
 * NetworkContentElement: le contenu du message à envoyer
+* uint?: l'instance id ( si votre message est un message crée , c-à-d non modifié, alors il faudra metter l'instance_id à DofusProxy.GLOBAL_INSTANCE_ID + 1 )
+* bool: si votre message est un faux message , crée par le bot
 * elle contient aussi une valeur bool IsForwardingData , laissé à true , si les données seront directement transmis sans modification
 *
 * Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
