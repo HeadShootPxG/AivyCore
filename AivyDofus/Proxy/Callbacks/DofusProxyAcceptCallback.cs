@@ -45,9 +45,13 @@ namespace AivyDofus.Proxy.Callbacks
                     int c = 0;
                     while (!remote.IsRunning)
                     {
-                        if(c > 2000)
+                        Thread.Sleep(200);
+                        if(++c > 5)
                         {
-                            _client_disconnector.Handle(client);
+                            if(client.IsRunning)
+                                client = _client_disconnector.Handle(client);
+                            if(remote.IsRunning)
+                                remote = _client_disconnector.Handle(remote);
                             break;
                         }
                     }

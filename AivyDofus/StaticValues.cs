@@ -15,9 +15,11 @@ namespace AivyDofus
         {
             get
             {
-                bool _result = _dofus_protocol_initied;
-                DOFUS_PROTOCOL_INITIED = !_result;
-                return _result;
+                if (_dofus_protocol_initied)
+                    return true;
+
+                DOFUS_PROTOCOL_INITIED = true;
+                return true;
             }
             set
             {

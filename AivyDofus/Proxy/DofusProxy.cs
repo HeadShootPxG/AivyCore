@@ -17,6 +17,10 @@ namespace AivyDofus.Proxy
     public class DofusProxy 
     {
         public static readonly OpenProxyConfigurationApi _proxy_api = new OpenProxyConfigurationApi("./proxy_information_api.json");
+        public static uint GLOBAL_INSTANCE_ID => LAST_CLIENT_INSTANCE_ID + SERVER_MSG_RCV_SINCE_CLIENT + FAKE_MESSAGE_SENT;
+        public static uint LAST_CLIENT_INSTANCE_ID = 0;
+        public static uint SERVER_MSG_RCV_SINCE_CLIENT = 0;
+        public static uint FAKE_MESSAGE_SENT = 0;
         readonly ProxyEntityMapper _proxy_mapper;
         readonly ProxyRepository _proxy_repository;
 

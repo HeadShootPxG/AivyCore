@@ -111,9 +111,19 @@ namespace AivyDofus.Proxy.Callbacks
                 if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element
                     && _buffer_reader.TruePacketCurrentLen == _buffer_reader.TruePacketCountLength)
                 {
+                    if (_buffer_reader.ClientSide)
+                    {
+                        DofusProxy.LAST_CLIENT_INSTANCE_ID = _buffer_reader.InstanceId.Value;
+                        DofusProxy.SERVER_MSG_RCV_SINCE_CLIENT = 0;
+                    }
+                    else
+                    {
+                        DofusProxy.SERVER_MSG_RCV_SINCE_CLIENT += 1;
+                    }
+                    
                     byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
                     // remove/set commentary to unsee/see message
-                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length})");
+                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length}) (id:{_buffer_reader.InstanceId + DofusProxy.FAKE_MESSAGE_SENT}|{DofusProxy.GLOBAL_INSTANCE_ID})");
                     byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 
                     Array.Copy(full_data, 0, base_data, 0, base_data.Length);
@@ -122,7 +132,7 @@ namespace AivyDofus.Proxy.Callbacks
                     if (_handler.GetHandler(element.protocolID))
                     {
                         _data_buffer_reader = new MessageDataBufferReader(element);
-                        
+                                                
                         if (!_handler.Handle(this, element, _data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data))))
                         {
                             if (remnant.Length > 0)

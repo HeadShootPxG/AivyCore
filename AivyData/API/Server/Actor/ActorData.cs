@@ -4,7 +4,8 @@ using System.Text;
 
 namespace AivyData.API.Server.Actor
 {
-    class ActorData
+    public class ActorData
     {
+
     }
 }
