@@ -32,5 +32,10 @@ namespace AivyDomain.Mappers.Client
 
             return client;
         }
+
+        public bool Remove(Func<ClientEntity, bool> predicat)
+        {
+            return _clients.Remove(_clients.FirstOrDefault(predicat));
+        }
     }
 }

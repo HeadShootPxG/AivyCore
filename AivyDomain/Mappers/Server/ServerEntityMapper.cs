@@ -35,5 +35,10 @@ namespace AivyDomain.Mappers.Server
 
             return entity;
         }
+
+        public bool Remove(Func<ServerEntity, bool> predicat)
+        {
+            return _servers.Remove(_servers.FirstOrDefault(predicat));
+        }
     }
 }

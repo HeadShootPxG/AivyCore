@@ -9,6 +9,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,16 +44,11 @@ namespace AivyDofus.Handler
 
         public abstract void Handle();
 
-        public virtual void Send(bool fromClient, ClientEntity sender, NetworkElement element, NetworkContentElement content, uint? instance_id = null, bool fake_msg = false)
+        public virtual void Send(bool fromClient, ClientEntity sender, NetworkElement element, NetworkContentElement content, uint? instance_id = null)
         {
             if (fromClient && instance_id is null) 
             {
                 throw new ArgumentNullException(nameof(instance_id));
-            }
-
-            if (fake_msg)
-            {
-                DofusProxy.FAKE_MESSAGE_SENT++;
             }
 
             byte[] _data = new MessageDataBufferWriter(element).Parse(content);
@@ -64,13 +60,13 @@ namespace AivyDofus.Handler
         }
 
         #region FAST ACTIONS
-        public void FromClientSendPublicMessage(byte channel, string content)
+        public void SendMultiClientChatMessage(ClientEntity sender, byte channel, string content, uint? instance_id = null)
         {
-            ClientEntity _client = null;
-            if(_callback._tag == ProxyTagEnum.Client)            
-                _client = _callback._remote;
-            if (_callback._tag == ProxyTagEnum.Server)
-                _client = _callback._client;
+            if (sender is null) throw new ArgumentNullException(nameof(sender));
+            if (channel < 0) throw new ArgumentOutOfRangeException(nameof(channel));
+            if (content is null) throw new ArgumentNullException(nameof(content));
+
+            if (instance_id != null && instance_id < 0) throw new ArgumentOutOfRangeException(nameof(instance_id));
 
             NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 861];
             NetworkContentElement element_content = new NetworkContentElement()
@@ -82,7 +78,7 @@ namespace AivyDofus.Handler
                 }
             };
 
-            Send(true, _client, element, element_content, DofusProxy.GLOBAL_INSTANCE_ID + 1, true);
+            Send(true, sender, element, element_content, instance_id);
         }
         #endregion
     }

@@ -48,5 +48,10 @@ namespace AivyDomain.Repository.Client
             if (predicat is null) throw new ArgumentNullException(nameof(predicat));
             return _mapper.MapFrom(predicat);
         }
+
+        public bool Remove(Func<ClientEntity, bool> predicat)
+        {
+            return _mapper.Remove(predicat);
+        }
     }
 }

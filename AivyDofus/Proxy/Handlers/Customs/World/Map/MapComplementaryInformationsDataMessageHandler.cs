@@ -2,6 +2,7 @@
 using AivyData.Enums;
 using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
+using AivyDofus.Proxy.Callbacks;
 using AivyDomain.Callback.Client;
 using AivyDomain.UseCases.Client;
 using NLog;
@@ -31,14 +32,13 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 
         public override void Handle()
         {
-            /* // test
-            IEnumerable<dynamic> _actors = _content["actors"];
-
-            _actors = new dynamic[] { _actors.FirstOrDefault(x => x["protocol_id"] == 36 && x["name"] == "zobi-poilue") };
-
-            _content["actors"] = _actors.ToArray();
-            Send(false, _callback._remote, _element, _content);
-            */
+            if (_callback is DofusProxyClientReceiveCallback _dofus_callback)
+            {
+                Task.Delay(5000).ContinueWith(task =>
+                {
+                    SendMultiClientChatMessage(_callback._client, 0, "Wesh les moules =D", ++_dofus_callback._proxy.GLOBAL_INSTANCE_ID);
+                });
+            }
         }
 
         public override void Error(Exception e)

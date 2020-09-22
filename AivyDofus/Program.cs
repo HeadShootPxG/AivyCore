@@ -32,11 +32,11 @@ namespace AivyDofus
             configuration.AddRule(LogLevel.Debug, LogLevel.Fatal, log_console);
             LogManager.Configuration = configuration;
 
-            DofusProxy proxy = new DofusProxy("D:/DofusApp", 666);
-            proxy.Active(true);
+            DofusProxy proxy = new DofusProxy("D:/DofusApp");
+            ProxyEntity p_entity = proxy.Active(true, 666);
 
-            DofusServer server = new DofusServer("D:/DofusApp", 778);
-            server.Active(true);
+            DofusServer server = new DofusServer("D:/DofusApp");
+            ServerEntity s_entity = server.Active(true, 777);
 
             Console.ReadLine();
         }

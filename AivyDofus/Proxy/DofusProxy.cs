@@ -15,43 +15,50 @@ using System.Threading.Tasks;
 namespace AivyDofus.Proxy
 {
     public class DofusProxy 
-    {
+    { 
         public static readonly OpenProxyConfigurationApi _proxy_api = new OpenProxyConfigurationApi("./proxy_information_api.json");
-        public static uint GLOBAL_INSTANCE_ID => LAST_CLIENT_INSTANCE_ID + SERVER_MSG_RCV_SINCE_CLIENT + FAKE_MESSAGE_SENT;
-        public static uint LAST_CLIENT_INSTANCE_ID = 0;
-        public static uint SERVER_MSG_RCV_SINCE_CLIENT = 0;
-        public static uint FAKE_MESSAGE_SENT = 0;
-        readonly ProxyEntityMapper _proxy_mapper;
-        readonly ProxyRepository _proxy_repository;
 
+        readonly ProxyEntityMapper _proxy_mapper = new ProxyEntityMapper();
+
+        public readonly ProxyRepository _proxy_repository;
         readonly ProxyCreatorRequest _proxy_creator;
         readonly ProxyActivatorRequest _proxy_activator;
-
-        ProxyEntity _proxy;
 
         readonly string _app_path;
         string _exe_path => $"{_app_path}/Dofus.exe";
         string _invoker_path => $"{_app_path}/DofusInvoker.swf";
 
-        public DofusProxy(string appPath, int port)
+        public DofusProxy(string appPath)
         {
             _app_path = appPath ?? throw new ArgumentNullException(nameof(appPath));
 
-            _proxy_mapper = new ProxyEntityMapper();
-            _proxy_repository = new ProxyRepository(_proxy_api, _proxy_mapper);
-
-            _proxy_creator = new ProxyCreatorRequest(_proxy_repository);
-            _proxy_activator = new ProxyActivatorRequest(_proxy_repository);
-
-            _proxy = _proxy_creator.Handle(_exe_path, port);
+            if (_proxy_repository is null)
+            {
+                _proxy_repository = new ProxyRepository(_proxy_api, _proxy_mapper);
+                _proxy_creator = new ProxyCreatorRequest(_proxy_repository);
+                _proxy_activator = new ProxyActivatorRequest(_proxy_repository);
+            }
 
             if (!StaticValues.DOFUS_PROTOCOL_INITIED)
                 new BotofuParser(_invoker_path).Parse();
         }
 
-        public void Active(bool active)
+        public ProxyEntity Active(bool active, int port)
         {
-            _proxy = _proxy_activator.Handle(_proxy, active, new DofusProxyAcceptCallback(_proxy));
+            if (active)
+            {
+                ProxyEntity result = _proxy_creator.Handle(_exe_path, port);
+                result = _proxy_activator.Handle(result, active, new DofusProxyAcceptCallback(result));
+                return result;
+            }
+            else
+            {
+                if(_proxy_repository.Remove(x => x.Port == port))
+                {
+                    return null;
+                }
+                throw new ArgumentNullException($"cannot disable proxy with port : {port}");
+            }
         }
     }
 }

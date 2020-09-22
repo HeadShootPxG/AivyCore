@@ -49,5 +49,10 @@ namespace AivyDomain.Repository.Proxy
             if (predicat is null) throw new ArgumentNullException(nameof(predicat));
             return _mapper.MapFrom(predicat);
         }
+
+        public bool Remove(Func<ProxyEntity, bool> predicat)
+        {
+            return _mapper.Remove(predicat);
+        }
     }
 }

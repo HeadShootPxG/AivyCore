@@ -13,7 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +32,8 @@ namespace AivyDofus.Proxy.Callbacks
         protected MessageHandler<ProxyHandlerAttribute> _handler;
         protected BigEndianReader _reader;
 
+        public readonly ProxyEntity _proxy;
+
         public override uint _instance_id => _buffer_reader.InstanceId.HasValue ? _buffer_reader.InstanceId.Value : base._instance_id;
 
         public DofusProxyClientReceiveCallback(ClientEntity client,
@@ -38,10 +42,13 @@ namespace AivyDofus.Proxy.Callbacks
                                                ClientLinkerRequest linker,
                                                ClientConnectorRequest connector, 
                                                ClientDisconnectorRequest disconnector, 
-                                               ClientSenderRequest sender, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
+                                               ClientSenderRequest sender,
+                                               ProxyEntity proxy, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
             : base(client, remote, creator, linker, connector, disconnector, sender, tag)
         {
             if (tag is ProxyTagEnum.UNKNOW) throw new ArgumentNullException(nameof(tag));
+
+            _proxy = proxy ?? throw new ArgumentNullException(nameof(proxy));
 
             _buffer_reader = new MessageBufferReader(tag == ProxyTagEnum.Client);
             _handler = new MessageHandler<ProxyHandlerAttribute>();
@@ -113,17 +120,17 @@ namespace AivyDofus.Proxy.Callbacks
                 {
                     if (_buffer_reader.ClientSide)
                     {
-                        DofusProxy.LAST_CLIENT_INSTANCE_ID = _buffer_reader.InstanceId.Value;
-                        DofusProxy.SERVER_MSG_RCV_SINCE_CLIENT = 0;
+                        _proxy.LAST_CLIENT_INSTANCE_ID = _buffer_reader.InstanceId.Value;
+                        _proxy.MESSAGE_RECEIVED_FROM_LAST = 0; 
                     }
                     else
                     {
-                        DofusProxy.SERVER_MSG_RCV_SINCE_CLIENT += 1;
+                        _proxy.MESSAGE_RECEIVED_FROM_LAST += 1;
                     }
                     
                     byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
                     // remove/set commentary to unsee/see message
-                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length}) (id:{_buffer_reader.InstanceId + DofusProxy.FAKE_MESSAGE_SENT}|{DofusProxy.GLOBAL_INSTANCE_ID})");
+                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length}) (id:{_buffer_reader.InstanceId} + {_proxy.FAKE_MESSAGE_CREATED} = {_buffer_reader.InstanceId + _proxy.FAKE_MESSAGE_CREATED}|{_proxy.GLOBAL_INSTANCE_ID})");
                     byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 
                     Array.Copy(full_data, 0, base_data, 0, base_data.Length);

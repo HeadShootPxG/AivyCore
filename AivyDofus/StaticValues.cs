@@ -19,7 +19,7 @@ namespace AivyDofus
                     return true;
 
                 DOFUS_PROTOCOL_INITIED = true;
-                return true;
+                return false;
             }
             set
             {

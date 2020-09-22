@@ -38,5 +38,10 @@ namespace AivyDomain.Mappers.Proxy
 
             return proxy;
         }
+
+        public bool Remove(Func<ProxyEntity, bool> predicat)
+        {
+            return _proxys.Remove(_proxys.FirstOrDefault(predicat));
+        }
     }
 }
