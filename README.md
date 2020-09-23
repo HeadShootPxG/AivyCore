@@ -63,12 +63,12 @@ Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'
 
 ```csharp
 // DofusProxy("DOSSIER APP DOFUS", PORT)
-DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS", 666);
-proxy.Active(true);
+DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS");
+proxy.Active(true, 666);
 
 // DofusServer("DOSSIER APP DOFUS", PORT)
-DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS", 777);
-server.Active(true);
+DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS");
+server.Active(true, 777);
 ```
 
 <h2> Handlers Proxy </h2>
