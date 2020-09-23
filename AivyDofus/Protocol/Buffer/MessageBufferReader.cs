@@ -50,28 +50,13 @@ namespace AivyDofus.Protocol.Buffer
             }
         }
 
-        public bool IsGameMessage
-        {
-            get
-            {
-                try 
-                {
-                    return IsValid && FullPacket.Length <= TruePacketCurrentLen && NonDataLength <= NonDataLength + Data.Length;
-                }
-                catch 
-                { 
-                    return false;
-                }
-            }
-        }
-
         public byte[] Data
         {
             get { return _data; }
             private set { _data = value; }
         }
 
-        public int NonDataLength => sizeof(short) + (ClientSide ? sizeof(uint) : 0) + LengthBytesCount.Value;
+        public int NonDataLength => sizeof(short) + (ClientSide ? sizeof(uint) : 0) + LengthBytesCount ?? 0;
         public int TruePacketCountLength => NonDataLength + Length.Value;
         public int TruePacketCurrentLen => NonDataLength + Data.Length;
         #endregion
@@ -91,7 +76,7 @@ namespace AivyDofus.Protocol.Buffer
                 return true;
 
             if (reader.BytesAvailable >= 2 && !Header.HasValue)            
-                Header = reader.ReadShort();
+                Header = reader.ReadUnsignedShort();
 
             if (ClientSide)
                 InstanceId = reader.ReadUnsignedInt();
@@ -99,10 +84,12 @@ namespace AivyDofus.Protocol.Buffer
             if(LengthBytesCount.HasValue &&
                 reader.BytesAvailable >= LengthBytesCount && !Length.HasValue)
             {
-                Length = 0;
-                for (int i = LengthBytesCount.Value - 1; i >= 0; i--)
+                switch (LengthBytesCount)
                 {
-                    Length |= reader.ReadByte() << (i * 8);
+                    case 0: Length = 0; break;
+                    case 1: Length = reader.ReadByte(); break;
+                    case 2: Length = reader.ReadShort(); break;
+                    case 3: Length = ((reader.ReadByte() & 255) << 16) + ((reader.ReadByte() & 255) << 8) + (reader.ReadByte() & 255); break;
                 }
             }
 

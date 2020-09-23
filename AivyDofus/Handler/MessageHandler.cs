@@ -48,10 +48,6 @@ namespace AivyDofus.Handler
             {
                 handler.Handle();
                 handler.EndHandle();
-                /*Task.Run(handler.Handle).ContinueWith(task =>
-                {
-                    handler.EndHandle();
-                });*/
             }
             catch (Exception e)
             {
@@ -63,12 +59,12 @@ namespace AivyDofus.Handler
 
         public bool GetHandler(int protocolId)
         {
-            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().ProtocolId == protocolId) != null;
+            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().BaseMessage.protocolID == protocolId) != null;
         }
 
         public bool GetHandler(string protocolName)
         {
-            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().ProtocolName == protocolName) != null;
+            return _handlers_type.FirstOrDefault(x => x.GetCustomAttribute<Attribute>().BaseMessage.name == protocolName) != null;
         }
     }
 }

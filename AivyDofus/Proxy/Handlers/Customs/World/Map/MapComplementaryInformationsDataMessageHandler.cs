@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 {
-    [ProxyHandler(ProtocolId = 226)]
+    //[ProxyHandler(ProtocolId = 226)]
     public class MapComplementaryInformationsDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();

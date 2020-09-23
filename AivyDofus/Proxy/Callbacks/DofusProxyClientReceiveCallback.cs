@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,71 +58,45 @@ namespace AivyDofus.Proxy.Callbacks
             _reader = new BigEndianReader();
         }
 
-        public override void Callback(IAsyncResult result)
+        private string _hex_string(byte[] bytes, bool lower = true, bool space = true)
         {
-            _client.Socket = (Socket)result.AsyncState;
-
-            if (_client.IsRunning && _remote.IsRunning)
-            {
-                int _rcv_len = _client.Socket.EndReceive(result, out SocketError errorCode);
-
-                if (_rcv_len > 0 && errorCode == SocketError.Success && _client.IsRunning && _remote.IsRunning)
-                {
-                    _client.ReceiveBuffer = new MemoryStream();
-                    _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
-
-                    MemoryStream _new_stream = _rcv_action?.Invoke(_client.ReceiveBuffer);
-
-                    if (_remote.IsRunning && _new_stream != null)
-                    {
-                        if(_new_stream.Length > 0 && _remote.IsRunning)
-                            _client_sender.Handle(_remote, _new_stream.ToArray());
-                        _reader.Dispose();
-                        _reader = new BigEndianReader();
-                        _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-                    }
-
-                    _client.ReceiveBuffer.Dispose();
-
-                    _buffer = new byte[_client.ReceiveBufferLength];
-
-                    try
-                    {
-                        _client.Socket.BeginReceive(_buffer,
-                                                    0,
-                                                    _buffer.Length,
-                                                    SocketFlags.None,
-                                                    Callback,
-                                                    _client.Socket);
-                    }
-                    catch (SocketException)
-                    {
-                        _client_disconnector.Handle(_remote);
-                    }
-
-                }
-            }
-            else
-            {
-                if (_remote.IsRunning)
-                    _client_disconnector.Handle(_remote);
-            }
+            string result = BitConverter.ToString(bytes).Replace("-", space ? " " : "");
+            return lower ? result.ToLower() : result.ToUpper();
         }
 
         private MemoryStream OnReceive(MemoryStream stream)
         {
-            _reader.Add(stream.ToArray(), 0, (int)stream.Length);
+            return stream;
+
+            //logger.Info($"rcv : {_hex_string(stream.ToArray())}");
+
+            /*if (_buffer_reader.Build(_reader))
+            {
+                logger.Info($"builded id : {_buffer_reader.MessageId}");
+
+                _reader.Dispose();
+                _reader = new BigEndianReader();
+                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
+
+                return new MemoryStream(_reader.Data);
+            }
+            else
+            {
+                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
+                return stream;
+            }*/
+            /*_reader.Add(stream.ToArray(), 0, (int)stream.Length);
 
             if(_buffer_reader.Build(_reader))
             {
                 byte[] full_data = _reader.Data;
-                if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element
-                    && _buffer_reader.TruePacketCurrentLen == _buffer_reader.TruePacketCountLength)
+
+                if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element)
                 {
                     if (_buffer_reader.ClientSide)
                     {
                         _proxy.LAST_CLIENT_INSTANCE_ID = _buffer_reader.InstanceId.Value;
-                        _proxy.MESSAGE_RECEIVED_FROM_LAST = 0; 
+                        _proxy.MESSAGE_RECEIVED_FROM_LAST = 0;
                     }
                     else
                     {
@@ -130,7 +105,7 @@ namespace AivyDofus.Proxy.Callbacks
                     
                     byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
                     // remove/set commentary to unsee/see message
-                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length}) (id:{_buffer_reader.InstanceId} + {_proxy.FAKE_MESSAGE_CREATED} = {_buffer_reader.InstanceId + _proxy.FAKE_MESSAGE_CREATED}|{_proxy.GLOBAL_INSTANCE_ID})");
+                    // logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length}) (id:{_buffer_reader.InstanceId} + {_proxy.FAKE_MESSAGE_CREATED} = {_buffer_reader.InstanceId + _proxy.FAKE_MESSAGE_CREATED}|{_proxy.GLOBAL_INSTANCE_ID})");
                     byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 
                     Array.Copy(full_data, 0, base_data, 0, base_data.Length);
@@ -169,7 +144,7 @@ namespace AivyDofus.Proxy.Callbacks
                 return new MemoryStream(full_data);
             }
 
-            return null;
+            return stream;*/
         }
     }
 }

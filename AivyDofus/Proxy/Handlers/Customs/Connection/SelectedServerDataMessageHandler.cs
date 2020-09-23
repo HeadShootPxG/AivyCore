@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.Connection
 {
-    [ProxyHandler(ProtocolId = 42)]
+    //[ProxyHandler(ProtocolId = 42)]
     public class SelectedServerDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
