@@ -56,7 +56,8 @@ namespace AivyCore
 (<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
 
 <h2> AivyDofus </h2>
-
+Il y a eu un tout petit changement dans le protocol Dofus , ducoup j'ai retirer la lecture des packets , mais ça arrive ^^
+ 
 La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
 Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
 
