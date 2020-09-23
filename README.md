@@ -1,3 +1,5 @@
+( la partie Dofus peut contenir quelque bug , il y a eu quelque petit changement de la part de Dofus que je suis entrain de corriger )
+
 <h2> # AivyCore </h2>
 Proxy Modulable
 
