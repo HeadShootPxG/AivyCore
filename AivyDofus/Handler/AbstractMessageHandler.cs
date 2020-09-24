@@ -60,15 +60,15 @@ namespace AivyDofus.Handler
         }
 
         #region FAST ACTIONS
-        public void SendMultiClientChatMessage(ClientEntity sender, byte channel, string content, uint? instance_id = null)
+        public void TestChatClient(ClientEntity sender, byte channel, string content, uint instance_id)
         {
             if (sender is null) throw new ArgumentNullException(nameof(sender));
             if (channel < 0) throw new ArgumentOutOfRangeException(nameof(channel));
             if (content is null) throw new ArgumentNullException(nameof(content));
 
-            if (instance_id != null && instance_id < 0) throw new ArgumentOutOfRangeException(nameof(instance_id));
+            if (instance_id < 0) throw new ArgumentOutOfRangeException(nameof(instance_id));
 
-            NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 861];
+            NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "ChatClientMultiMessage"];
             NetworkContentElement element_content = new NetworkContentElement()
             {
                 fields =

@@ -38,7 +38,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            IEnumerable<dynamic> _servers = _content["servers"];
+            /*IEnumerable<dynamic> _servers = _content["servers"];
 
             foreach (ProxyCustomServerData custom in DofusProxy._proxy_api.GetData(null).custom_servers)
             {
@@ -70,7 +70,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
             _content["servers"] = _servers.ToArray();
 
-            Send(false, _callback._remote, _element, _content);
+            Send(false, _callback._remote, _element, _content);*/
         }
     }
 }

@@ -22,8 +22,6 @@ namespace AivyDomain.Callback.Client
         public readonly ClientSenderRequest _client_sender;
         public readonly ProxyTagEnum _tag;
 
-        public virtual uint _instance_id => 0;
-
         public AbstractClientReceiveCallback(ClientEntity client, 
                                              ClientEntity remote, 
                                              ClientCreatorRequest creator,
@@ -57,10 +55,7 @@ namespace AivyDomain.Callback.Client
 
             if (errorCode == SocketError.Success && _client.IsRunning && _rcv_len > 0)
             {
-                MemoryStream new_stream = _rcv_action?.Invoke(_client.ReceiveBuffer) ?? _client.ReceiveBuffer;
-
-                if (_remote.IsRunning && new_stream != null && new_stream.Length > 0)
-                    _client_sender.Handle(_remote, new_stream.ToArray());
+                _rcv_action?.Invoke(_client.ReceiveBuffer);
 
                 _buffer = new byte[_client.ReceiveBufferLength];
 
@@ -84,7 +79,7 @@ namespace AivyDomain.Callback.Client
                 if (_remote.IsRunning)
                 {
                     if (_rcv_len > 0)
-                        _client_sender.Handle(_remote, _client.ReceiveBuffer.ToArray());
+                        _rcv_action?.Invoke(_client.ReceiveBuffer);
                     else
                         _client_disconnector.Handle(_remote);
                 }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 {
-    //[ProxyHandler(ProtocolId = 226)]
+    [ProxyHandler(ProtocolName = "MapComplementaryInformationsDataMessage")]
     public class MapComplementaryInformationsDataMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -36,7 +36,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
             {
                 Task.Delay(5000).ContinueWith(task =>
                 {
-                    SendMultiClientChatMessage(_callback._client, 0, "Wesh les moules =D", ++_dofus_callback._proxy.GLOBAL_INSTANCE_ID);
+                    TestChatClient(_callback._client, 0, "Wesh les moules =D", ++_dofus_callback._proxy.GLOBAL_INSTANCE_ID);
                 });
             }
         }

@@ -17,7 +17,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public override bool IsForwardingData => false;
+        public override bool IsForwardingData => true;
 
         public ServerSelectionMessageHandler(AbstractClientReceiveCallback callback,
                                             NetworkElement element,
@@ -27,19 +27,9 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         }
 
-        public static string Random()
-        {
-            return Guid.NewGuid().ToString("N");
-        }
-
-        public static byte[] Encode(string ticket)
-        {
-            return Encoding.ASCII.GetBytes(ticket);
-        }
-
         public override void Handle()
         {
-            if (DofusProxy._proxy_api.GetData(null).custom_servers.FirstOrDefault(x => x.ServerId == (int)_content["serverId"]) is ProxyCustomServerData _data)
+            /*if (DofusProxy._proxy_api.GetData(null).custom_servers.FirstOrDefault(x => x.ServerId == (int)_content["serverId"]) is ProxyCustomServerData _data)
             {
                 logger.Info($"data:{_data.ServerId} - content:{_content["serverId"]}");
                 NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 42];
@@ -63,12 +53,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
             else
             {
                 Send(true, _callback._remote, _element, _content, _callback._instance_id);
-            }
-        }
-
-        public override void Error(Exception e)
-        {
-            logger.Error(e);
+            }*/
         }
     }
 }

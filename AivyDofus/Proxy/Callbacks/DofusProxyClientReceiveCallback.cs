@@ -11,6 +11,7 @@ using Newtonsoft.Json.Serialization;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -35,8 +36,6 @@ namespace AivyDofus.Proxy.Callbacks
 
         public readonly ProxyEntity _proxy;
 
-        public override uint _instance_id => _buffer_reader.InstanceId.HasValue ? _buffer_reader.InstanceId.Value : base._instance_id;
-
         public DofusProxyClientReceiveCallback(ClientEntity client,
                                                ClientEntity remote,
                                                ClientCreatorRequest creator,
@@ -55,96 +54,105 @@ namespace AivyDofus.Proxy.Callbacks
             _handler = new MessageHandler<ProxyHandlerAttribute>();
 
             _rcv_action += OnReceive;
-            _reader = new BigEndianReader();
         }
 
-        private string _hex_string(byte[] bytes, bool lower = true, bool space = true)
+        private ushort? _current_header { get; set; } = null;
+        private uint? _instance_id { get; set; } = null;
+        private int? _length { get; set; } = null;
+        private byte[] _data { get; set; } = null;
+
+        private int _message_id => _current_header.HasValue ? _current_header.Value >> 2 : 0;
+        private int _static_header => _current_header.HasValue ? _current_header.Value & 3 : 0;
+
+        private void _clear()
         {
-            string result = BitConverter.ToString(bytes).Replace("-", space ? " " : "");
-            return lower ? result.ToLower() : result.ToUpper();
+            _current_header = null;
+            _instance_id = null;
+            _length = null;
+            _data = null;
         }
 
-        private MemoryStream OnReceive(MemoryStream stream)
+        private long _position { get; set; } = 0;
+        /// <summary>
+        /// thx to Hitman for this implementation ;)
+        /// </summary>
+        /// <param name="stream"></param>
+        private void OnReceive(MemoryStream stream)
         {
-            return stream;
-
-            //logger.Info($"rcv : {_hex_string(stream.ToArray())}");
-
-            /*if (_buffer_reader.Build(_reader))
+            if (_reader is null) _reader = new BigEndianReader();
+            if (stream.Length > 0)
             {
-                logger.Info($"builded id : {_buffer_reader.MessageId}");
-
-                _reader.Dispose();
-                _reader = new BigEndianReader();
-                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-
-                return new MemoryStream(_reader.Data);
+                _client_sender.Handle(_remote, stream.ToArray());
+                _reader.Add(stream.ToArray(), 0, (int)stream.Length);
             }
-            else
-            {
-                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-                return stream;
-            }*/
-            /*_reader.Add(stream.ToArray(), 0, (int)stream.Length);
 
-            if(_buffer_reader.Build(_reader))
+            byte[] full_data = _reader.Data;
+            while (_position < full_data.Length && full_data.Length >= 2)
             {
-                byte[] full_data = _reader.Data;
+                long start_pos = _position;
+                _current_header = (ushort)((full_data[_position] * 256) + full_data[_position + 1]);
+                _position += sizeof(ushort);
 
-                if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element)
+                if(_tag == ProxyTagEnum.Client)
                 {
-                    if (_buffer_reader.ClientSide)
+                    _instance_id = (uint)((full_data[_position] * 256 * 256 * 256) + (full_data[_position + 1] * 256 * 256) + (full_data[_position + 2] * 256) + full_data[_position + 3]);
+                    _position += sizeof(uint);
+                }
+                _position +=  _static_header;
+
+                switch (_static_header)
+                {
+                    case 0: _length = 0; break;
+                    case 1: _length = full_data[_position - 1]; break;
+                    case 2: _length = (ushort)((full_data[_position - 2] * 256) + full_data[_position - 1]); break;
+                    case 3: _length = (full_data[_position - 3] * 65536) + (full_data[_position - 2] * 256) + full_data[_position - 1]; break;
+                }
+
+                long _current_data_len = full_data.Length - _position;
+                if(_current_data_len >= _length)
+                {
+                    NetworkElement _element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _message_id];
+                    _data = new byte[_current_data_len];
+
+                    if(_tag == ProxyTagEnum.Client)
                     {
-                        _proxy.LAST_CLIENT_INSTANCE_ID = _buffer_reader.InstanceId.Value;
+                        _proxy.LAST_CLIENT_INSTANCE_ID = _instance_id.Value;
                         _proxy.MESSAGE_RECEIVED_FROM_LAST = 0;
                     }
                     else
                     {
-                        _proxy.MESSAGE_RECEIVED_FROM_LAST += 1;
+                        _proxy.MESSAGE_RECEIVED_FROM_LAST++;
                     }
-                    
-                    byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
-                    // remove/set commentary to unsee/see message
-                    // logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length}) (id:{_buffer_reader.InstanceId} + {_proxy.FAKE_MESSAGE_CREATED} = {_buffer_reader.InstanceId + _proxy.FAKE_MESSAGE_CREATED}|{_proxy.GLOBAL_INSTANCE_ID})");
-                    byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
 
-                    Array.Copy(full_data, 0, base_data, 0, base_data.Length);
-                    Array.Copy(full_data, base_data.Length, remnant, 0, remnant.Length);
-
-                    if (_handler.GetHandler(element.protocolID))
+                    Array.Copy(full_data, _position, _data, 0, _current_data_len);
+                    if (_element != null)
                     {
-                        _data_buffer_reader = new MessageDataBufferReader(element);
-                                                
-                        if (!_handler.Handle(this, element, _data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data))))
+                        logger.Info($"[{_tag}] msg: {_element.BasicString}");
+                        _data_buffer_reader = new MessageDataBufferReader(_element);
+                        if (_handler.GetHandler(_element.protocolID))
                         {
-                            if (remnant.Length > 0)
-                            {
-                                _reader.Dispose();
-                                _reader = new BigEndianReader();
-                                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-
-                                return OnReceive(new MemoryStream(remnant));
-                            }
-
-                            return new MemoryStream();
+                            _handler.Handle(this, _element, _data_buffer_reader.Parse(new BigEndianReader(_data)));
                         }
                     }
 
-                    if(remnant.Length > 0 && _remote.IsRunning)
+                    _position += _length.Value;
+
+                    _clear();
+
+                    if(_current_data_len == _length)
                     {
-                        _client_sender.Handle(_remote, base_data);
                         _reader.Dispose();
                         _reader = new BigEndianReader();
-                        _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-
-                        return OnReceive(new MemoryStream(remnant));
+                        _position = 0;
+                        break;
                     }
                 }
-
-                return new MemoryStream(full_data);
+                else
+                {
+                    _position = start_pos; 
+                    break;
+                }                
             }
-
-            return stream;*/
         }
     }
 }

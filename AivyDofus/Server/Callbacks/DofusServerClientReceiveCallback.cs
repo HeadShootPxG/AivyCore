@@ -30,8 +30,6 @@ namespace AivyDofus.Server.Callbacks
         protected MessageHandler<ServerHandlerAttribute> _handler;
         protected BigEndianReader _reader;
 
-        public override uint _instance_id => _buffer_reader.InstanceId.HasValue ? _buffer_reader.InstanceId.Value : base._instance_id;
-
         private readonly NetworkContentElement _protocol_required_message = new NetworkContentElement()
         {
             fields =
@@ -40,10 +38,10 @@ namespace AivyDofus.Server.Callbacks
                 { "requiredVersion", BotofuProtocolManager.Protocol.version.protocol.version.minimum }
             }
         };
-        private readonly NetworkElement _protocol_required = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 1];
+        private readonly NetworkElement _protocol_required = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "ProtocolRequired"];
 
         private readonly NetworkContentElement _hello_game_message = new NetworkContentElement();
-        private readonly NetworkElement _hello_game = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 101];
+        private readonly NetworkElement _hello_game = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "HelloGameMessage"];
 
         public DofusServerClientReceiveCallback(ClientEntity client, ClientCreatorRequest creator, ClientLinkerRequest linker, ClientConnectorRequest connector, ClientDisconnectorRequest disconnector, ClientSenderRequest sender)
             : base(client, null, creator, linker, connector, disconnector, sender, ProxyTagEnum.Client)
@@ -70,7 +68,7 @@ namespace AivyDofus.Server.Callbacks
             }
         }
 
-        public override void Callback(IAsyncResult result)
+        /*public override void Callback(IAsyncResult result)
         {
             _client.Socket = (Socket)result.AsyncState;
             _client.LastTimeMessage = DateTime.Now;
@@ -112,11 +110,11 @@ namespace AivyDofus.Server.Callbacks
             {
                 _client_disconnector.Handle(_client);
             }
-        }
+        }*/
 
-        private MemoryStream OnReceive(MemoryStream stream)
+        private void OnReceive(MemoryStream stream)
         {
-            _reader.Add(stream.ToArray(), 0, (int)stream.Length);
+            /*_reader.Add(stream.ToArray(), 0, (int)stream.Length);
 
             if (_buffer_reader.Build(_reader))
             {
@@ -144,10 +142,8 @@ namespace AivyDofus.Server.Callbacks
                                 _reader = new BigEndianReader();
                                 _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
 
-                                return OnReceive(new MemoryStream(remnant));
+                                return;
                             }
-
-                            return new MemoryStream();
                         }
                     }
 
@@ -157,14 +153,14 @@ namespace AivyDofus.Server.Callbacks
                         _reader = new BigEndianReader();
                         _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
 
-                        return OnReceive(new MemoryStream(remnant));
+                        //return OnReceive(new MemoryStream(remnant));
                     }
                 }
 
-                return new MemoryStream(full_data);
-            }
+                //return new MemoryStream(full_data);
+            }*/
 
-            return null;
+            //return null;
         }
     }    
 }

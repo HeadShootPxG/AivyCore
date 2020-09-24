@@ -14,7 +14,7 @@ namespace AivyDomain.Callback.Client
 
         public byte[] _buffer { get; set; }
 
-        protected Func<MemoryStream, MemoryStream> _rcv_action { get; set; }
+        protected Action<MemoryStream> _rcv_action { get; set; }
 
         public ClientReceiveCallback(ClientEntity client)
             : base(client)

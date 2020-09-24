@@ -94,9 +94,6 @@
     <Compile Include="Protocol\Elements\Fields\EnumField.cs" />
     <Compile Include="Protocol\Elements\Fields\Limits.cs" />
     <Compile Include="Protocol\Elements\NetworkElement.cs" />
-    <Compile Include="Proxy\Handlers\Customs\Connection\IdentificationMessageHandler.cs" />
-    <Compile Include="Proxy\Handlers\Customs\Connection\RawDataMessageHandler.cs" />
-    <Compile Include="Proxy\Handlers\Customs\Connection\SelectedServerDataMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServerSelectionMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\World\Map\MapComplementaryInformationsDataMessageHandler.cs" />
