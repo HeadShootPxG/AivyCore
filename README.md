@@ -1,5 +1,3 @@
-( la partie Dofus peut contenir quelque bug , il y a eu quelque petit changement de la part de Dofus que je suis entrain de corriger )
-
 <h2> # AivyCore </h2>
 Proxy Modulable
 
@@ -64,11 +62,13 @@ La création du proxy et du serveur se passe dans Program.cs  (https://github.co
 Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
 
 ```csharp
-// DofusProxy("DOSSIER APP DOFUS", PORT)
+// DofusProxy("DOSSIER APP DOFUS")
+// active(bool, int)
 DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS");
 proxy.Active(true, 666);
 
-// DofusServer("DOSSIER APP DOFUS", PORT)
+// DofusServer("DOSSIER APP DOFUS")
+// active(bool, int)
 DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS");
 server.Active(true, 777);
 ```
@@ -108,7 +108,7 @@ server.Active(true, 777);
 *
 * Toutes les propriétées sont répertorié dans le fichier ./protocol.json dans le fichier éxécutable
 */
-[ProxyHandler(ProtocolId = 30)]
+[ProxyHandler(ProtocolName = "ServersListMessage")] // l'id peut changer donc favoriser toujours le nom
 public class ServersListMessageHandler : AbstractMessageHandler
 {
     static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -141,8 +141,8 @@ public class ServersListMessageHandler : AbstractMessageHandler
                 { "date", 1234828800000 }
             }
         }).ToArray();
-
-        //Send(true, _callback._remote, _element, _content, DofusProxy.GLOABL_INSTANCE_ID + 1, true); si c'est un faux message provenant du client
+        //                                                          
+        //Send(true, _callback._remote, _element, _content, /*pour générer un nouvel instance_id , il faut l'appeler depuis le proxy (cast le callback)*/ 1, true); si c'est un faux message provenant du client
         Send(false, _callback._remote, _element, _content);
     }
 }
