@@ -84,7 +84,9 @@ namespace AivyDofus.Protocol.Buffer
                     else
                     {
                         string read_length_method = $"Read{field.write_length_method.Replace("write", "")}";
-                        array = new dynamic[_read_value(read_length_method, reader)];
+                        dynamic _length = _read_value(read_length_method, reader);
+
+                        array = new dynamic[_length];
                     }
 
                     for(int i = 0; i < array.Length; i++)

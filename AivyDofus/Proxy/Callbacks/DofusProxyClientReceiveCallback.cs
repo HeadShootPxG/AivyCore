@@ -77,7 +77,7 @@ namespace AivyDofus.Proxy.Callbacks
         /// thx to Hitman for this implementation ;)
         /// </summary>
         /// <param name="stream"></param>
-        private void OnReceive(MemoryStream stream)
+        protected virtual void OnReceive(MemoryStream stream)
         {
             if (_reader is null) _reader = new BigEndianReader();
             if (stream.Length > 0)
@@ -132,6 +132,10 @@ namespace AivyDofus.Proxy.Callbacks
                     }
                     else
                     {
+                        if(_message_id == 8892) // rdm
+                        {
+                            _element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "RawDataMessage"];
+                        }
                         _proxy.MESSAGE_RECEIVED_FROM_LAST++;
                     }
 
@@ -141,7 +145,7 @@ namespace AivyDofus.Proxy.Callbacks
 
                     if (_element != null)
                     {
-                        //logger.Info($"[{_tag}] {_element.BasicString}");
+                        logger.Info($"[{_tag}] {_element.BasicString}");
                         _data_buffer_reader = new MessageDataBufferReader(_element);
                         using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {

@@ -32,12 +32,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 
         public override void Handle()
         {
-            logger.Info($"{_content}");
-        }
-
-        public override void Error(Exception e)
-        {
-            logger.Error(e);
+        
         }
     }
 }

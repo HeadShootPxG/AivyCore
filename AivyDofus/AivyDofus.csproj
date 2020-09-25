@@ -88,6 +88,8 @@
     <Compile Include="Protocol\Parser\BotofuParser.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyAcceptCallback.cs" />
     <Compile Include="Proxy\Callbacks\DofusProxyClientReceiveCallback.cs" />
+    <Compile Include="Proxy\Callbacks\DofusRetroProxyAcceptCallback.cs" />
+    <Compile Include="Proxy\Callbacks\DofusRetroProxyClientReceiveCallback.cs" />
     <Compile Include="Proxy\DofusProxy.cs" />
     <Compile Include="Protocol\Elements\Fields\ClassField.cs" />
     <Compile Include="Protocol\Elements\Fields\EnumField.cs" />
