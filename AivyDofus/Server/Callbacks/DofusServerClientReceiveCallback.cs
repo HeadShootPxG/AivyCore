@@ -23,7 +23,6 @@ namespace AivyDofus.Server.Callbacks
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected MessageBufferReader _buffer_reader;        
         protected MessageDataBufferReader _data_buffer_reader;
         protected MessageBufferWriter _buffer_writer;
 
@@ -34,10 +33,10 @@ namespace AivyDofus.Server.Callbacks
         {
             fields =
             {
-                { "currentVersion", BotofuProtocolManager.Protocol.version.protocol.version.current },
-                { "requiredVersion", BotofuProtocolManager.Protocol.version.protocol.version.minimum }
+                { "version", "1.0.1-ad7c4fd" }
             }
         };
+
         private readonly NetworkElement _protocol_required = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "ProtocolRequired"];
 
         private readonly NetworkContentElement _hello_game_message = new NetworkContentElement();
@@ -46,15 +45,14 @@ namespace AivyDofus.Server.Callbacks
         public DofusServerClientReceiveCallback(ClientEntity client, ClientCreatorRequest creator, ClientLinkerRequest linker, ClientConnectorRequest connector, ClientDisconnectorRequest disconnector, ClientSenderRequest sender)
             : base(client, null, creator, linker, connector, disconnector, sender, ProxyTagEnum.Client)
         {
-            _buffer_reader = new MessageBufferReader(true);
             _buffer_writer = new MessageBufferWriter(false);
             _handler = new MessageHandler<ServerHandlerAttribute>();
 
             _rcv_action += OnReceive;
             _reader = new BigEndianReader();
 
-            if (_client.IsRunning) 
-            { 
+            if (_client.IsRunning)
+            {
                 // send protocolRequired
                 using (BigEndianWriter _writer = _buffer_writer.Build((ushort)_protocol_required.protocolID, null, new MessageDataBufferWriter(_protocol_required).Parse(_protocol_required_message)))
                 {
@@ -67,100 +65,101 @@ namespace AivyDofus.Server.Callbacks
                 }
             }
         }
+        private ushort? _current_header { get; set; } = null;
+        private uint? _instance_id { get; set; } = null;
+        private int? _length { get; set; } = null;
+        private byte[] _data { get; set; } = null;
 
-        /*public override void Callback(IAsyncResult result)
+        private int _message_id => _current_header.HasValue ? _current_header.Value >> 2 : 0;
+        private int _static_header => _current_header.HasValue ? _current_header.Value & 3 : 0;
+
+        private void _clear()
         {
-            _client.Socket = (Socket)result.AsyncState;
-            _client.LastTimeMessage = DateTime.Now;
-            int _rcv_len = _client.Socket.EndReceive(result, out SocketError errorCode);
+            _current_header = null;
+            _instance_id = null;
+            _length = null;
+            _data = null;
+        }
 
-            if (_rcv_len > 0 && errorCode == SocketError.Success)
-            {
-                _client.ReceiveBuffer = new MemoryStream();
-                _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
-
-                MemoryStream _new_stream = _rcv_action?.Invoke(_client.ReceiveBuffer);
-
-                if (_new_stream != null)
-                {
-                    _reader.Dispose();
-                    _reader = new BigEndianReader();
-                    _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-                }
-
-                _client.ReceiveBuffer.Dispose();
-
-                _buffer = new byte[_client.ReceiveBufferLength];
-
-                try
-                {
-                    _client.Socket.BeginReceive(_buffer,
-                                                0,
-                                                _buffer.Length,
-                                                SocketFlags.None,
-                                                Callback,
-                                                _client.Socket);
-                }
-                catch (SocketException e)
-                {
-                    logger.Error(e);
-                }
-            }
-            else
-            {
-                _client_disconnector.Handle(_client);
-            }
-        }*/
-
+        private long _position { get; set; } = 0;
+        /// <summary>
+        /// thx to Hitman for this implementation ;)
+        /// </summary>
+        /// <param name="stream"></param>
         private void OnReceive(MemoryStream stream)
         {
-            /*_reader.Add(stream.ToArray(), 0, (int)stream.Length);
-
-            if (_buffer_reader.Build(_reader))
+            if (_reader is null) _reader = new BigEndianReader();
+            if (stream.Length > 0)
             {
-                byte[] full_data = _reader.Data;
-                if (BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _buffer_reader.MessageId] is NetworkElement element
-                    && _buffer_reader.TruePacketCurrentLen == _buffer_reader.TruePacketCountLength)
+                _reader.Add(stream.ToArray(), 0, (int)stream.Length);
+            }
+
+            byte[] full_data = _reader.Data;
+            while (_position < full_data.Length && full_data.Length - _position >= 2)
+            {
+                long start_pos = _position;
+                _current_header = (ushort)((full_data[_position] * 256) + full_data[_position + 1]);
+                _position += sizeof(ushort);
+
+                _instance_id = (uint)((full_data[_position] * 256 * 256 * 256) + (full_data[_position + 1] * 256 * 256) + (full_data[_position + 2] * 256) + full_data[_position + 3]);
+                _position += sizeof(uint);
+
+
+                if (full_data.Length - _position < _static_header)
+                    break;
+
+                switch (_static_header)
                 {
-                    byte[] base_data = new byte[_buffer_reader.TruePacketCountLength];
-                    // remove/set commentary to unsee/see message
-                    logger.Info($"{_tag} {element.BasicString} - (l:{base_data.Length})");
-                    byte[] remnant = new byte[full_data.Length - _buffer_reader.TruePacketCountLength];
+                    case 0: _length = 0; break;
+                    case 1: _length = full_data[_position]; break;
+                    case 2: _length = (ushort)((full_data[_position] * 256) + full_data[_position + 1]); break;
+                    case 3: _length = (full_data[_position] * 256 * 256) + (full_data[_position + 1] * 256) + full_data[_position + 2]; break;
+                }
 
-                    Array.Copy(full_data, 0, base_data, 0, base_data.Length);
-                    Array.Copy(full_data, base_data.Length, remnant, 0, remnant.Length);
+                _position += _static_header;
 
-                    if (_handler.GetHandler(element.protocolID))
+                long _current_data_len = full_data.Length - _position;
+                if (_current_data_len >= _length)
+                {
+                    NetworkElement _element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _message_id];
+                    _data = new byte[_current_data_len];
+
+                    byte[] packet_data = new byte[(int)(_position - start_pos) + _length.Value];
+                    Array.Copy(full_data, start_pos, packet_data, 0, packet_data.Length);
+                    Array.Copy(full_data, _position, _data, 0, _length.Value);
+
+                    if (_element != null)
                     {
-                        _data_buffer_reader = new MessageDataBufferReader(element);
-
-                        if (!_handler.Handle(this, element, _data_buffer_reader.Parse(new BigEndianReader(_buffer_reader.Data))))
+                        logger.Info($"[{_tag}] {_element.BasicString}");
+                        _data_buffer_reader = new MessageDataBufferReader(_element);
+                        using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {
-                            if (remnant.Length > 0)
+                            if (_handler.Handle(this, _element, _data_buffer_reader.Parse(big_data_reader)))
                             {
-                                _reader.Dispose();
-                                _reader = new BigEndianReader();
-                                _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-
-                                return;
+                                // to do
                             }
                         }
                     }
 
-                    if (remnant.Length > 0)
-                    {                        
+                    _position += _length.Value;
+
+                    if (_current_data_len == _length)
+                    {
+                        _clear();
+
                         _reader.Dispose();
                         _reader = new BigEndianReader();
-                        _buffer_reader = new MessageBufferReader(_buffer_reader.ClientSide);
-
-                        //return OnReceive(new MemoryStream(remnant));
+                        _position = 0;
+                        break;
                     }
+                    _clear();
                 }
-
-                //return new MemoryStream(full_data);
-            }*/
-
-            //return null;
+                else
+                {
+                    _position = start_pos;
+                    break;
+                }
+            }
         }
-    }    
+    }
 }

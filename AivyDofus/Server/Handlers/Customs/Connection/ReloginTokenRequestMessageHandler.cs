@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Server.Handlers.Customs.Connection
 {
-    [ServerHandler(ProtocolId = 6540)]
+    [ServerHandler(ProtocolName = "ReloginTokenRequestMessage")]
     public class ReloginTokenRequestMessageHandler : AbstractMessageHandler
     {
         public override bool IsForwardingData => true;
@@ -22,7 +22,7 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         }
 
-        public static string Random()
+        /*public static string Random()
         {
             return Guid.NewGuid().ToString("N");
         }
@@ -30,21 +30,11 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
         public static byte[] Encode(string ticket)
         {
             return Encoding.ASCII.GetBytes(ticket);
-        }
+        }*/
 
         public override void Handle()
         {
-            /*NetworkElement relogin_status_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 6539];
-            NetworkContentElement relogin_status_content = new NetworkContentElement()
-            {
-                fields =
-                {
-                    { "validToken", true },
-                    { "ticket", Encode(Random()) }
-                }
-            };
 
-            Send(false, _callback._client, relogin_status_message, relogin_status_content);*/
         }
     }
 }

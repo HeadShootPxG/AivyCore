@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Server.Handlers.Customs.Connection
 {
-    [ServerHandler(ProtocolId = 150)]
+    [ServerHandler(ProtocolName = "CharactersListRequestMessage")]
     public class CharactersListRequestMessageHandler : AbstractMessageHandler
     {
         public override bool IsForwardingData => true;
@@ -24,7 +24,7 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            NetworkElement characters_list_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 151];
+            NetworkElement characters_list_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "CharactersListMessage"];
             NetworkContentElement characters_list_content = new NetworkContentElement()
             {
                 fields =

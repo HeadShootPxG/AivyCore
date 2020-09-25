@@ -17,7 +17,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public override bool IsForwardingData => true;
+        public override bool IsForwardingData => false;
 
         public ServerSelectionMessageHandler(AbstractClientReceiveCallback callback,
                                             NetworkElement element,
@@ -27,12 +27,23 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         }
 
+        private string _rnd_ticket(int length = 32, bool upper = true)
+        {
+            string str = string.Empty;
+            Random rdn = new Random();
+            for (int i = 1; i <= length; i++)
+            {
+                int num = rdn.Next(0, 26);
+                str += (char)('a' + num);
+            }
+            return upper ? str.ToUpper() : str;
+        }
+
         public override void Handle()
         {
-            /*if (DofusProxy._proxy_api.GetData(null).custom_servers.FirstOrDefault(x => x.ServerId == (int)_content["serverId"]) is ProxyCustomServerData _data)
+            if (DofusProxy._proxy_api.GetData(null).custom_servers.FirstOrDefault(x => x.ServerId == (int)_content["serverId"]) is ProxyCustomServerData _data)
             {
-                logger.Info($"data:{_data.ServerId} - content:{_content["serverId"]}");
-                NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 42];
+                NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "SelectedServerDataMessage"];
 
                 logger.Info("request connection in custom server");
 
@@ -44,7 +55,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
                         { "address", _data.IpAddress },
                         { "ports", _data.Ports },
                         { "canCreateNewCharacter", true },
-                        { "ticket", Encode(Random()) }
+                        { "ticket", _rnd_ticket() }
                     }
                 });
 
@@ -52,8 +63,13 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
             }
             else
             {
-                Send(true, _callback._remote, _element, _content, _callback._instance_id);
-            }*/
+                Send(true, _callback._remote, _element, _content, _callback.InstanceId);
+            }
+        }
+
+        public override void Error(Exception e)
+        {
+            logger.Error(e);
         }
     }
 }

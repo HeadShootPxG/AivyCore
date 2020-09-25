@@ -56,7 +56,7 @@ namespace AivyDofus.Handler
 
             _callback._client_sender.Handle(sender, _final_data);
 
-            logger.Info($"fake message sent : {element.BasicString} {instance_id.Value}");
+            logger.Info($"fake message sent : {element.BasicString} {(instance_id.HasValue ? instance_id.Value : 0)}");
         }
 
         #region FAST ACTIONS

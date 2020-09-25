@@ -35,6 +35,8 @@ namespace AivyDofus.Proxy.Callbacks
 
         public readonly ProxyEntity _proxy;
 
+        public override uint InstanceId => _instance_id.HasValue ? _instance_id.Value : base.InstanceId;
+
         public DofusProxyClientReceiveCallback(ClientEntity client,
                                                ClientEntity remote,
                                                ClientCreatorRequest creator,
@@ -139,7 +141,7 @@ namespace AivyDofus.Proxy.Callbacks
 
                     if (_element != null)
                     {
-                        logger.Info($"[{_tag}] {_element.BasicString}");
+                        //logger.Info($"[{_tag}] {_element.BasicString}");
                         _data_buffer_reader = new MessageDataBufferReader(_element);
                         using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {

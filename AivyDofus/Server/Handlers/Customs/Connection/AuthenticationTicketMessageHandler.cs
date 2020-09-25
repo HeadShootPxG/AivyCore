@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Server.Handlers.Customs.Connection
 {
-    [ServerHandler(ProtocolId = 110)]
+    [ServerHandler(ProtocolName = "AuthenticationTicketMessage")]
     public class AuthenticationTicketMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -27,9 +27,9 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            NetworkElement authentication_accepted_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 111];
+            NetworkElement authentication_accepted_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "AuthenticationTicketAcceptedMessage"];
+            NetworkElement account_capabilities_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "AccountCapabilitiesMessage"];
 
-            NetworkElement account_capabilities_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == 6216];
             NetworkContentElement account_capabilities_content = new NetworkContentElement()
             {
                 fields =

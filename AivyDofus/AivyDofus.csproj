@@ -77,7 +77,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Protocol\Buffer\MessageBufferReader.cs" />
     <Compile Include="Protocol\Buffer\MessageBufferWriter.cs" />
     <Compile Include="Protocol\Buffer\MessageDataBufferReader.cs" />
     <Compile Include="Protocol\Buffer\MessageDataBufferWriter.cs" />
@@ -94,6 +93,7 @@
     <Compile Include="Protocol\Elements\Fields\EnumField.cs" />
     <Compile Include="Protocol\Elements\Fields\Limits.cs" />
     <Compile Include="Protocol\Elements\NetworkElement.cs" />
+    <Compile Include="Proxy\Handlers\Customs\Connection\ProtocolRequiredHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServerSelectionMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\World\Map\MapComplementaryInformationsDataMessageHandler.cs" />
