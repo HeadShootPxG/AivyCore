@@ -67,6 +67,9 @@ Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'
 DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS");
 proxy.Active(true, 666);
 
+DofusRetroProxy retro_proxy = new DofusRetroProxy("EMPLACEMENT DOSSER APP DOFUS RETRO"); // vérifier bien que le nom de l'exe soit bien Dofus.exe
+proxy.Active(true, 668);
+
 // DofusServer("DOSSIER APP DOFUS")
 // active(bool, int)
 DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS");
