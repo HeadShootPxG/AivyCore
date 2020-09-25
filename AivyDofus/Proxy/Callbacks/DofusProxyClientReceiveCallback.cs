@@ -80,7 +80,6 @@ namespace AivyDofus.Proxy.Callbacks
             if (_reader is null) _reader = new BigEndianReader();
             if (stream.Length > 0)
             {
-                _client_sender.Handle(_remote, stream.ToArray());
                 _reader.Add(stream.ToArray(), 0, (int)stream.Length);
             }
 
@@ -117,23 +116,42 @@ namespace AivyDofus.Proxy.Callbacks
                     _data = new byte[_current_data_len];
 
                     if(_tag == ProxyTagEnum.Client)
-                    {
-                        _proxy.LAST_CLIENT_INSTANCE_ID = _instance_id.Value;
-                        _proxy.MESSAGE_RECEIVED_FROM_LAST = 0;
+                    {   
+                        // rmv element from not game socket
+                        if(_instance_id > _proxy.GLOBAL_INSTANCE_ID * 2)
+                        {
+                            _element = null;
+                        }
+                        else
+                        {
+                            _proxy.LAST_CLIENT_INSTANCE_ID = _instance_id.Value;
+                            _proxy.MESSAGE_RECEIVED_FROM_LAST = 0;
+                        }
                     }
                     else
                     {
                         _proxy.MESSAGE_RECEIVED_FROM_LAST++;
                     }
 
-                    Array.Copy(full_data, _position, _data, 0, _current_data_len);
+                    byte[] packet_data = new byte[(int)(_position - start_pos) + _length.Value];
+                    Array.Copy(full_data, start_pos, packet_data, 0, packet_data.Length);
+                    Array.Copy(full_data, _position, _data, 0, _length.Value);
+
                     if (_element != null)
                     {
+                        logger.Info($"[{_tag}] {_element.BasicString}");
                         _data_buffer_reader = new MessageDataBufferReader(_element);
-                        if (_handler.GetHandler(_element.protocolID))
+                        using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {
-                            _handler.Handle(this, _element, _data_buffer_reader.Parse(new BigEndianReader(_data)));
+                            if (_handler.Handle(this, _element, _data_buffer_reader.Parse(big_data_reader)))
+                            {
+                                _client_sender.Handle(_remote, packet_data);
+                            }
                         }
+                    }
+                    else
+                    {
+                        _client_sender.Handle(_remote, packet_data);
                     }
 
                     _position += _length.Value;

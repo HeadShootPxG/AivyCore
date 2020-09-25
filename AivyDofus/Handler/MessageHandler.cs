@@ -40,6 +40,7 @@ namespace AivyDofus.Handler
 
         private bool _handle(Type handler_type, AbstractClientReceiveCallback callback, NetworkElement element, NetworkContentElement content)
         {
+            if (!GetHandler(element.protocolID)) return true;
             if (handler_type is null) return true;
 
             AbstractMessageHandler handler = Activator.CreateInstance(handler_type, new object[] { callback, element, content }) as AbstractMessageHandler;
