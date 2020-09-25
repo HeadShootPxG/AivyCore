@@ -32,13 +32,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Map
 
         public override void Handle()
         {
-            if (_callback is DofusProxyClientReceiveCallback _dofus_callback)
-            {
-                Task.Delay(5000).ContinueWith(task =>
-                {
-                    TestChatClient(_callback._client, 0, "Wesh les moules =D", ++_dofus_callback._proxy.GLOBAL_INSTANCE_ID);
-                });
-            }
+            logger.Info($"{_content}");
         }
 
         public override void Error(Exception e)

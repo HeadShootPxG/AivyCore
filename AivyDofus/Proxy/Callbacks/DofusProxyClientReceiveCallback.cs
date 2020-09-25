@@ -27,7 +27,6 @@ namespace AivyDofus.Proxy.Callbacks
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        protected MessageBufferReader _buffer_reader;
         protected MessageDataBufferReader _data_buffer_reader;
         protected MessageBufferWriter _buffer_writer;
 
@@ -50,7 +49,6 @@ namespace AivyDofus.Proxy.Callbacks
 
             _proxy = proxy ?? throw new ArgumentNullException(nameof(proxy));
 
-            _buffer_reader = new MessageBufferReader(tag == ProxyTagEnum.Client);
             _handler = new MessageHandler<ProxyHandlerAttribute>();
 
             _rcv_action += OnReceive;
@@ -87,7 +85,7 @@ namespace AivyDofus.Proxy.Callbacks
             }
 
             byte[] full_data = _reader.Data;
-            while (_position < full_data.Length && full_data.Length >= 2)
+            while (_position < full_data.Length && full_data.Length - _position >= 2)
             {
                 long start_pos = _position;
                 _current_header = (ushort)((full_data[_position] * 256) + full_data[_position + 1]);
@@ -98,15 +96,19 @@ namespace AivyDofus.Proxy.Callbacks
                     _instance_id = (uint)((full_data[_position] * 256 * 256 * 256) + (full_data[_position + 1] * 256 * 256) + (full_data[_position + 2] * 256) + full_data[_position + 3]);
                     _position += sizeof(uint);
                 }
-                _position +=  _static_header;
+
+                if (full_data.Length - _position < _static_header)
+                    break;
 
                 switch (_static_header)
                 {
                     case 0: _length = 0; break;
-                    case 1: _length = full_data[_position - 1]; break;
-                    case 2: _length = (ushort)((full_data[_position - 2] * 256) + full_data[_position - 1]); break;
-                    case 3: _length = (full_data[_position - 3] * 65536) + (full_data[_position - 2] * 256) + full_data[_position - 1]; break;
+                    case 1: _length = full_data[_position]; break;
+                    case 2: _length = (ushort)((full_data[_position] * 256) + full_data[_position + 1]); break;
+                    case 3: _length = (full_data[_position] * 256 * 256) + (full_data[_position + 1] * 256) + full_data[_position + 2]; break;
                 }
+
+                _position += _static_header;
 
                 long _current_data_len = full_data.Length - _position;
                 if(_current_data_len >= _length)
@@ -127,7 +129,6 @@ namespace AivyDofus.Proxy.Callbacks
                     Array.Copy(full_data, _position, _data, 0, _current_data_len);
                     if (_element != null)
                     {
-                        logger.Info($"[{_tag}] msg: {_element.BasicString}");
                         _data_buffer_reader = new MessageDataBufferReader(_element);
                         if (_handler.GetHandler(_element.protocolID))
                         {
@@ -137,15 +138,16 @@ namespace AivyDofus.Proxy.Callbacks
 
                     _position += _length.Value;
 
-                    _clear();
-
-                    if(_current_data_len == _length)
+                    if (_current_data_len == _length)
                     {
+                        _clear();
+
                         _reader.Dispose();
                         _reader = new BigEndianReader();
                         _position = 0;
                         break;
                     }
+                    _clear();
                 }
                 else
                 {
