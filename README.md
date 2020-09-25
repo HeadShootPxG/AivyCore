@@ -55,9 +55,7 @@ namespace AivyCore
 (<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
 (<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
 
-<h2> AivyDofus </h2>
-Il y a eu un tout petit changement dans le protocol Dofus , ducoup j'ai retirer la lecture des packets , mais ça arrive ^^
- 
+<h2> AivyDofus </h2> 
 La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
 Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
 
@@ -67,6 +65,8 @@ Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'
 DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS");
 proxy.Active(true, 666);
 
+// il n'y a pas de traitement de packet reçu pour Dofus Retro ( je ne connais pas la façon de lire les packets mais si vous voulez l'ajouter c'est ici :
+// https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs ) 
 DofusRetroProxy retro_proxy = new DofusRetroProxy("EMPLACEMENT DOSSER APP DOFUS RETRO"); // vérifier bien que le nom de l'exe soit bien Dofus.exe
 proxy.Active(true, 668);
 
