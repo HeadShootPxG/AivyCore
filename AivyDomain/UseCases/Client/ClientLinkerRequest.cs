@@ -19,7 +19,7 @@ namespace AivyDomain.UseCases.Client
 
         public ClientEntity Handle(ClientEntity request1, Socket request2)
         {
-            return _repository.ActionResult(x => x == request1, x => 
+            return _repository.ActionResult(x => x.IsRunning ? x.Socket?.RemoteEndPoint == request1.Socket?.RemoteEndPoint : x.RemoteIp == request1.RemoteIp, x => 
             {
                 if (request1 is null) throw new ArgumentNullException(nameof(request1));
                 if (request2 is null) throw new ArgumentNullException(nameof(request2));

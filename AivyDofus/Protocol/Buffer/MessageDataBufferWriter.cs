@@ -1,6 +1,7 @@
 ﻿using AivyDofus.IO;
 using AivyDofus.Protocol.Elements;
 using AivyDofus.Protocol.Elements.Fields;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace AivyDofus.Protocol.Buffer
 {
     public class MessageDataBufferWriter
     {
+        static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         private static bool _is_primitive(ClassField field)
         {
             return BotofuProtocolManager.Protocol[ProtocolKeyEnum.MessagesAndTypes, x => x.name == field.type] is null;
@@ -93,9 +96,16 @@ namespace AivyDofus.Protocol.Buffer
                         _write_value(write_length_method, array.Length, writer);
                     }
 
-                    for (int i = 0; i < array.Length; i++)
+                    if (array is byte[] _byte_array)
                     {
-                        _parse_var_element(field, array[i], writer);
+                        _write_value("WriteBytes", _byte_array, writer);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            _parse_var_element(field, array[i], writer);
+                        }
                     }
                 }
                 else

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace AivyDomain.Mappers.Client
@@ -18,19 +19,16 @@ namespace AivyDomain.Mappers.Client
         public ClientEntity MapFrom(Func<ClientEntity, bool> input)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
-
-            ClientEntity client = _clients.FirstOrDefault(input);
-
-            if(client is null)
+            if (input(new ClientEntity()))
             {
-                client = new ClientEntity() 
+                ClientEntity client = new ClientEntity()
                 {
                     ReceiveBufferLength = 16384 // to do -> get from file ? 
                 };
                 _clients.Add(client);
+                return client;
             }
-
-            return client;
+            return _clients.FirstOrDefault(input);
         }
 
         public bool Remove(Func<ClientEntity, bool> predicat)

@@ -14,7 +14,7 @@ namespace AivyData.Entities
         public int ReceiveBufferLength { get; set; }
 
         public MemoryStream ReceiveBuffer { get; set; }
-        public DateTime LastTimeMessage { get; set; }
+        public string CurrentToken { get; set; }
 
         public bool IsRunning
         {

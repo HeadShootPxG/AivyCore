@@ -20,20 +20,18 @@ namespace AivyDomain.Mappers.Server
         public ServerEntity MapFrom(Func<ServerEntity, bool> input)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
-
-            ServerEntity entity = _servers.FirstOrDefault(input);
-            
-            if(entity is null)
+            if(input(new ServerEntity()))
             {
-                entity = new ServerEntity() 
+                ServerEntity entity = new ServerEntity() 
                 {
                     Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp),
                     IsRunning = false
                 };
                 _servers.Add(entity);
+                return entity;
             }
 
-            return entity;
+            return _servers.FirstOrDefault(input);
         }
 
         public bool Remove(Func<ServerEntity, bool> predicat)

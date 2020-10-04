@@ -46,7 +46,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
                 if (custom.Ports.Length > 0)
                 {
-                    // to do , try connect client
+                    // to do , try connect client to check server
                     status = 3;
                 }
 

@@ -33,7 +33,7 @@ namespace AivyDomain.Repository.Client
         {
             if (action is null) throw new ArgumentNullException(nameof(action));
             ClientEntity result = GetResult(predicat);
-            if (result is null) throw new ArgumentNullException(nameof(result));
+            if (result is null) return null;// throw new ArgumentNullException(nameof(result));
             return action(result);
         }
 

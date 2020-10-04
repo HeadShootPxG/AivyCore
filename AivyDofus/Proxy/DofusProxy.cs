@@ -16,7 +16,8 @@ namespace AivyDofus.Proxy
 {
     public class DofusRetroProxy
     {
-        public static readonly OpenProxyConfigurationApi _proxy_api = new OpenProxyConfigurationApi("./retro_proxy_information_api.json");
+        // just for test
+        public static readonly OpenProxyApi _proxy_api = new OpenProxyApi("./retro_proxy_information_api.json");
 
         public readonly ProxyRepository _proxy_repository;
 
@@ -30,7 +31,6 @@ namespace AivyDofus.Proxy
 
         public DofusRetroProxy(string appPath)
         {
-
             _app_path = appPath ?? throw new ArgumentNullException(nameof(appPath));
 
             if (_proxy_repository is null)
@@ -100,7 +100,7 @@ namespace AivyDofus.Proxy
             }
             else
             {
-                if(_proxy_repository.Remove(x => x.Port == port))
+                if (_proxy_repository.Remove(x => x.Port == port))
                 {
                     return null;
                 }

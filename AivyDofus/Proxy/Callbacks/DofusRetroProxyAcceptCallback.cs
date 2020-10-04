@@ -34,7 +34,7 @@ namespace AivyDofus.Proxy.Callbacks
 
                 ClientEntity remote = _client_creator.Handle(_proxy.IpRedirectedStack.Dequeue());
                 remote = _client_linker.Handle(remote, new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp));
-                DofusRetroProxyClientReceiveCallback remote_rcv_callback = new DofusRetroProxyClientReceiveCallback(remote, client, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Server);
+                DofusRetroProxyClientReceiveCallback remote_rcv_callback = new DofusRetroProxyClientReceiveCallback(remote, client, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Server);
                 remote = _client_connector.Handle(remote, new ClientConnectCallback(remote, remote_rcv_callback));
 
                 // wait remote client to connect
@@ -50,7 +50,7 @@ namespace AivyDofus.Proxy.Callbacks
 
                 if (client.IsRunning)
                 {
-                    client = _client_receiver.Handle(client, new DofusRetroProxyClientReceiveCallback(client, remote, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Client));
+                    client = _client_receiver.Handle(client, new DofusRetroProxyClientReceiveCallback(client, remote, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Client));
 
                     logger.Info("client connected");
                 }

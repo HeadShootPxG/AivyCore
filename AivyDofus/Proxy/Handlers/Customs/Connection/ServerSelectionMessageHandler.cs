@@ -1,7 +1,9 @@
 ﻿using AivyData.API;
 using AivyData.API.Proxy;
+using AivyDofus.Crypto;
 using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
+using AivyDofus.Proxy.Callbacks;
 using AivyDomain.Callback.Client;
 using NLog;
 using System;
@@ -20,8 +22,8 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
         public override bool IsForwardingData => false;
 
         public ServerSelectionMessageHandler(AbstractClientReceiveCallback callback,
-                                            NetworkElement element,
-                                            NetworkContentElement content)
+                                             NetworkElement element,
+                                             NetworkContentElement content)
             : base(callback, element, content)
         {
 
@@ -41,15 +43,17 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
 
         public override void Handle()
         {
+            DofusProxyClientReceiveCallback _proxy_callback = _casted_callback<DofusProxyClientReceiveCallback>();
+
             if (DofusProxy._proxy_api.GetData(null).custom_servers.FirstOrDefault(x => x.ServerId == (int)_content["serverId"]) is ProxyCustomServerData _data)
             {
                 NetworkElement element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "SelectedServerDataMessage"];
 
                 logger.Info("request connection in custom server");
 
-                Send(false, _callback._client, element, new NetworkContentElement() 
+                Send(false, _callback._client, element, new NetworkContentElement()
                 {
-                    fields = 
+                    fields =
                     {
                         { "serverId", _data.ServerId },
                         { "address", _data.IpAddress },
@@ -59,11 +63,15 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
                     }
                 });
 
+                logger.Info($"{_proxy_callback._proxy.AccountData}");
+                _proxy_callback._proxy.AccountData.ConnectedToCustomServer = true;
+
                 _callback._client_disconnector.Handle(_callback._client);
             }
             else
             {
                 Send(true, _callback._remote, _element, _content, _callback.InstanceId);
+                _proxy_callback._proxy.AccountData.ConnectedToCustomServer = false;
             }
         }
 

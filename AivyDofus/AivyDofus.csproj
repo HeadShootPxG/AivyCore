@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\Hash.cs" />
     <Compile Include="Handler\AbstractMessageHandler.cs" />
     <Compile Include="Handler\HandlerAttribute.cs" />
     <Compile Include="Handler\IMessageHandler.cs" />
@@ -95,6 +96,8 @@
     <Compile Include="Protocol\Elements\Fields\EnumField.cs" />
     <Compile Include="Protocol\Elements\Fields\Limits.cs" />
     <Compile Include="Protocol\Elements\NetworkElement.cs" />
+    <Compile Include="Proxy\Handlers\Customs\Connection\AuthenticationTicketMessageHandler.cs" />
+    <Compile Include="Proxy\Handlers\Customs\Connection\IdentificationSuccessMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ProtocolRequiredHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServerSelectionMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
@@ -103,7 +106,7 @@
     <Compile Include="Proxy\API\OpenProxyConfigurationApi.cs" />
     <Compile Include="Server\API\OpenServerDatabaseApi.cs" />
     <Compile Include="Server\Callbacks\DofusServerAcceptCallback.cs" />
-    <Compile Include="Server\Callbacks\DofusServerClientReceiveCallback.cs" />
+    <Compile Include="Server\Callbacks\DofusServerWorldClientReceiveCallback.cs" />
     <Compile Include="Server\DofusServer.cs" />
     <Compile Include="Server\Handlers\Customs\Connection\AuthenticationTicketMessageHandler.cs" />
     <Compile Include="Server\Handlers\Customs\Connection\CharactersListRequestMessageHandler.cs" />

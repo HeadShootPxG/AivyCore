@@ -1,4 +1,5 @@
-﻿using AivyData.Entities;
+﻿using AivyData.API.Proxy;
+using AivyData.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,24 +20,22 @@ namespace AivyDomain.Mappers.Proxy
 
         public ProxyEntity MapFrom(Func<ProxyEntity, bool> input)
         {
-            if (input is null)
-                throw new ArgumentNullException(nameof(input));
-
-            ProxyEntity proxy = _proxys.FirstOrDefault(input);
-
-            if(proxy is null)
+            if (input is null) throw new ArgumentNullException(nameof(input));
+            if(input(new ProxyEntity()))
             {
-                proxy = new ProxyEntity()
+                ProxyEntity proxy = new ProxyEntity()
                 {
                     Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp),
                     IsRunning = false,
                     HookInterface = new HookInterfaceEntity(),
-                    IpRedirectedStack = new Queue<IPEndPoint>()
+                    IpRedirectedStack = new Queue<IPEndPoint>(),
+                    AccountData = new ProxyAccountMinimumInformationData()
                 };
                 _proxys.Add(proxy);
+                return proxy;
             }
 
-            return proxy;
+            return _proxys.FirstOrDefault(input);
         }
 
         public bool Remove(Func<ProxyEntity, bool> predicat)

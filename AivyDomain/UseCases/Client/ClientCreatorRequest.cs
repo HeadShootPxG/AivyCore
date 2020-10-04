@@ -23,7 +23,7 @@ namespace AivyDomain.UseCases.Client
 
         public ClientEntity Handle(IPEndPoint request)
         {
-            return _repository.ActionResult(x => x.RemoteIp == request, x => 
+            return _repository.ActionResult(x => true, x => 
             {
                 if (request is null) throw new ArgumentNullException(nameof(request));
 

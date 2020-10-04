@@ -39,10 +39,16 @@ namespace AivyDofus.Handler
 
         public virtual void Error(Exception e)
         {
-
+            logger.Error(e);
         }
 
         public abstract void Handle();
+
+        protected T _casted_callback<T>() where T : AbstractClientReceiveCallback
+        {
+            if (_callback is T _casted) return _casted;
+            throw new Exception($"callback cannot be casted to {nameof(T)}");
+        }
 
         public virtual void Send(bool fromClient, ClientEntity sender, NetworkElement element, NetworkContentElement content, uint? instance_id = null)
         {
@@ -52,7 +58,7 @@ namespace AivyDofus.Handler
             }
 
             byte[] _data = new MessageDataBufferWriter(element).Parse(content);
-            byte[] _final_data = new MessageBufferWriter(fromClient).Build((ushort)element.protocolID, instance_id, _data).Data;
+            byte[] _final_data = new MessageBufferWriter(fromClient).Build((ushort)(element.protocolID  == 6253 ? 8892 /*rdm*/ : element.protocolID), instance_id, _data).Data;
 
             _callback._client_sender.Handle(sender, _final_data);
 

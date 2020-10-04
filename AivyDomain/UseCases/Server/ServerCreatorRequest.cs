@@ -18,7 +18,7 @@ namespace AivyDomain.UseCases.Server
 
         public ServerEntity Handle(int port)
         {
-            return _repository.ActionResult(x => x.Port == port, x => 
+            return _repository.ActionResult(x => true, x => 
             { 
                 x.Port = port;
                 return x;

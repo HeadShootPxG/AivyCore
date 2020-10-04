@@ -40,6 +40,29 @@ namespace AivyDofus.Server.API
             }
         }
 
+        public T GetData<T>(Func<T, bool> predicat) where T : IdentifiableData
+        {
+            if (predicat is null) throw new ArgumentNullException(nameof(predicat));
+
+            using (LiteDatabase db = new LiteDatabase(_location))
+            {
+                ILiteCollection<T> servers = db.GetCollection<T>(typeof(T).Name);
+                return servers.Query().ToArray().FirstOrDefault(predicat);
+            }
+        }
+
+        public T UpdateData<T>(T data) where T : IdentifiableData
+        {
+            using (LiteDatabase db = new LiteDatabase(_location))
+            {
+                ILiteCollection<T> servers = db.GetCollection<T>(typeof(T).Name);
+
+                servers.DeleteMany(x => x.Id == data.Id);
+                servers.Upsert(data);
+                return data;
+            }
+        }
+
         public ServerData GetData(Func<ServerData, bool> predicat)
         {
             if (predicat is null) throw new ArgumentNullException(nameof(predicat));
@@ -59,6 +82,8 @@ namespace AivyDofus.Server.API
             {
                 ILiteCollection<ServerData> servers = db.GetCollection<ServerData>(typeof(ServerData).Name);
 
+                if (servers.Exists(x => x.ServerId == data.ServerId))
+                    servers.DeleteMany(x => x.ServerId == data.ServerId);
                 servers.Upsert(data);
                 return data;
             }

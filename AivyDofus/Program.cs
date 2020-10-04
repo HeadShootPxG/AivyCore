@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AivyDofus
@@ -32,11 +33,14 @@ namespace AivyDofus
             configuration.AddRule(LogLevel.Debug, LogLevel.Fatal, log_console);
             LogManager.Configuration = configuration;
 
-            DofusRetroProxy r_proxy = new DofusRetroProxy(@"D:\retro\resources\app\retroclient");
-            ProxyEntity retro_entity = r_proxy.Active(true, 668);
+            /*DofusRetroProxy r_proxy = new DofusRetroProxy(@"D:\retro\resources\app\retroclient");
+            ProxyEntity retro_entity = r_proxy.Active(true, 668);*/
 
             DofusProxy proxy = new DofusProxy("D:/DofusApp");
             ProxyEntity p_entity = proxy.Active(true, 666);
+
+            Thread.Sleep(2000);
+            ProxyEntity p2_entity = proxy.Active(true, 667);
 
             DofusServer server = new DofusServer("D:/DofusApp");
             ServerEntity s_entity = server.Active(true, 777);

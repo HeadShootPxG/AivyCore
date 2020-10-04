@@ -6,6 +6,7 @@ using AivyDofus.Protocol.Buffer;
 using AivyDofus.Protocol.Elements;
 using AivyDofus.Proxy.Handlers;
 using AivyDomain.Callback.Client;
+using AivyDomain.Repository.Client;
 using AivyDomain.UseCases.Client;
 using Newtonsoft.Json.Serialization;
 using NLog;
@@ -39,18 +40,22 @@ namespace AivyDofus.Proxy.Callbacks
 
         public DofusProxyClientReceiveCallback(ClientEntity client,
                                                ClientEntity remote,
+                                               ClientRepository repository,
                                                ClientCreatorRequest creator,
                                                ClientLinkerRequest linker,
                                                ClientConnectorRequest connector, 
                                                ClientDisconnectorRequest disconnector, 
                                                ClientSenderRequest sender,
                                                ProxyEntity proxy, ProxyTagEnum tag = ProxyTagEnum.UNKNOW)
-            : base(client, remote, creator, linker, connector, disconnector, sender, tag)
+            : base(client, remote, repository,creator, linker, connector, disconnector, sender, tag)
         {
             if (tag is ProxyTagEnum.UNKNOW) throw new ArgumentNullException(nameof(tag));
 
             _proxy = proxy ?? throw new ArgumentNullException(nameof(proxy));
+        }
 
+        protected override void _constructor_handled()
+        {
             _handler = new MessageHandler<ProxyHandlerAttribute>();
 
             _rcv_action += OnReceive;
@@ -74,7 +79,7 @@ namespace AivyDofus.Proxy.Callbacks
 
         private long _position { get; set; } = 0;
         /// <summary>
-        /// thx to Hitman for this implementation ;)
+        /// thx to Hitman for this implementation made by ToOnS
         /// </summary>
         /// <param name="stream"></param>
         protected virtual void OnReceive(MemoryStream stream)
@@ -145,7 +150,7 @@ namespace AivyDofus.Proxy.Callbacks
 
                     if (_element != null)
                     {
-                        logger.Info($"[{_tag}] {_element.BasicString}");
+                        logger.Info($"[{_tag}] {_element.BasicString} n°{_proxy.GLOBAL_INSTANCE_ID}");
                         _data_buffer_reader = new MessageDataBufferReader(_element);
                         using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {

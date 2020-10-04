@@ -1,5 +1,6 @@
 ﻿using AivyData.Entities;
 using AivyData.Enums;
+using AivyDomain.Repository.Client;
 using AivyDomain.UseCases.Client;
 using NLog;
 using System;
@@ -15,6 +16,7 @@ namespace AivyDomain.Callback.Client
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public readonly ClientEntity _remote;
+        public readonly ClientRepository _client_repository;
         public readonly ClientCreatorRequest _client_creator;
         public readonly ClientLinkerRequest _client_linker;
         public readonly ClientConnectorRequest _client_connector;
@@ -26,6 +28,7 @@ namespace AivyDomain.Callback.Client
 
         public AbstractClientReceiveCallback(ClientEntity client, 
                                              ClientEntity remote, 
+                                             ClientRepository repository,
                                              ClientCreatorRequest creator,
                                              ClientLinkerRequest linker,
                                              ClientConnectorRequest connector,
@@ -36,11 +39,19 @@ namespace AivyDomain.Callback.Client
             _remote = remote;
             _tag = tag;
 
+            _client_repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _client_creator = creator ?? throw new ArgumentNullException(nameof(creator));
             _client_linker = linker ?? throw new ArgumentNullException(nameof(linker));
             _client_connector = connector ?? throw new ArgumentNullException(nameof(connector));
             _client_disconnector = disconnector ?? throw new ArgumentNullException(nameof(disconnector));
             _client_sender = sender ?? throw new ArgumentNullException(nameof(sender));
+
+            _constructor_handled();
+        }
+
+        protected virtual void _constructor_handled()
+        {
+            // to do
         }
 
         public override void Callback(IAsyncResult result)
@@ -51,13 +62,14 @@ namespace AivyDomain.Callback.Client
 
             if (_rcv_len > 0)
             {
-                _client.ReceiveBuffer = new MemoryStream();
-                _client.ReceiveBuffer.Write(_buffer, 0, _rcv_len);
+                if (_client.ReceiveBuffer != null) _client.ReceiveBuffer.Dispose();
+                _client.ReceiveBuffer = new MemoryStream(_buffer, 0, _rcv_len);
             }
 
             if (errorCode == SocketError.Success && _client.IsRunning && _rcv_len > 0)
             {
-                _rcv_action?.Invoke(_client.ReceiveBuffer);
+                if(_client.ReceiveBuffer != null)
+                    _rcv_action?.Invoke(_client.ReceiveBuffer);
 
                 _buffer = new byte[_client.ReceiveBufferLength];
 
@@ -70,7 +82,7 @@ namespace AivyDomain.Callback.Client
                                                 Callback,
                                                 _client.Socket);
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     _client_disconnector.Handle(_remote);
                 }
@@ -93,9 +105,6 @@ namespace AivyDomain.Callback.Client
                         _client_disconnector.Handle(_remote);
                 }
             }
-
-            _client.ReceiveBuffer?.Dispose();
-            _client.ReceiveBuffer = null;
         }
     }
 }

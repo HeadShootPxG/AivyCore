@@ -89,9 +89,16 @@ namespace AivyDofus.Protocol.Buffer
                         array = new dynamic[_length];
                     }
 
-                    for(int i = 0; i < array.Length; i++)
+                    if (field.type == "ByteArray")
                     {
-                        array[i] = _parse_var_element(field, reader);
+                        array = _read_value("ReadBytes", reader, array.Length) as dynamic[];
+                    }
+                    else
+                    {
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            array[i] = _parse_var_element(field, reader);
+                        }
                     }
 
                     _network_content[field.name] = array;
@@ -138,9 +145,9 @@ namespace AivyDofus.Protocol.Buffer
             }
         }
 
-        private dynamic _read_value(string read_method, BigEndianReader reader)
+        private dynamic _read_value(string read_method, BigEndianReader reader, params object[] param)
         {
-            return typeof(BigEndianReader).GetMethod(read_method).Invoke(reader, new object[0]);
+            return typeof(BigEndianReader).GetMethod(read_method).Invoke(reader, param);
         }
     }
 }

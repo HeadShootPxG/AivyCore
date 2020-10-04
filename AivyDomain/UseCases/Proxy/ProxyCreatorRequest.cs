@@ -30,7 +30,7 @@ namespace AivyDomain.UseCases.Proxy
         /// <returns></returns>
         public ProxyEntity Handle(string exePath, int port)
         {
-            return _repository.ActionResult(x => x.Port == port, x =>
+            return _repository.ActionResult(x => true, x =>
             {
                 x.Port = port;
                 x.HookInterface.OnIpRedirected += (ip, processId, portRed) =>

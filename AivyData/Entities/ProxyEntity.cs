@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AivyData.API.Proxy;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
@@ -11,10 +12,11 @@ namespace AivyData.Entities
         public HookEntity Hooker { get; set; }
         public HookInterfaceEntity HookInterface { get; set; }
         public Queue<IPEndPoint> IpRedirectedStack { get; set; }
+        public ProxyAccountMinimumInformationData AccountData { get; set; }
 
         public uint LAST_CLIENT_INSTANCE_ID { get; set; }
         public uint MESSAGE_RECEIVED_FROM_LAST { get; set; }
-        public uint FAKE_MESSAGE_CREATED { get; set; }
+        public uint FAKE_MESSAGE_CREATED { get; set; }        
 
         public uint GLOBAL_INSTANCE_ID
         {

@@ -1,6 +1,7 @@
 ﻿using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
 using AivyDomain.Callback.Client;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
     [ServerHandler(ProtocolName = "CharactersListRequestMessage")]
     public class CharactersListRequestMessageHandler : AbstractMessageHandler
     {
+        static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         public override bool IsForwardingData => true;
 
         public CharactersListRequestMessageHandler(AbstractClientReceiveCallback callback,
@@ -35,6 +38,11 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
             };
 
             Send(false, _callback._client, characters_list_message, characters_list_content);
+        }
+
+        public override void Error(Exception e)
+        {
+            logger.Error(e);
         }
     }
 }
