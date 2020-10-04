@@ -55,9 +55,7 @@ namespace AivyCore
 (<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
 (<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
 
-<h2> AivyDofus </h2>
-Il y a eu un tout petit changement dans le protocol Dofus , ducoup j'ai retirer la lecture des packets , mais ça arrive ^^
- 
+<h2> AivyDofus </h2> 
 La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
 Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
 
@@ -66,6 +64,11 @@ Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'
 // active(bool, int)
 DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS");
 proxy.Active(true, 666);
+
+// il n'y a pas de traitement de packet reçu pour Dofus Retro ( je ne connais pas la façon de lire les packets mais si vous voulez l'ajouter c'est ici :
+// https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs ) 
+DofusRetroProxy retro_proxy = new DofusRetroProxy("EMPLACEMENT DOSSER APP DOFUS RETRO"); // vérifier bien que le nom de l'exe soit bien Dofus.exe
+proxy.Active(true, 668);
 
 // DofusServer("DOSSIER APP DOFUS")
 // active(bool, int)
@@ -81,19 +84,17 @@ server.Active(true, 777);
 * La class doit être une sous-class de AbstractMessageHandler , et implémentera les fonction Handle() , EndHandle() ( optionel ) , Error(Exception) ( optionel ) et son
 * constructeur doit être NomDeVotreClass(Callback, NetworkElement, NetworkContentElement) : base(Callback,NetworkElement,NetworkContentElement) , le constructeur ne peut pas 
 * être modifié , sinon il y a une erreur lors de la création
-* la class AbstractMesssageHandler contient une fonction Send(bool,ClientEntity,NetworkElement,NetworkContentElement,uint?=null,bool=false) , elle permet d'envoyer un message avec les arguments 
+* la class AbstractMesssageHandler contient une fonction Send(bool,ClientEntity,NetworkElement,NetworkContentElement,uint?=null) , elle permet d'envoyer un message avec les arguments 
 * bool: si le message provient du client ( donc , message envoyé au serveur )
 * ClientEntity: le client auquel on veut envoyer le message 
 * NetworkElement: le message à envoyer
 * NetworkContentElement: le contenu du message à envoyer
-* uint?: l'instance id ( si votre message est un message crée , c-à-d non modifié, alors il faudra metter l'instance_id à DofusProxy.GLOBAL_INSTANCE_ID + 1 )
-* bool: si votre message est un faux message , crée par le bot
+* uint?: l'instance id ( si votre message est un message crée , c-à-d non modifié, alors il faudra metter l'instance_id à ((DofusProxyClientReceiveCallback)_callback)._proxy.GLOBAL_INSTANCE_ID + 1 )
 * elle contient aussi une valeur bool IsForwardingData , laissé à true , si les données seront directement transmis sans modification
 *
 * Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
 * Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
-* Pour faire la différence , il faudra , soit vous fié à _callback._tag , sinon , vous apprenez un peu le protocol , et vous regardez quel packet est envoyé par qui ^^ 
-* L'instanceId est gérez de façon très triviale , et peut comporter quelque faille , mais elle est fonctionnelle dans la plupart des cas
+* Pour faire la différence , il faudra , soit vous fié à _callback._tag , sinon , vous apprenez un peu le protocol , et vous regardez quel packet est envoyé par qui ^^
 * 
 * Pour créer un message/type il faut créer un NetworkContentElement de cette forme : 
 * new NetworkContentElement()
