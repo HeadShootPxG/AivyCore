@@ -42,7 +42,7 @@ namespace AivyDofus.Proxy.Callbacks
                 // wait remote client to connect
                 try
                 {
-                    while (!remote.IsRunning) { logger.Info("waiting"); }
+                    while (!remote.IsRunning) ;
                 }
                 catch(Exception e)
                 {

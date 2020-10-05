@@ -28,7 +28,6 @@ namespace AivyDofus.Server
         readonly ServerActivatorRequest _server_activator;
 
         readonly string _app_path;
-        //string _exe_path => $"{_app_path}/Dofus.exe";
         string _invoker_path => $"{_app_path}/DofusInvoker.swf";
 
         public DofusServer(string appPath)

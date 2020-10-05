@@ -40,14 +40,14 @@ namespace AivyDofus.Server.API
             }
         }
 
-        public T GetData<T>(Func<T, bool> predicat) where T : IdentifiableData
+        public IEnumerable<T> GetData<T>(Func<T, bool> predicat) where T : IdentifiableData
         {
             if (predicat is null) throw new ArgumentNullException(nameof(predicat));
 
             using (LiteDatabase db = new LiteDatabase(_location))
             {
                 ILiteCollection<T> servers = db.GetCollection<T>(typeof(T).Name);
-                return servers.Query().ToArray().FirstOrDefault(predicat);
+                return servers.Query().ToArray().Where(predicat);
             }
         }
 

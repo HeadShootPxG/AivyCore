@@ -69,5 +69,25 @@ namespace AivyDofus.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] BreedJson {
+            get {
+                object obj = ResourceManager.GetObject("BreedJson", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] HeadJson {
+            get {
+                object obj = ResourceManager.GetObject("HeadJson", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

@@ -39,8 +39,8 @@ namespace AivyDofus
             DofusProxy proxy = new DofusProxy("D:/DofusApp");
             ProxyEntity p_entity = proxy.Active(true, 666);
 
-            Thread.Sleep(2000);
-            ProxyEntity p2_entity = proxy.Active(true, 667);
+            /*Thread.Sleep(2000);
+            ProxyEntity p2_entity = proxy.Active(true, 667);*/
 
             DofusServer server = new DofusServer("D:/DofusApp");
             ServerEntity s_entity = server.Active(true, 777);

@@ -22,16 +22,6 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         }
 
-        /*public static string Random()
-        {
-            return Guid.NewGuid().ToString("N");
-        }
-
-        public static byte[] Encode(string ticket)
-        {
-            return Encoding.ASCII.GetBytes(ticket);
-        }*/
-
         public override void Handle()
         {
 

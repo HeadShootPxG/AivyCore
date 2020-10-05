@@ -1,5 +1,9 @@
-﻿using AivyDofus.Handler;
+﻿using AivyData.API;
+using AivyData.API.Server.Actor;
+using AivyDofus.Extension.Server.Data;
+using AivyDofus.Handler;
 using AivyDofus.Protocol.Elements;
+using AivyDofus.Server.Callbacks;
 using AivyDomain.Callback.Client;
 using NLog;
 using System;
@@ -27,17 +31,22 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         public override void Handle()
         {
-            NetworkElement characters_list_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "CharactersListMessage"];
-            NetworkContentElement characters_list_content = new NetworkContentElement()
+            DofusServerWorldClientReceiveCallback _world_callback = _casted_callback<DofusServerWorldClientReceiveCallback>();
+            if (DofusServer._server_api.GetData(x => x.Port == _world_callback._server.Port) is ServerData server_data &&
+                DofusServer._server_api.GetData<PlayerData>(x => x.AccountToken == _world_callback._client.CurrentToken && x.ServerId == server_data.ServerId) is IEnumerable<PlayerData> players)
             {
-                fields =
+                NetworkElement characters_list_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "CharactersListMessage"];
+                NetworkContentElement characters_list_content = new NetworkContentElement()
                 {
-                    { "hasStartupActions", false },
-                    { "characters", new NetworkContentElement[0] }
-                }
-            };
+                    fields =
+                    {
+                        { "hasStartupActions", false },
+                        { "characters", players.Select(x => server_data.Type == 1 ? x.BaseHardcoreInformation() : x.BaseInformation()).ToArray() }
+                    }
+                };
 
-            Send(false, _callback._client, characters_list_message, characters_list_content);
+                Send(false, _callback._client, characters_list_message, characters_list_content);
+            }
         }
 
         public override void Error(Exception e)

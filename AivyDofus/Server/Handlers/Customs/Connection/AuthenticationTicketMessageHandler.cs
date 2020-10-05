@@ -36,7 +36,7 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
             string token = _content["ticket"];            
 
-            if (DofusServer._server_api.GetData<ServerAccountInformationData>(x => x.Token == token) is ServerAccountInformationData _account)
+            if (DofusServer._server_api.GetData<ServerAccountInformationData>(x => x.Token == token).FirstOrDefault() is ServerAccountInformationData _account)
             {
                 ClientEntity connected = _world_callback._client_repository.GetResult(x => x.CurrentToken == token && x.IsRunning && x != _world_callback._client);
                 if(connected != null)
