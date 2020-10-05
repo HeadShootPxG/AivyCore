@@ -103,7 +103,7 @@ Voici un exemple de Handler commenté :
         
         // obligatoire , cette variable ne sert que pour le proxy 
         // à TRUE elle redirige directement les données reçu sans aucune modification ( du type du handler ici : ServerSelectionMessage )   
-        // à FALSE elle bloque tout les packets reçu ( du type du handler ici : ServerSelectionMessage )
+        // à FALSE elle bloque tout les packets reçu ( du type du handler ici : ServerSelectionMessage ) et vous devrez envoyer un message manuellement
         public override bool IsForwardingData => false;
 
         // le constructeur doit avoir ses arguments la :
