@@ -134,7 +134,7 @@ Voici un exemple de Handler commenté :
                 { "nomDeLaPropriété", null }, // valeur de la propriété
                 { "protocol_id" , 0 } // sur certain type , il peut être obligatoire ( dans le protocol c'est si prefixed_by_type_id = true ) 
                 // { ... }   
-            }
+            };
         }
         
         // optionel
