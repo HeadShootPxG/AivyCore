@@ -1,23 +1,20 @@
-<h2> # AivyCore </h2>
-Proxy Modulable
+(Pour une explication du code , le principe de base reste le même que https://github.com/Mrpotatosse/BotoxCore )
 
-Pour le moment les APIs ne sont pas encore implémenté. 
+English README : https://github.com/Mrpotatosse/AivyCore/blob/master/README_EN.md
 
-Voici un exemple de Program permettant d'installer un proxy sur un fichier éxécutable en lançant le proxy sur le port 666
+<h2> AivyCore </h2>
 
-```csharp
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using System;
-using AivyData.Entities;
-using AivyDomain.API.Proxy;
-using AivyDomain.Mappers.Proxy;
-using AivyDomain.Repository.Proxy;
-using AivyDomain.UseCases.Proxy;
+AivyCore est une base de Network contenant un Client , un Server , un Proxy
 
-namespace AivyCore
-{
+Le but n'est pas de vous donnez une base pour qu'ensuite vous réutilisiez sans comprendre. Donc je vous invite avant tout , à vous munir d'une base solide en programmation.
+
+<h2> AivyDofus </h2>
+
+AivyDofus est une implémentation de AivyCore pour le jeu Dofus ( www.dofus.com )
+
+Un exemple d'implémentation
+
+```csharp 
     class Program
     {
         static readonly ConsoleTarget log_console = new ConsoleTarget("log_console");
@@ -49,104 +46,108 @@ namespace AivyCore
             Console.ReadLine();
         }
     }
-}
 ```
 
-(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs">exemple pour un serveur dofus</a>)
-(<a href="https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs">exemple pour un proxy dofus</a>)
+Proxy : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs
 
-<h2> AivyDofus </h2> 
-La création du proxy et du serveur se passe dans Program.cs  (https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Program.cs)
-Pour l'instant je n'ai fait que le mono-compte , mais si vous voulez modifier c'est oklm
+Server : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs
 
-```csharp
-// DofusProxy("DOSSIER APP DOFUS")
-// active(bool, int)
-DofusProxy proxy = new DofusProxy("EMPLACEMENT DOSSIER APP DOFUS");
-proxy.Active(true, 666);
+Comme vous pouvez le voir, le proxy gère Dofus 2.0 et Dofus Retro ( cependant pour Dofus Retro aucune lecture des packets reçu n'est implémenté , je n'ai ajouter qu'un petit
+script permettant de se connecter sans mettre ses identifiants sur le client (mais directement avec du code) , ça se passe ici : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs )
 
-// il n'y a pas de traitement de packet reçu pour Dofus Retro ( je ne connais pas la façon de lire les packets mais si vous voulez l'ajouter c'est ici :
-// https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs ) 
-DofusRetroProxy retro_proxy = new DofusRetroProxy("EMPLACEMENT DOSSER APP DOFUS RETRO"); // vérifier bien que le nom de l'exe soit bien Dofus.exe
-proxy.Active(true, 668);
-
-// DofusServer("DOSSIER APP DOFUS")
-// active(bool, int)
-DofusServer server = new DofusServer("EMPLACEMENT DOSSIER APP DOFUS");
-server.Active(true, 777);
-```
-
-<h2> Handlers Proxy </h2>
+Voici un exemple pour lancer un DofusServer ou un DofusProxy/DofusRetroProxy
 
 ```csharp
-/*
-* Il faut mettre l'attribut ProxyHandler pour que la class soit reconnu en tant que IHandler ( si vous ne le mettez pas , le message ne sera pas stocké 
-* La class doit être une sous-class de AbstractMessageHandler , et implémentera les fonction Handle() , EndHandle() ( optionel ) , Error(Exception) ( optionel ) et son
-* constructeur doit être NomDeVotreClass(Callback, NetworkElement, NetworkContentElement) : base(Callback,NetworkElement,NetworkContentElement) , le constructeur ne peut pas 
-* être modifié , sinon il y a une erreur lors de la création
-* la class AbstractMesssageHandler contient une fonction Send(bool,ClientEntity,NetworkElement,NetworkContentElement,uint?=null) , elle permet d'envoyer un message avec les arguments 
-* bool: si le message provient du client ( donc , message envoyé au serveur )
-* ClientEntity: le client auquel on veut envoyer le message 
-* NetworkElement: le message à envoyer
-* NetworkContentElement: le contenu du message à envoyer
-* uint?: l'instance id ( si votre message est un message crée , c-à-d non modifié, alors il faudra metter l'instance_id à ((DofusProxyClientReceiveCallback)_callback)._proxy.GLOBAL_INSTANCE_ID + 1 )
-* elle contient aussi une valeur bool IsForwardingData , laissé à true , si les données seront directement transmis sans modification
-*
-* Lorsque le message provient du client Dofus , client = client Dofus et remote = serveur Dofus 
-* Lorsque le message provient du server Dofus , client = serveur Dofus et remote = client Dofus
-* Pour faire la différence , il faudra , soit vous fié à _callback._tag , sinon , vous apprenez un peu le protocol , et vous regardez quel packet est envoyé par qui ^^
-* 
-* Pour créer un message/type il faut créer un NetworkContentElement de cette forme : 
-* new NetworkContentElement()
-* {
-*   fields = 
-*   { 
-*      { "nomDeLaPropriété", valeur de la propriété },
-*      { "protocol_id" , 0 } // sur certain type , il peut être obligatoire ( dans le protocol c'est si prefixed_by_type_id = true ) 
-*      { ... }   
-*   }
-* }
-*
-* Toutes les propriétées sont répertorié dans le fichier ./protocol.json dans le fichier éxécutable
-*/
-[ProxyHandler(ProtocolName = "ServersListMessage")] // l'id peut changer donc favoriser toujours le nom
-public class ServersListMessageHandler : AbstractMessageHandler
-{
-    static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
-    public override bool IsForwardingData => false;
-
-    public ServersListMessageHandler(ProxyClientReceiveCallback callback, 
-                                     NetworkElement element,
-                                     NetworkContentElement content)
-        : base(callback, element, content)
+    // un exemple pour lancer 10 server
+    DofusServer server = new DofusServer("EMPLACEMENT DU DOSSIER APP");
+    int nombre_de_server_a_lancer = 10;
+    for(int i = 1;i <= nombre_de_server_a_lancer;i++)
     {
-
+        int port_du_server = 666;
+        ServerEntity server_instance = server.Active(true, port_du_server + i); 
     }
 
-    public override void Handle()
+    // un exemple pour lancer 10 proxy (pour DofusRetro c'est similaire , il suffit de remplacer DofusProxy par DofusRetroProxy et le constructeur de DofusRetroProxy 
+    // prend en argument le dossier qui contient le fichier Dofus.exe)
+    DofusProxy proxy = new DofusProxy("EMPLACEMENT DU DOSSIER APP");
+    int nombre_de_proxy_a_lancer = 10;
+    for(int i = 1;i <= nombre_de_proxy_a_lancer;i++)
     {
-        IEnumerable<dynamic> _servers = _content["servers"];            
-        _content["servers"] = _servers.Append(new NetworkContentElement()
+        int port_du_proxy = 666;
+        ProxyEntity proxy_instance = proxy.Active(true, port_du_proxy + i); 
+        Thread.Sleep(2000); // le client Dofus peut ne pas se lancer si vous en ouvre plein en même temps donc mettez une pause entre chaque ouverture de client
+    }
+```
+
+<h2> AivyDofus - Dofus 2.0 - Handler </h2>
+
+LE PROTOCOL SOUS FORME DE JSON SE TROUVE DANS LE DOSSIER DE VOTRE EXECUTABLE sous le nom ./protocol.json (lancez le programme 1 fois pour que le fichier se crée automatiquement)
+
+Les Handlers pour Dofus 2.0 sont gérez sous forme de ``class`` 
+
+Proxy Handlers : https://github.com/Mrpotatosse/AivyCore/tree/master/AivyDofus/Proxy/Handlers/Customs
+
+Server Handlers : https://github.com/Mrpotatosse/AivyCore/tree/master/AivyDofus/Server/Handlers/Customs
+
+Voici un exemple de Handler commenté : 
+
+```csharp
+    // L'attribut doit être spécifié pour pouvoir handle le message , mettez l'attribut en commentaire si vous voulez désactivez le handle d'un message
+    // ProxyHandler pour les proxys et ServerHandler pour les servers
+    [ProxyHandler(ProtocolName = "ServerSelectionMessage")]
+    // Votre class Handler doit hérité de AbstractMessageHandler https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Handler/AbstractMessageHandler.cs
+    public class ServerSelectionMessageHandler : AbstractMessageHandler
+    {
+        // optionel pour le log
+        static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
+        // obligatoire , cette variable ne sert que pour le proxy 
+        // à TRUE elle redirige directement les données reçu sans aucune modification ( du type du handler ici : ServerSelectionMessage )   
+        // à FALSE elle bloque tout les packets reçu ( du type du handler ici : ServerSelectionMessage ) et vous devrez envoyer un message manuellement
+        public override bool IsForwardingData => false;
+
+        // le constructeur doit avoir ses arguments la :
+        //  - AbstractClientReceiveCallback => _callback : contient
+        //             ._tag -> un énum qui définie si le message provient du Client ou du Server
+        //             ._client -> qui représente le client ayant activé le callback
+        //             ._remote -> le client en lien ( pour le server la valeur est null ) ( pour le proxy , si _tag = Client alors _remote = Server sinon l'inverse )
+        //             ._client_repository -> le stockage de tout les clients
+        //             ._client_creator, ._client_linker, ._client_connector, ._client_disconnector -> differente class qui représente les actions possible sur un client
+        //  - NetworkElement => _element : la base du message ( ce qui contient toutes les informations de lecture/écriture )
+        //  - NetworkContentElement => _content : le contenu du message reçu
+        // Le constructeur ne peux pas être modifié ( sinon il y a aura une erreur lors du runtime )
+        public ServerSelectionMessageHandler(AbstractClientReceiveCallback callback,
+                                             NetworkElement element,
+                                             NetworkContentElement content)
+            : base(callback, element, content)
         {
-            fields =
+
+        }
+        
+        // OBLIGATOIRE , la fonction qui permet de Handle un message
+        public override void Handle()
+        {
+            // Pour créer un message/type il faut passer par un NetworkContentElement
+            NetworkContentElement custom_message = new NetworkContentElement()
             {
-                { "isMonoAccount", true },
-                { "isSelectable", true },
-                { "id", 671 },
-                { "type", 1 },
-                { "status", 3 },
-                { "completion", 0 },
-                { "charactersCount", 1 },
-                { "charactersSlots", 5 },
-                { "date", 1234828800000 }
-            }
-        }).ToArray();
-        //                                                          
-        //Send(true, _callback._remote, _element, _content, /*pour générer un nouvel instance_id , il faut l'appeler depuis le proxy (cast le callback)*/ 1, true); si c'est un faux message provenant du client
-        Send(false, _callback._remote, _element, _content);
+                field = 
+                { "nomDeLaPropriété", null }, // valeur de la propriété
+                { "protocol_id" , 0 } // sur certain type , il peut être obligatoire ( dans le protocol c'est si prefixed_by_type_id = true ) 
+                // { ... }   
+            };
+        }
+        
+        // optionel
+        public override void EndHandle()
+        {
+        
+        }
+        // optionel
+        public override void Error(Exception e)
+        {
+            logger.Error(e);
+        }
     }
-}
 ```
 
 <h2> Dépendances </h2>
@@ -158,4 +159,5 @@ public class ServersListMessageHandler : AbstractMessageHandler
 - EasyHook ( SocketHook de Nameless https://cadernis.fr/index.php?threads/sockethook-injector-alternative-%C3%A0-no-ankama-dll.2221/page-2#post-24796 celui que j'utilise est une ancienne version auquel j'ai appliqué quelque modification )
 
 - Botofu parser ( https://gitlab.com/botofu/protocol_parser ) ( j'ai directement ajouter le .exe aux ressources ducoup le protocol devrait être parser à chaque ouverture du hook  https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Protocol/Parser/BotofuParser.cs )
-
+  
+- LiteDB (https://www.litedb.org/) ( pour la base de données côté serveur , c'est du NoSQL pour faciliter le stockage d'object ) ( vous pouvez le modifier et importer la base de données qui vous plait https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/API/OpenServerDatabaseApi.cs )
