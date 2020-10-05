@@ -45,6 +45,7 @@ Un exemple d'implémentation
 ```
 
 Proxy : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/DofusProxy.cs
+
 Server : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs
 
 Comme vous pouvez le voir, le proxy gère Dofus 2.0 et Dofus Retro ( cependant pour Dofus Retro aucune lecture des packets reçu n'est immplémenté , je n'ai ajouter qu'un petit
@@ -81,6 +82,7 @@ LE PROTOCOL SOUS FORME DE JSON SE TROUVE DANS LE DOSSIER DE VOTRE EXECUTABLE sou
 Les Handlers pour Dofus 2.0 sont gérez sous forme de ``class`` 
 
 Proxy Handlers : https://github.com/Mrpotatosse/AivyCore/tree/master/AivyDofus/Proxy/Handlers/Customs
+
 Server Handlers : https://github.com/Mrpotatosse/AivyCore/tree/master/AivyDofus/Server/Handlers/Customs
 
 Voici un exemple de Handler commenté : 
