@@ -1,3 +1,5 @@
+(Pour une explication du code , le principe de base reste le même que https://github.com/Mrpotatosse/BotoxCore )
+
 English README : https://github.com/Mrpotatosse/AivyCore/blob/master/README_EN.md
 
 <h2> AivyCore </h2>
