@@ -48,7 +48,7 @@ Proxy : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Dofu
 
 Server : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs
 
-Has you could see , the proxy can handle Dofus 2.0 and Dofus Retro ( but for Dofus Retro there isn't packet reading , but I just had a little script to make you set you logging information with code, everything is here : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs )
+Has you could see , the proxy can handle Dofus 2.0 and Dofus Retro ( but for Dofus Retro there isn't packet reading , but I just had a little script to let you set your logging information with code, everything is here : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs )
 
 This is an example of starting DofusServer or DofusProxy/DofusRetroProxy :
 
