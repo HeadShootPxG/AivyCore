@@ -77,7 +77,7 @@ Voici un exemple pour lancer un DofusServer ou un DofusProxy/DofusRetroProxy
 
 <h2> AivyDofus - Dofus 2.0 - Handler </h2>
 
-LE PROTOCOL SOUS FORME DE JSON SE TROUVE DANS LE DOSSIER DE VOTRE EXECUTABLE sous le nom ./protocol.json
+LE PROTOCOL SOUS FORME DE JSON SE TROUVE DANS LE DOSSIER DE VOTRE EXECUTABLE sous le nom ./protocol.json (lancez le programme 1 fois pour que le fichier se crée automatiquement)
 
 Les Handlers pour Dofus 2.0 sont gérez sous forme de ``class`` 
 
