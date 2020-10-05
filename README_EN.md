@@ -128,8 +128,8 @@ Handler example commented :
                 field = 
                 { "nomDeLaPropriété", null }, // property value
                 { "protocol_id" , 0 } // on some type , this is obligatory , check it on protocol.json , 'prefixed_by_type_id' value
-                { ... }   
-            }
+                // { ... }   
+            };
         }
         
         // optional
