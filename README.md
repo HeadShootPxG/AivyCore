@@ -1,3 +1,5 @@
+English README : https://github.com/Mrpotatosse/AivyCore/blob/master/README_EN.md
+
 <h2> AivyCore </h2>
 
 AivyCore est une base de Network contenant un Client , un Server , un Proxy
