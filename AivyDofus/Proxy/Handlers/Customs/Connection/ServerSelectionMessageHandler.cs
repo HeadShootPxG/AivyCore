@@ -63,9 +63,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
                     }
                 });
 
-                logger.Info($"{_proxy_callback._proxy.AccountData}");
                 _proxy_callback._proxy.AccountData.ConnectedToCustomServer = true;
-
                 _callback._client_disconnector.Handle(_callback._client);
             }
             else

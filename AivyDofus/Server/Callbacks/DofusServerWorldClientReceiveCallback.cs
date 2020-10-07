@@ -37,7 +37,7 @@ namespace AivyDofus.Server.Callbacks
         {
             fields =
             {
-                { "version", "1.0.1-ad7c4fd" }
+                { "version", "1.0.1-0b7cff8" }
             }
         };
 

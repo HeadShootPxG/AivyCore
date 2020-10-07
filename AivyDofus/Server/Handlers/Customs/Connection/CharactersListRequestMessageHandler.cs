@@ -29,6 +29,9 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
 
         }
 
+        public static readonly NetworkElement _character_base_informations = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Types, x => x.name == "CharacterBaseInformations"];
+        public static readonly NetworkElement _character_hardcore_base_informations = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Types, x => x.name == "CharacterHardcoreOrEpicInformations"];
+
         public static readonly NetworkElement _characters_list_message = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "CharactersListMessage"];
         public static NetworkContentElement _characters_list_content(IEnumerable<PlayerData> players, ServerData server_data, bool hasStartupActions = false)
         {
@@ -37,7 +40,7 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
                 fields =
                 {
                     { "hasStartupActions", hasStartupActions },
-                    { "characters", players.Select(x => server_data.Type == 1 ? x.BaseHardcoreInformation() : x.BaseInformation()).ToArray() }
+                    { "characters", players.Select(x => server_data.Type == 1 ? x.BaseHardcoreInformation(_character_hardcore_base_informations.protocolID) : x.BaseInformation(_character_base_informations.protocolID)).ToArray() }
                 }
             };
         }

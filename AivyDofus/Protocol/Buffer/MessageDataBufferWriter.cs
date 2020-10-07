@@ -5,6 +5,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,8 +53,10 @@ namespace AivyDofus.Protocol.Buffer
 
         private void _parse_super(BigEndianWriter writer)
         {
-            if (_network_base.super_serialize)            
-                writer.WriteBytes(new MessageDataBufferWriter(_super).Parse(_network_content));            
+            if (_network_base.super_serialize)
+            {
+                writer.WriteBytes(new MessageDataBufferWriter(_super).Parse(_network_content));
+            }
         }
 
         private void _parse_bool(BigEndianWriter writer)

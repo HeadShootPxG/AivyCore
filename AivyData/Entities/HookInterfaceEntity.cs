@@ -15,5 +15,10 @@ namespace AivyData.Entities
             base.IpRedirected(ip, processId, redirectionPort);
             OnIpRedirected?.Invoke(ip, processId, redirectionPort);
         }
+
+        public override int[] LocalPortWhiteList()
+        {
+            return new int[] { 4444 };// for Dofus retro
+        }
     }
 }

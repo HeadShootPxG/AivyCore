@@ -53,7 +53,7 @@ namespace AivyDofus.Server.Handlers.Customs.Creation
 
                 string name = _content["name"];
 
-                if (!Regex.IsMatch(name, @"(\w){3,20}"))
+                if (!Regex.IsMatch(name, @"(\w){3,20}")) // to do
                     throw new CharacterCreationException("ERR_INVALID_NAME");
 
                 if (DofusServer._server_api.GetData<PlayerData>(x => x.Name.ToLower() == name.ToLower()).Count() > 0)
@@ -66,6 +66,9 @@ namespace AivyDofus.Server.Handlers.Customs.Creation
 
                 BreedObjectData breed_data = StaticValues.BREEDS.FirstOrDefault(x => x.Id == breed);
                 HeadObjectData head_data = StaticValues.HEADS.FirstOrDefault(x => x.Id == cosmeticId);
+
+                if (breed_data is null || head_data is null)
+                    throw new CharacterCreationException("ERR_NOT_ALLOWED");
 
                 Random rnd = new Random();
                 int rnd_id = -1;
@@ -98,11 +101,12 @@ namespace AivyDofus.Server.Handlers.Customs.Creation
         // if no error
         public override void EndHandle()
         {
-            Send(false, _callback._client, _character_creation_result, _character_creation_result_content("OK"));
             DofusServerWorldClientReceiveCallback _world_callback = _casted_callback<DofusServerWorldClientReceiveCallback>();
             if (DofusServer._server_api.GetData(x => x.Port == _world_callback._server.Port) is ServerData server_data &&
                 DofusServer._server_api.GetData<PlayerData>(x => x.AccountToken == _world_callback._client.CurrentToken && x.ServerId == server_data.ServerId) is IEnumerable<PlayerData> players)
             {
+                Send(false, _callback._client, _character_creation_result, _character_creation_result_content("OK"));
+
                 NetworkContentElement characters_list = CharactersListRequestMessageHandler._characters_list_content(players, server_data);
                 Send(false, _callback._client, CharactersListRequestMessageHandler._characters_list_message, characters_list);
                 // connect client

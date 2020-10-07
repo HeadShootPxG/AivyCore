@@ -34,7 +34,7 @@ namespace AivyDofus.Server.Handlers.Customs.Connection
         {
             DofusServerWorldClientReceiveCallback _world_callback = _casted_callback<DofusServerWorldClientReceiveCallback>();
 
-            string token = _content["ticket"];            
+            string token = _content["ticket"];  
 
             if (DofusServer._server_api.GetData<ServerAccountInformationData>(x => x.Token == token).FirstOrDefault() is ServerAccountInformationData _account)
             {

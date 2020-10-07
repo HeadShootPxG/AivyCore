@@ -41,7 +41,8 @@ namespace AivyDofus.Proxy.Callbacks
 
                 string password_key = msg.Substring(2, msg.Length - 2);
 
-                string version = "1.33.1\n";
+                // set version manualy
+                string version = "1.33.5\n";
                 string account_info = $"{account_name}\n{password_encrypt(clear_password, password_key)}\n";
                 string af = " Af\n";
 

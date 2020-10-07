@@ -10,13 +10,13 @@ namespace AivyDofus.Extension.Server.Data
 {
     public static class PlayerDataExtension
     {
-        public static NetworkContentElement BaseInformation(this PlayerData player)
+        public static NetworkContentElement BaseInformation(this PlayerData player, int protocolId)
         {
             return new NetworkContentElement()
             {
                 fields =
                 {
-                    { "protocol_id", 6238 },
+                    { "protocol_id", protocolId },
                     { "id", player.Id },
                     { "name", player.Name },
                     { "level", 1 /*short*/ },
@@ -27,11 +27,10 @@ namespace AivyDofus.Extension.Server.Data
             };
         }
 
-        public static NetworkContentElement BaseHardcoreInformation(this PlayerData player)
+        public static NetworkContentElement BaseHardcoreInformation(this PlayerData player, int protocolId)
         {
-            NetworkContentElement base_information = player.BaseInformation();
+            NetworkContentElement base_information = player.BaseInformation(protocolId);
 
-            base_information["protocol_id"] = 3059;
             base_information["deathState"] = 0;// byte -> PlayerLifeStatusEnum
             base_information["deathCount"] = 0;// short
             base_information["deathMaxLevel"] = 1;// short
