@@ -53,7 +53,8 @@ Proxy : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Dofu
 Server : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/DofusServer.cs
 
 Comme vous pouvez le voir, le proxy gère Dofus 2.0 et Dofus Retro ( cependant pour Dofus Retro aucune lecture des packets reçu n'est implémenté , je n'ai ajouter qu'un petit
-script permettant de se connecter sans mettre ses identifiants sur le client (mais directement avec du code) , ça se passe ici : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs )
+script permettant de se connecter sans mettre ses identifiants sur le client (mais directement avec du code) , ça se passe ici : https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Proxy/Callbacks/DofusRetroProxyClientReceiveCallback.cs 
+il fauudra renseigner votre ndc , mdp et la version du jeu)
 
 Voici un exemple pour lancer un DofusServer ou un DofusProxy/DofusRetroProxy
 
