@@ -111,7 +111,7 @@ Voici un exemple de Handler commenté :
         //             ._tag -> un énum qui définie si le message provient du Client ou du Server
         //             ._client -> qui représente le client ayant activé le callback
         //             ._remote -> le client en lien ( pour le server la valeur est null ) ( pour le proxy , si _tag = Client alors _remote = Server sinon l'inverse )
-        //             ._client_repository -> le stockage de tout les clients
+        //             ._client_repository -> le stockage de tout les clients (à noté que vous pouvez éxécutez des actions depuis cette variable , mais il est préférable de les         // créer sous forme de class , comme ceux déjà créer , pour éviter tout conflit au niveau de la liste de client )
         //             ._client_creator, ._client_linker, ._client_connector, ._client_disconnector -> differente class qui représente les actions possible sur un client
         //  - NetworkElement => _element : la base du message ( ce qui contient toutes les informations de lecture/écriture )
         //  - NetworkContentElement => _content : le contenu du message reçu
