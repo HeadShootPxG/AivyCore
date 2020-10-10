@@ -4,6 +4,8 @@ English README : https://github.com/Mrpotatosse/AivyCore/blob/master/README_EN.m
 
 <h2> AivyCore </h2>
 
+<img src="https://www.freelogodesign.org/file/app/client/thumb/bf88aa20-942d-494c-b987-4eb6664bee5b_200x200.png?1602335806664">
+
 AivyCore est une base de Network contenant un Client , un Server , un Proxy
 
 Le but n'est pas de vous donnez une base pour qu'ensuite vous réutilisiez sans comprendre. Donc je vous invite avant tout , à vous munir d'une base solide en programmation.
