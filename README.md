@@ -4,8 +4,6 @@ English README : https://github.com/Mrpotatosse/AivyCore/blob/master/README_EN.m
 
 <h2> AivyCore </h2>
 
-<img src="https://www.freelogodesign.org/file/app/client/thumb/bf88aa20-942d-494c-b987-4eb6664bee5b_200x200.png?1602335806664">
-
 AivyCore est une base de Network contenant un Client , un Server , un Proxy
 
 Le but n'est pas de vous donnez une base pour qu'ensuite vous réutilisiez sans comprendre. Donc je vous invite avant tout , à vous munir d'une base solide en programmation.
@@ -165,3 +163,5 @@ Voici un exemple de Handler commenté :
 - Botofu parser ( https://gitlab.com/botofu/protocol_parser ) ( j'ai directement ajouter le .exe aux ressources ducoup le protocol devrait être parser à chaque ouverture du hook  https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Protocol/Parser/BotofuParser.cs )
   
 - LiteDB (https://www.litedb.org/) ( pour la base de données côté serveur , c'est du NoSQL pour faciliter le stockage d'object ) ( vous pouvez le modifier et importer la base de données qui vous plait https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/API/OpenServerDatabaseApi.cs )
+
+<div style="text-align: center"><img src="https://www.freelogodesign.org/file/app/client/thumb/bf88aa20-942d-494c-b987-4eb6664bee5b_200x200.png?1602335806664"/></div>
