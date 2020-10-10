@@ -164,4 +164,4 @@ Voici un exemple de Handler commenté :
   
 - LiteDB (https://www.litedb.org/) ( pour la base de données côté serveur , c'est du NoSQL pour faciliter le stockage d'object ) ( vous pouvez le modifier et importer la base de données qui vous plait https://github.com/Mrpotatosse/AivyCore/blob/master/AivyDofus/Server/API/OpenServerDatabaseApi.cs )
 
-<div style="text-align: center"><img src="https://www.freelogodesign.org/file/app/client/thumb/bf88aa20-942d-494c-b987-4eb6664bee5b_200x200.png?1602335806664"/></div>
+<img align="center" src="https://www.freelogodesign.org/file/app/client/thumb/bf88aa20-942d-494c-b987-4eb6664bee5b_200x200.png?1602335806664"/>
