@@ -1,6 +1,10 @@
-(Pour une explication du code , le principe de base reste le même que https://github.com/Mrpotatosse/BotoxCore )
+(Pour une explication du code , le principe de base reste le même que Botox https://cadernis.fr/index.php?threads/botox-mitm.2551/ )
 
 English README : https://github.com/Mrpotatosse/AivyCore/blob/master/README_EN.md
+
+<p align="center">
+  <img src="https://pbs.twimg.com/media/Ej-YmeJXcAIG7Dy?format=jpg&name=medium"/>
+</p>
 
 <h2> AivyCore </h2>
 

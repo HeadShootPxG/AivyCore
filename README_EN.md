@@ -126,7 +126,7 @@ Handler example commented :
             NetworkContentElement custom_message = new NetworkContentElement()
             {
                 field = 
-                { "nomDeLaPropriété", null }, // property value
+                { "propertyName", null }, // property value
                 { "protocol_id" , 0 } // on some type , this is obligatory , check it on protocol.json , 'prefixed_by_type_id' value
                 // { ... }   
             };
