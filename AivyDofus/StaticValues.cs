@@ -33,6 +33,23 @@ namespace AivyDofus
             }
         }
 
+        static readonly object _locker_raw_data_id = new object();
+        static int _raw_data_id = 1528;
+        public static int RAW_DATA_MSG_RCV_ID
+        {
+            get
+            {
+                return _raw_data_id;
+            }
+            set
+            {
+                lock (_locker_raw_data_id)
+                {
+                    _raw_data_id = value;
+                }
+            }
+        }
+
         static readonly object _locker_breed = new object();
         static BreedObjectData[] _breeds = null;
         public static BreedObjectData[] BREEDS

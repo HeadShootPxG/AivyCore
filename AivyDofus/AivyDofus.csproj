@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crypto\Hash.cs" />
+    <Compile Include="Extension\AsyncExtension.cs" />
     <Compile Include="Extension\Server\Data\LookExtension.cs" />
     <Compile Include="Extension\Server\Data\PlayerDataExtension.cs" />
     <Compile Include="Handler\AbstractMessageHandler.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Proxy\Handlers\Customs\Connection\ProtocolRequiredHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServerSelectionMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\Connection\ServersListMessageHandler.cs" />
+    <Compile Include="Proxy\Handlers\Customs\World\Exchange\ExchangeStartedWithStorageMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\Customs\World\Map\MapComplementaryInformationsDataMessageHandler.cs" />
     <Compile Include="Proxy\Handlers\ProxyHandlerAttribute.cs" />
     <Compile Include="Proxy\API\OpenProxyConfigurationApi.cs" />

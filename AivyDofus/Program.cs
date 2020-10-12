@@ -36,13 +36,13 @@ namespace AivyDofus
             /*DofusRetroProxy r_proxy = new DofusRetroProxy(@"D:\retro\resources\app\retroclient");
             ProxyEntity retro_entity = r_proxy.Active(true, 668);*/
 
-            DofusProxy proxy = new DofusProxy("D:/DofusApp");
+            DofusProxy proxy = new DofusProxy(@"D:\AppDofus");
             ProxyEntity p_entity = proxy.Active(true, 666);
 
             /*Thread.Sleep(2000);
             ProxyEntity p2_entity = proxy.Active(true, 667);*/
 
-            DofusServer server = new DofusServer("D:/DofusApp");
+            DofusServer server = new DofusServer(@"D:\AppDofus");
             ServerEntity s_entity = server.Active(true, 777);
 
             Console.ReadLine();

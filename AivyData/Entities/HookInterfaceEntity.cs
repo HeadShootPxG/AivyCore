@@ -10,6 +10,11 @@ namespace AivyData.Entities
     {
         public event Action<IPEndPoint, int, int> OnIpRedirected;
 
+        public override void Ping()
+        {
+            // to do check afk
+        }
+
         public override void IpRedirected(IPEndPoint ip, int processId, int redirectionPort)
         {
             base.IpRedirected(ip, processId, redirectionPort);

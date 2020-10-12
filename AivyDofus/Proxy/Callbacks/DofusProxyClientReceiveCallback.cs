@@ -117,15 +117,15 @@ namespace AivyDofus.Proxy.Callbacks
                 _position += _static_header;
 
                 long _current_data_len = full_data.Length - _position;
-                if(_current_data_len >= _length)
+                if (_current_data_len >= _length)
                 {
                     NetworkElement _element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.protocolID == _message_id];
                     _data = new byte[_current_data_len];
 
-                    if(_tag == ProxyTagEnum.Client)
-                    {   
+                    if (_tag == ProxyTagEnum.Client)
+                    {
                         // rmv element from not game socket
-                        if(_instance_id > _proxy.GLOBAL_INSTANCE_ID * 2)
+                        if (_instance_id > _proxy.GLOBAL_INSTANCE_ID * 2)
                         {
                             _element = null;
                         }
@@ -137,7 +137,7 @@ namespace AivyDofus.Proxy.Callbacks
                     }
                     else
                     {
-                        if(_message_id == 8892) // rdm
+                        if (_message_id == StaticValues.RAW_DATA_MSG_RCV_ID) // rdm
                         {
                             _element = BotofuProtocolManager.Protocol[ProtocolKeyEnum.Messages, x => x.name == "RawDataMessage"];
                         }
@@ -154,7 +154,7 @@ namespace AivyDofus.Proxy.Callbacks
                         _data_buffer_reader = new MessageDataBufferReader(_element);
                         using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {
-                            if (_handler.Handle(this, _element, _data_buffer_reader.Parse(big_data_reader)))
+                            if (_handler.Handle(this, _element, _data_buffer_reader.Parse(big_data_reader)).Result)
                             {
                                 _client_sender.Handle(_remote, packet_data);
                             }
@@ -180,7 +180,7 @@ namespace AivyDofus.Proxy.Callbacks
                 }
                 else
                 {
-                    _position = start_pos; 
+                    _position = start_pos;
                     break;
                 }                
             }

@@ -42,7 +42,21 @@ namespace SocketHook
             catch (Exception ex) { _interface.Error(ex); }
 
             WakeUpProcess();
-            while (true) ;
+
+            try
+            {
+                while (true) 
+                {
+                    Thread.Sleep(500);
+                    _interface.Ping();
+                }
+            }
+            catch
+            {
+                _connectHook.Dispose();
+
+                LocalHook.Release();
+            }
         }
 
         private int _onConnect(IntPtr socket, IntPtr address, int addrSize)
@@ -58,7 +72,7 @@ namespace SocketHook
                 return connect(socket, address, addrSize);
             }
 
-            //_interface.Message($"Connection attempt at {ipAddress}:{htons(port)}, redirecting to 127.0.0.1:{_redirectionPort}...");
+            _interface.Message($"Connection attempt at {ipAddress}:{htons(port)}, redirecting to 127.0.0.1:{_redirectionPort}...");
 
             _interface.IpRedirected(new IPEndPoint(ipAddress, htons(port)), Process.GetCurrentProcess().Id, _redirectionPort);
 

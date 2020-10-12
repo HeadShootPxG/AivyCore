@@ -37,22 +37,17 @@ namespace AivyDofus.Proxy.Callbacks
                 DofusRetroProxyClientReceiveCallback remote_rcv_callback = new DofusRetroProxyClientReceiveCallback(remote, client, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Server);
                 remote = _client_connector.Handle(remote, new ClientConnectCallback(remote, remote_rcv_callback));
 
-                // wait remote client to connect
-                try
-                {
-                    while (!remote.IsRunning) ;
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
-                    return;
-                }
-
-                if (client.IsRunning)
+                if (client.IsRunning && remote.IsRunning)
                 {
                     client = _client_receiver.Handle(client, new DofusRetroProxyClientReceiveCallback(client, remote, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Client));
 
                     logger.Info("client connected");
+                }
+                else
+                {
+                    client = _client_disconnector.Handle(client);
+
+                    logger.Info("remote client cannot connect to server");
                 }
 
                 _proxy.Socket.BeginAccept(Callback, _proxy.Socket);

@@ -23,7 +23,7 @@ namespace AivyDomain.Mappers.Client
             {
                 ClientEntity client = new ClientEntity()
                 {
-                    ReceiveBufferLength = 16384 // to do -> get from file ? 
+                    ReceiveBufferLength = 4096 // to do -> get from file ? 
                 };
                 _clients.Add(client);
                 return client;

@@ -31,6 +31,15 @@ namespace AivyDomain.UseCases.Client
 
                 x.Socket.BeginConnect(x.RemoteIp, request2.Callback, x.Socket);
 
+                DateTime timeout_start = DateTime.Now;
+                while (!x.IsRunning) 
+                {
+                    if((DateTime.Now - timeout_start) is TimeSpan diff)
+                    {
+                        if (diff.TotalMilliseconds > 3000) return x;// max timeout 3 sec
+                    }
+                }
+
                 return x;
             });
         }

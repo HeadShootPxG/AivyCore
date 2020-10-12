@@ -58,7 +58,7 @@ namespace AivyDofus.Handler
             }
 
             byte[] _data = new MessageDataBufferWriter(element).Parse(content);
-            byte[] _final_data = new MessageBufferWriter(fromClient).Build((ushort)(element.protocolID  == 6253 ? 8892 /*rdm*/ : element.protocolID), instance_id, _data).Data;
+            byte[] _final_data = new MessageBufferWriter(fromClient).Build((ushort)(element.protocolID  == 6253 ? StaticValues.RAW_DATA_MSG_RCV_ID : element.protocolID), instance_id, _data).Data;
 
             _callback._client_sender.Handle(sender, _final_data);
 
