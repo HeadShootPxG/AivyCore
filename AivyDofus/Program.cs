@@ -40,10 +40,10 @@ namespace AivyDofus
             ProxyEntity p_entity = proxy.Active(true, 666);
 
             /*Thread.Sleep(2000);
-            ProxyEntity p2_entity = proxy.Active(true, 667);*/
+            ProxyEntity p2_entity = proxy.Active(true, 667);
 
             DofusServer server = new DofusServer(@"D:\AppDofus");
-            ServerEntity s_entity = server.Active(true, 777);
+            ServerEntity s_entity = server.Active(true, 777);*/
 
             Console.ReadLine();
         }

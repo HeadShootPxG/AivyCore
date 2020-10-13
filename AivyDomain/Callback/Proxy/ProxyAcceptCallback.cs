@@ -61,12 +61,13 @@ namespace AivyDomain.Callback.Proxy
                 AbstractClientReceiveCallback remote_rcv_callback = new AbstractClientReceiveCallback(remote, client, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, ProxyTagEnum.Server);
                 remote = _client_connector.Handle(remote, new ClientConnectCallback(remote, remote_rcv_callback));
 
-                // wait remote client to connect 
-                while (!remote.IsRunning) ; 
 
-                client = _client_receiver.Handle(client, new AbstractClientReceiveCallback(client, remote, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, ProxyTagEnum.Client));
+                if (client.IsRunning && remote.IsRunning)
+                {
+                    client = _client_receiver.Handle(client, new AbstractClientReceiveCallback(client, remote, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, ProxyTagEnum.Client));
 
-                logger.Info("client connected");
+                    logger.Info("client connected");
+                }
 
                 _proxy.Socket.BeginAccept(Callback, _proxy.Socket);
             }

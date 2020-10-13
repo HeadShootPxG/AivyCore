@@ -19,6 +19,7 @@ namespace AivyDofus.Proxy.Callbacks
         public DofusRetroProxyAcceptCallback(ProxyEntity proxy)
             : base(proxy)
         {
+            
         }
 
         public override void Callback(IAsyncResult result)
@@ -42,12 +43,6 @@ namespace AivyDofus.Proxy.Callbacks
                     client = _client_receiver.Handle(client, new DofusRetroProxyClientReceiveCallback(client, remote, _client_repository, _client_creator, _client_linker, _client_connector, _client_disconnector, _client_sender, _proxy, ProxyTagEnum.Client));
 
                     logger.Info("client connected");
-                }
-                else
-                {
-                    client = _client_disconnector.Handle(client);
-
-                    logger.Info("remote client cannot connect to server");
                 }
 
                 _proxy.Socket.BeginAccept(Callback, _proxy.Socket);

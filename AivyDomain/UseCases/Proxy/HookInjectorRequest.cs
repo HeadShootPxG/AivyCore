@@ -2,6 +2,7 @@
 using AivyData.Entities;
 using AivyDomain.Repository;
 using EasyHook;
+using NLog;
 using SocketHook;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace AivyDomain.UseCases.Proxy
 {
     public class HookInjectorRequest : IRequestHandler<ProxyEntity, HookEntity>
     {
+        static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly IRepository<ProxyEntity, ProxyData> _repository;
 
         public HookInjectorRequest(IRepository<ProxyEntity, ProxyData> repository)
@@ -34,6 +37,11 @@ namespace AivyDomain.UseCases.Proxy
                 out _hook.ProcessId,
                 _hook.ChannelName,
                 request.Port);
+
+                while (_hook.ProcessId == 0) ;
+
+                x.ProcessId = _hook.ProcessId;
+                logger.Debug($"Process id : {_hook.ProcessId}");
 
                 return x;
             }).Hooker;

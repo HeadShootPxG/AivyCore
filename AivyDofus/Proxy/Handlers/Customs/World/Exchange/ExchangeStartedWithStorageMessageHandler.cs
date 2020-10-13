@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AivyDofus.Proxy.Handlers.Customs.World.Exchange
 {
-    [ProxyHandler(ProtocolName = "ExchangeStartedWithStorageMessage")]
+    //[ProxyHandler(ProtocolName = "ExchangeStartedWithStorageMessage")]
     public class ExchangeStartedWithStorageMessageHandler : AbstractMessageHandler
     {
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -37,8 +37,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.World.Exchange
 
         public override void Handle()
         {
-            DofusProxyClientReceiveCallback _proxy_callback = _casted_callback<DofusProxyClientReceiveCallback>();
-            ///Send(true, _callback._client, _exchange_object_move_kama, _exchange_object_move_kama_message(0), ++_proxy_callback._proxy.GLOBAL_INSTANCE_ID);
+
         }
 
         public override void Error(Exception e)

@@ -6,6 +6,7 @@ using AivyDofus.Protocol.Buffer;
 using AivyDofus.Protocol.Elements;
 using AivyDofus.Proxy.Handlers;
 using AivyDomain.Callback.Client;
+using AivyDomain.Callback.Proxy;
 using AivyDomain.Repository.Client;
 using AivyDomain.UseCases.Client;
 using Newtonsoft.Json.Serialization;
@@ -78,6 +79,9 @@ namespace AivyDofus.Proxy.Callbacks
         }
 
         private long _position { get; set; } = 0;
+
+
+        static readonly object _locker = new object();
         /// <summary>
         /// thx to Hitman for this implementation made by ToOnS
         /// </summary>
@@ -152,6 +156,7 @@ namespace AivyDofus.Proxy.Callbacks
                     {
                         logger.Info($"[{_tag}] {_element.BasicString} n°{_proxy.GLOBAL_INSTANCE_ID}");
                         _data_buffer_reader = new MessageDataBufferReader(_element);
+
                         using (BigEndianReader big_data_reader = new BigEndianReader(_data))
                         {
                             if (_handler.Handle(this, _element, _data_buffer_reader.Parse(big_data_reader)).Result)

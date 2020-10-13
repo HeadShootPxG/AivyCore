@@ -41,8 +41,7 @@ namespace AivyDofus.Server
                 _server_activator = new ServerActivatorRequest(_server_repository);
             }
 
-            if (!StaticValues.DOFUS_PROTOCOL_INITIED)
-                new BotofuParser(_invoker_path).Parse();
+            new BotofuParser(_invoker_path).Parse();
         }
 
         public ServerEntity Active(bool active, int port)

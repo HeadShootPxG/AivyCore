@@ -19,7 +19,7 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
         {
         }
 
-        public override bool IsForwardingData => false;
+        public override bool IsForwardingData => true;
 
         public override void Handle()
         {
@@ -31,10 +31,10 @@ namespace AivyDofus.Proxy.Handlers.Customs.Connection
             _proxy_callback._proxy.AccountData.AccountId = account_id;
             _proxy_callback._proxy.AccountData.Nickname = nickname;
 
-            _content["hasConsoleRight"] = true;
+            /*_content["hasConsoleRight"] = true;
             _content["hasRights"] = true;
 
-            Send(false, _callback._remote, _element, _content);
+            Send(false, _callback._remote, _element, _content);*/
         }
     }
 }

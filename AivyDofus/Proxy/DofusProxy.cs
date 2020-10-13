@@ -27,7 +27,7 @@ namespace AivyDofus.Proxy
         protected readonly ProxyActivatorRequest _proxy_activator;
 
         protected readonly string _app_path;
-        protected string _exe_path => $"{_app_path}/Dofus.exe";
+        public string _exe_path => $"{_app_path}/Dofus.exe";
 
         public DofusRetroProxy(string appPath)
         {
@@ -85,9 +85,8 @@ namespace AivyDofus.Proxy
                 _proxy_creator = new ProxyCreatorRequest(_proxy_repository);
                 _proxy_activator = new ProxyActivatorRequest(_proxy_repository);
             }
-
-            if (!StaticValues.DOFUS_PROTOCOL_INITIED)
-                new BotofuParser(_invoker_path).Parse();
+                
+            new BotofuParser(_invoker_path).Parse();
         }
 
         public virtual ProxyEntity Active(bool active, int port)
