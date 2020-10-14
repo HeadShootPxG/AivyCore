@@ -58,7 +58,7 @@ namespace AivyDofus
                 }
                 if (type == "-s")
                 {
-
+                    // to do
                 }
             }
             catch(Exception e)
