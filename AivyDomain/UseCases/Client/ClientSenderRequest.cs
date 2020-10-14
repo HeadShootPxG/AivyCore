@@ -27,6 +27,7 @@ namespace AivyDomain.UseCases.Client
                 if (!x.IsRunning) return x;
 
                 x.Socket.BeginSend(request2, 0, request2.Length, SocketFlags.None, new ClientSendCallback(x).Callback, x.Socket);
+
                 return x;
             });
         }

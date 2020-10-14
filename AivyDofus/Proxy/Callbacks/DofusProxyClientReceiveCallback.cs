@@ -79,9 +79,6 @@ namespace AivyDofus.Proxy.Callbacks
         }
 
         private long _position { get; set; } = 0;
-
-
-        static readonly object _locker = new object();
         /// <summary>
         /// thx to Hitman for this implementation made by ToOnS
         /// </summary>

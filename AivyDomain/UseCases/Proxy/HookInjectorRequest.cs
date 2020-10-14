@@ -6,6 +6,7 @@ using NLog;
 using SocketHook;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace AivyDomain.UseCases.Proxy
@@ -15,10 +16,12 @@ namespace AivyDomain.UseCases.Proxy
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IRepository<ProxyEntity, ProxyData> _repository;
+        private readonly ProxyActivatorRequest _proxy_disabler;
 
         public HookInjectorRequest(IRepository<ProxyEntity, ProxyData> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _proxy_disabler = new ProxyActivatorRequest(_repository);
         }
 
         public HookEntity Handle(ProxyEntity request)
@@ -41,6 +44,7 @@ namespace AivyDomain.UseCases.Proxy
                 while (_hook.ProcessId == 0) ;
 
                 x.ProcessId = _hook.ProcessId;
+
                 logger.Debug($"Process id : {_hook.ProcessId}");
 
                 return x;

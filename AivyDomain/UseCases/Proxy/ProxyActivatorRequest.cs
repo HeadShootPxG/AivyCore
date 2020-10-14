@@ -21,26 +21,29 @@ namespace AivyDomain.UseCases.Proxy
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public ProxyEntity Handle(ProxyEntity request1, bool request2, ProxyAcceptCallback request3)
+        public ProxyEntity Handle(ProxyEntity proxy, bool active, ProxyAcceptCallback callback)
         {
-            return _repository.ActionResult(x => x.Port == request1.Port && request1.ProcessId == x.ProcessId, x =>
+            return _repository.ActionResult(x => x.Port == proxy.Port && proxy.ProcessId == x.ProcessId, x =>
             {
-                if (x.IsRunning == request2)
+                if (x.IsRunning == active)
                     throw new Exception($"proxy running state is already : {x.IsRunning}");
 
-                if (request2)
+                if (active)
                 {
+                    if (callback is null) throw new ArgumentNullException(nameof(callback));
+
                     x.Socket.Bind(new IPEndPoint(IPAddress.Any, x.Port));
                     x.Socket.Listen(10);
 
-                    x.Socket.BeginAccept(request3.Callback, x.Socket);
+                    x.Socket.BeginAccept(callback.Callback, x.Socket);
                 }
                 else
                 {
                     x.Socket.Dispose();
+                    _repository.Remove(v => v.Port == x.Port);
                 }
 
-                x.IsRunning = request2;
+                x.IsRunning = active;
 
                 logger.Info($"proxy running state : {x.IsRunning}");
 

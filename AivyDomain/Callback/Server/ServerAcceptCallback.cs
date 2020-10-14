@@ -45,10 +45,12 @@ namespace AivyDomain.Callback.Server
 
         public override void Callback(IAsyncResult result)
         {
+            if (!_server.IsRunning) return;
+
+            _server.Socket = (Socket)result.AsyncState;
+            
             if (_server.IsRunning)
             {
-                _server.Socket = (Socket)result.AsyncState;
-
                 Socket _client_socket = _server.Socket.EndAccept(result);
 
                 ClientEntity client = _client_creator.Handle(_client_socket.RemoteEndPoint as IPEndPoint);

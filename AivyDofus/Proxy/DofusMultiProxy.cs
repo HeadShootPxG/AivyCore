@@ -9,6 +9,7 @@ using AivyDomain.Callback.Proxy;
 using AivyDomain.Mappers.Proxy;
 using AivyDomain.Repository.Proxy;
 using AivyDomain.UseCases.Proxy;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,8 @@ namespace AivyDofus.Proxy
 {
     public class DofusMultiProxy
     {
+        static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         public static readonly OpenProxyConfigurationApi _proxy_api = new OpenProxyConfigurationApi("./proxy_information_api.json");
 
         public readonly ProxyRepository _proxy_repository;
@@ -72,7 +75,7 @@ namespace AivyDofus.Proxy
             {
                 case ProxyCallbackTypeEnum.Dofus2:return Active<DofusProxyAcceptCallback>(active, port, exe_path);
                 case ProxyCallbackTypeEnum.DofusRetro: return Active<DofusRetroProxyAcceptCallback>(active, port, exe_path);
-                default: return Active<ProxyAcceptCallback>(active, port, exe_path);
+                default: logger.Info("default proxy callback was called"); return Active<ProxyAcceptCallback>(active, port, exe_path);
             }
         }
     }

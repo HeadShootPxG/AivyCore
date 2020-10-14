@@ -57,10 +57,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AivyCore\AivyCore.csproj">
-      <Project>{6208D306-93D9-41C8-B371-BEEADC2BB95F}</Project>
-      <Name>AivyCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AivyData\AivyData.csproj">
       <Project>{815D89EA-D8FF-4E69-9FC0-C212CBBB98B0}</Project>
       <Name>AivyData</Name>

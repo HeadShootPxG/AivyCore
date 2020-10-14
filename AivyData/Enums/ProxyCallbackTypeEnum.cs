@@ -6,8 +6,8 @@ namespace AivyData.Enums
 {
     public enum ProxyCallbackTypeEnum
     {
-        Dofus2,
-        DofusRetro,
-        Unknow
+        Unknow = 0,
+        DofusRetro = 1,
+        Dofus2 = 2
     }
 }
